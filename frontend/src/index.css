@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --color-main-blue: #5e7ff5;
+}
+
 #root {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
