@@ -16,7 +16,7 @@ const SearchBar = () => {
         placeholder="Search parts..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full border border-gray-700 bg-gray-50 rounded-md pl-3 pr-10 py-2 focus:outline-none focus:ring-1 focus:ring-main-blue placeholder:text-gray-700"
+        className="w-full border border-gray-700 rounded-md pl-3 pr-10 py-2 focus:outline-none focus:ring-1 focus:ring-main-blue placeholder:text-gray-700"
       />
       {/*Search Icon */}
       <button

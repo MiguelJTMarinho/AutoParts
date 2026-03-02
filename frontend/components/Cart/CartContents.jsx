@@ -55,9 +55,9 @@ const CartContents = () => {
             </div>
           </div>
           <div>
-            <p>€{product.price.toLocaleString()}</p>
+            <p>{product.price.toLocaleString()}€</p>
             <button>
-              <RiDeleteBin3Line className="h-6 w-6 text-red-600" />
+              <RiDeleteBin3Line className="h-6 w-6 text-red-600 cursor-pointer" />
             </button>
           </div>
         </div>
