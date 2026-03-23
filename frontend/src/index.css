@@ -2,6 +2,9 @@
 
 @theme {
   --color-main-blue: #3498db;
+  --color-blue-7: #2b6cb0;
+  --color-blue-6: #155dfc;
+  --color-blue-5: #4299e1;
 }
 
 #root {

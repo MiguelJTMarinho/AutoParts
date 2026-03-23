@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Toaster, toast } from "sonner";
+import ProductGrid from "./ProductGrid";
 
 const selectedProduct = {
   name: "Farol BMW Série 3",
@@ -9,11 +11,54 @@ const selectedProduct = {
   year: "2010-2014",
   condition: "Used",
   images: [
-    { url: "https://picsum.photos/600/600?1" },
-    { url: "https://picsum.photos/600/600?2" },
-    { url: "https://picsum.photos/600/600?3" },
+    { url: "https://picsum.photos/500/500?1" },
+    { url: "https://picsum.photos/500/500?2" },
+    { url: "https://picsum.photos/500/500?3" },
   ],
 };
+
+const similarProducts = [
+  {
+    _id: 1,
+    name: "Product 1",
+    price: 100,
+    images: [
+      {
+        url: "https://picsum.photos/500/500?1",
+      },
+    ],
+  },
+  {
+    _id: 2,
+    name: "Product 2",
+    price: 100,
+    images: [
+      {
+        url: "https://picsum.photos/500/500?2",
+      },
+    ],
+  },
+  {
+    _id: 3,
+    name: "Product 3",
+    price: 100,
+    images: [
+      {
+        url: "https://picsum.photos/500/500?3",
+      },
+    ],
+  },
+  {
+    _id: 4,
+    name: "Product 4",
+    price: 100,
+    images: [
+      {
+        url: "https://picsum.photos/500/500?4",
+      },
+    ],
+  },
+];
 
 const ProductDetails = () => {
   const [mainImage, setMainImage] = useState("");
@@ -23,6 +68,16 @@ const ProductDetails = () => {
   const handleQuantityChange = (action) => {
     if (action === "plus") setQuantity((prev) => prev + 1);
     if (action === "minus" && quantity > 1) setQuantity((prev) => prev - 1);
+  };
+
+  const handleAddToCart = () => {
+    setIsButtonDisabled(true);
+    setTimeout(() => {
+      toast.success("Product added to cart", {
+        duration: 1000,
+      });
+      setIsButtonDisabled(false);
+    }, 500);
   };
 
   useEffect(() => {
@@ -49,7 +104,13 @@ const ProductDetails = () => {
 
             {/* main image */}
             <div className="flex-1">
-              <img src={mainImage} className="w-full rounded-lg border" />
+              {mainImage && (
+                <img
+                  src={mainImage}
+                  alt={selectedProduct.name}
+                  className="w-full rounded-lg border"
+                />
+              )}
 
               {/* mobile thumbs */}
               <div className="flex md:hidden gap-2 mt-3 overflow-x-auto">
@@ -101,8 +162,12 @@ const ProductDetails = () => {
             </div>
 
             {/* add to cart */}
-            <button className="w-full bg-main-blue text-white py-3 rounded font-semibold hover:opacity-90 cursor-pointer">
-              Add to cart
+            <button
+              onClick={handleAddToCart}
+              disabled={isButtonDisabled}
+              className={`w-full bg-main-blue text-white py-3 rounded font-semibold hover:opacity-90 cursor-pointer ${isButtonDisabled ? "cursor-not-allowed opacity-50" : ""}`}
+            >
+              {isButtonDisabled ? "Adding..." : "Add to cart"}
             </button>
 
             {/* characteristics */}
@@ -134,6 +199,13 @@ const ProductDetails = () => {
               </table>
             </div>
           </div>
+        </div>
+        <div className="mt-20">
+          <h2 className="text-2xl text-center font-medium mb-4">
+            {" "}
+            You May Also Like
+          </h2>
+          <ProductGrid products={similarProducts} />
         </div>
       </div>
     </div>
