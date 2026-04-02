@@ -126,6 +126,20 @@ const FilterSidebar = () => {
           </button>
         )}
       </div>
+      {/* OEM */}
+      <div className="border rounded-lg p-4 space-y-3">
+        <h3 className="text-xs text-gray-500 uppercase font-semibold">
+          OEM Part Number
+        </h3>
+
+        <input
+          type="text"
+          value={getParam("oem") || ""}
+          onChange={(e) => updateParam("oem", e.target.value)}
+          placeholder="Enter OEM number..."
+          className="w-full border rounded px-2 py-1 text-sm"
+        />
+      </div>
       {/* VEHICLE */}
       <div className="border rounded-lg p-4 space-y-3">
         <h3 className="text-xs text-gray-500 uppercase font-semibold">

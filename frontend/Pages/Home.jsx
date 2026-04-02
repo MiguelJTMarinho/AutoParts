@@ -11,9 +11,9 @@ const Home = () => {
       <Hero />
       <NewArrivals />
 
-      {/* Best Seller */}
+      {/* Best Seller 
       <h2 className="text-3xl text-center font-bold mb-4">Best Seller</h2>
-      <ProductDetails />
+      <ProductDetails />*/}
 
       <FeaturedCollection />
       <FeaturesSection />
