@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import StripeButton from "./StripeButton";
 import PaypalButton from "./PaypalButton";
 
 const cart = {
@@ -191,14 +190,54 @@ const Checkout = () => {
               <div>
                 <h3 className="text-lg mb-4">Pay with Paypall</h3>
                 <PaypalButton
-                  ammount={100}
-                  onSucess={handlePaymentSuccess}
+                  amount={"100"}
+                  onSuccess={handlePaymentSuccess}
                   onError={(err) => alert("Payment Failed. Try again.")}
                 />
               </div>
             )}
           </div>
         </form>
+      </div>
+      {/* Right Section */}
+      <div className="bg-gray-50 p-6 rounded-lg">
+        <h3 className="text-lg mb-4">Order Summary</h3>
+        <div className="border-t py-4 mb-4">
+          {cart.products.map((product, index) => (
+            <div
+              key={index}
+              className="flex items-start justify-between py-2 border-b"
+            >
+              <div className="flex items-start">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-20 h-24 object-cover mr-4"
+                />
+                <div>
+                  <h3 className="text-md">{product.name}</h3>
+                  <p className="text-gray-500">
+                    {product.make} {product.model}
+                  </p>
+                  <p className="text-gray-500">{product.category}</p>
+                </div>
+              </div>
+              <p className="text-xl">€{product.price}</p>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-between items-center text-lg mb-4">
+          <p>Subtotal</p>
+          <p>€{cart.totalprice?.toLocaleString()}</p>
+        </div>
+        <div className="flex justify-between items-center text-lg mb-4">
+          <p>Shipping</p>
+          <p>Free</p>
+        </div>
+        <div className="flex justify-between items-center text-lg mt-4 border-t pt-4">
+          <p>Total</p>
+          <p>€{cart.totalprice?.toLocaleString()}</p>
+        </div>
       </div>
     </div>
   );
