@@ -59,7 +59,7 @@ const Profile = () => {
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="flex w-full justify-end">
           <Link
-            to="/orders"
+            to="/my-orders"
             className="mr-4 px-6 py-2.5 rounded-lg bg-main-blue text-white font-semibold hover:opacity-90 cursor-pointer"
           >
             <h2>Orders</h2>
