@@ -2,8 +2,10 @@ import React from "react";
 import {
   FaBoxOpen,
   FaClipboardList,
+  FaCubes,
   FaSignOutAlt,
   FaStore,
+  FaTags,
   FaUser,
 } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
@@ -45,6 +47,28 @@ const AdminSidebar = () => {
           <span>Products</span>
         </NavLink>
         <NavLink
+          to="/admin/categories"
+          className={({ isActive }) =>
+            isActive
+              ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
+              : "text-gray-300 hover:bg-gray700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"
+          }
+        >
+          <FaTags />
+          <span>Categories</span>
+        </NavLink>
+        <NavLink
+          to="/admin/part-brands"
+          className={({ isActive }) =>
+            isActive
+              ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
+              : "text-gray-300 hover:bg-gray700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"
+          }
+        >
+          <FaCubes />
+          <span>Part Brands</span>
+        </NavLink>
+        <NavLink
           to="/admin/orders"
           className={({ isActive }) =>
             isActive
@@ -56,7 +80,7 @@ const AdminSidebar = () => {
           <span>Orders</span>
         </NavLink>
         <NavLink
-          to="/admin/shop"
+          to="/"
           className={({ isActive }) =>
             isActive
               ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"

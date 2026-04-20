@@ -17,6 +17,9 @@ import AdminHomePage from "../Pages/AdminHomePage";
 import UserManagement from "../components/Admin/UserManagement";
 import ProductManagement from "../components/Admin/ProductManagement";
 import EditProductPage from "../components/Admin/EditProductPage";
+import OrderManagement from "../components/Admin/OrderManagement";
+import CategoriesManagement from "../components/Admin/CategoriesManagement";
+import PartBrandsManagement from "../components/Admin/PartBrandManagement";
 
 const App = () => {
   return (
@@ -41,6 +44,9 @@ const App = () => {
           <Route path="users" element={<UserManagement />} />
           <Route path="products" element={<ProductManagement />} />
           <Route path="products/:id/edit" element={<EditProductPage />} />
+          <Route path="orders" element={<OrderManagement />} />
+          <Route path="categories" element={<CategoriesManagement />} />
+          <Route path="part-brands" element={<PartBrandsManagement />} />
         </Route>
       </Routes>
     </BrowserRouter>
