@@ -20,11 +20,13 @@ import EditProductPage from "../components/Admin/EditProductPage";
 import OrderManagement from "../components/Admin/OrderManagement";
 import CategoriesManagement from "../components/Admin/CategoriesManagement";
 import PartBrandsManagement from "../components/Admin/PartBrandManagement";
+import ScrollToTop from "../components/Common/ScrollToTop";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Toaster position="top-right" />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<UserLayout />}>
           <Route index element={<Home />} />

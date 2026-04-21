@@ -6,10 +6,42 @@ const selectedProduct = {
   name: "Farol BMW Série 3",
   price: 120,
   description: "Original used headlight in excellent condition.",
-  brand: "BMW",
-  model: "Série 3",
-  year: "2010-2014",
+  sku: "BMW-HEADLIGHT-001",
+
+  category: "Lighting",
+  part_brand: "Bosch",
+
   condition: "Used",
+  stock: 2,
+
+  compatibility: [
+    {
+      brand: "BMW",
+      model: "Série 3",
+      year_start: 2010,
+      year_end: 2014,
+    },
+    {
+      brand: "BMW",
+      model: "Série 3 Touring",
+      year_start: 2011,
+      year_end: 2015,
+    },
+  ],
+
+  oem_references: [
+    {
+      reference_code: "63117202578",
+      brand: "BMW",
+      type: "OEM",
+    },
+    {
+      reference_code: "BOSCH-99821",
+      brand: "Bosch",
+      type: "Compatible",
+    },
+  ],
+
   images: [
     { url: "https://picsum.photos/500/500?1" },
     { url: "https://picsum.photos/500/500?2" },
@@ -177,26 +209,73 @@ const ProductDetails = () => {
               <table className="w-full text-sm">
                 <tbody className="divide-y">
                   <tr>
-                    <td className="py-2 text-gray-500">Brand</td>
-                    <td>{selectedProduct.brand}</td>
+                    <td className="py-2 text-gray-500">SKU</td>
+                    <td>{selectedProduct.sku}</td>
                   </tr>
 
                   <tr>
-                    <td className="py-2 text-gray-500">Model</td>
-                    <td>{selectedProduct.model}</td>
+                    <td className="py-2 text-gray-500">Category</td>
+                    <td>{selectedProduct.category}</td>
                   </tr>
 
                   <tr>
-                    <td className="py-2 text-gray-500">Year</td>
-                    <td>{selectedProduct.year}</td>
+                    <td className="py-2 text-gray-500">Part Brand</td>
+                    <td>{selectedProduct.part_brand}</td>
                   </tr>
 
                   <tr>
                     <td className="py-2 text-gray-500">Condition</td>
                     <td>{selectedProduct.condition}</td>
                   </tr>
+
+                  <tr>
+                    <td className="py-2 text-gray-500">Stock</td>
+                    <td>
+                      {selectedProduct.stock > 0
+                        ? `${selectedProduct.stock} available`
+                        : "Out of stock"}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold mb-3">Compatibility</h3>
+
+            <div className="space-y-2">
+              {selectedProduct.compatibility.map((item, index) => (
+                <div
+                  key={index}
+                  className="border p-3 rounded text-sm flex justify-between"
+                >
+                  <span>
+                    {item.brand} {item.model}
+                  </span>
+
+                  <span className="text-gray-500">
+                    {item.year_start} - {item.year_end}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold mb-3">OEM References</h3>
+
+            <div className="space-y-2">
+              {selectedProduct.oem_references.map((oem, index) => (
+                <div
+                  key={index}
+                  className="border p-3 rounded text-sm flex justify-between"
+                >
+                  <span>{oem.reference_code}</span>
+
+                  <span className="text-gray-500">
+                    {oem.brand} ({oem.type})
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>

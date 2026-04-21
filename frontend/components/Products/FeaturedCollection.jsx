@@ -20,7 +20,7 @@ const FeaturedCollection = () => {
             keep your vehicle running smoothly and safely, every day.
           </p>
           <Link
-            to="/products/all"
+            to="/collections/all"
             className="bg-black text-white px-6 py-3 rounded-lg text-lg hover:bg-gray-800"
           >
             Shop Now

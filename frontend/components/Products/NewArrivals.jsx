@@ -1,115 +1,70 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const NewArrivals = () => {
   const scrollRef = useRef(null);
+
   const [isDragging, setIsDragging] = useState(false);
+  const [hasDragged, setHasDragged] = useState(false);
   const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(false);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
+
   const newArrivals = [
     {
       _id: "1",
       name: "Farol BMW Série 3",
       price: 120,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=1",
-          altText: "Farol BMW Série 3",
-        },
-      ],
+      images: [{ url: "https://picsum.photos/500/500?random=1" }],
     },
     {
       _id: "2",
       name: "Parachoques Audi A4",
       price: 180,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=2",
-          altText: "Parachoques Audi A4",
-        },
-      ],
+      images: [{ url: "https://picsum.photos/500/500?random=2" }],
     },
     {
       _id: "3",
-      name: "Espelho Retrovisor Mercedes C",
+      name: "Espelho Mercedes C",
       price: 75,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=3",
-          altText: "Espelho Retrovisor",
-        },
-      ],
+      images: [{ url: "https://picsum.photos/500/500?random=3" }],
     },
     {
       _id: "4",
-      name: "Jante 18'' Volkswagen",
+      name: "Jante 18'' VW",
       price: 95,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=4",
-          altText: "Jante 18",
-        },
-      ],
+      images: [{ url: "https://picsum.photos/500/500?random=4" }],
     },
     {
       _id: "5",
       name: "Radiador Peugeot 308",
       price: 140,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=5",
-          altText: "Radiador",
-        },
-      ],
-    },
-    {
-      _id: "6",
-      name: "Capot Renault Megane",
-      price: 200,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=6",
-          altText: "Capot Megane",
-        },
-      ],
-    },
-    {
-      _id: "7",
-      name: "Turbo 1.6 HDI",
-      price: 250,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=7",
-          altText: "Turbo",
-        },
-      ],
-    },
-    {
-      _id: "8",
-      name: "Caixa de Velocidades Opel",
-      price: 320,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=8",
-          altText: "Caixa de velocidades",
-        },
-      ],
+      images: [{ url: "https://picsum.photos/500/500?random=5" }],
     },
   ];
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
+    setHasDragged(false);
     setStartX(e.pageX - scrollRef.current.offsetLeft);
     setScrollLeft(scrollRef.current.scrollLeft);
   };
 
   const handleMouseMove = (e) => {
     if (!isDragging) return;
+
+    e.preventDefault();
+
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = x - startX;
+
+    if (Math.abs(walk) > 5) {
+      setHasDragged(true);
+    }
+
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
 
@@ -117,95 +72,118 @@ const NewArrivals = () => {
     setIsDragging(false);
   };
 
-  const scroll = (direction) => {
-    const scrollAmount = direction == "left" ? -300 : 300;
-    scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  const scroll = (dir) => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const amount = el.clientWidth * 0.8;
+
+    el.scrollBy({
+      left: dir === "left" ? -amount : amount,
+      behavior: "smooth",
+    });
   };
 
-  // Update Scroll Buttons
-  const updateScrollButtons = () => {
-    const container = scrollRef.current;
+  const updateScrollButtons = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
 
-    if (container) {
-      const leftScroll = container.scrollLeft;
-      const rightScrollable =
-        container.scrollWidth > leftScroll + container.clientWidth;
-
-      setCanScrollLeft(leftScroll > 0);
-      setCanScrollRight(rightScrollable);
-    }
-
-    // console.log({
-    //   scrollLeft: container.scrollLeft,
-    //   ClientWidth: container.ClientWidth,
-    //   containerScrollWidth: container.scrollWidth,
-    //   offsetLeft: scrollRef.current.offsetLeft,
-    // });
-  };
+    setCanScrollLeft(el.scrollLeft > 10);
+    setCanScrollRight(
+      Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth,
+    );
+  }, []);
 
   useEffect(() => {
-    const container = scrollRef.current;
-    if (container) {
-      container.addEventListener("scroll", updateScrollButtons);
-      updateScrollButtons();
-      return () => container.removeEventListener("scroll", updateScrollButtons);
-    }
-  });
+    const el = scrollRef.current;
+    if (!el) return;
+
+    updateScrollButtons();
+    el.addEventListener("scroll", updateScrollButtons);
+
+    return () => el.removeEventListener("scroll", updateScrollButtons);
+  }, [updateScrollButtons]);
 
   return (
-    <section className="py-16 px-4 lg:px-0">
-      <div className="container mx-auto text-center mb-10 relative">
-        <h2 className="text-3xl font-bold mb-4">Explore New Arrivals</h2>
-        <p className="text-lg text-gray-600 mb-13">
-          Discover the latest auto parts added to our catalog. All components
-          reliable, and ready for fast delivery.
-        </p>
-
-        {/* Scroll Buttons */}
-        <div className="absolute right-0 -bottom-11.25 flex space-x-2 cursor-pointer">
-          <button
-            onClick={() => scroll("left")}
-            disabled={!canScrollLeft}
-            className={`p-2 rounded border ${canScrollLeft ? "bg-white text-black cursor-pointer" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
-          >
-            <FiChevronLeft className="text-2xl" />
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className={`p-2 rounded border ${canScrollRight ? "bg-white text-black cursor-pointer" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
-          >
-            <FiChevronRight className="text-2xl" />
-          </button>
-        </div>
-      </div>
-      {/* Scrollable COntent */}
-      <div
-        ref={scrollRef}
-        className={`container mx-auto overflow-x-scroll flex space-x-6 relative ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUpOrLeave}
-        onMouseLeave={handleMouseUpOrLeave}
-      >
-        {newArrivals.map((product) => (
-          <div
-            key={product._id}
-            className="min-w-full sm-min-w-[50%] lg:min-w-[30%] relative"
-          >
-            <img
-              src={product.images[0]?.url}
-              alt={product.images[0]?.altText || product.name}
-              className="w-full h-125 object-cover rounded-lg"
-              draggable="false"
-            />
-            <div className="absolute bottom-0 left-0 right-0 backdrop-blur-md text-white px-4 rounded-b-lg">
-              <Link to={`/product/${product._id}`} className="block">
-                <h4 className="font-medium">{product.name}</h4>
-                <p className="mt-1">${product.price}</p>
-              </Link>
-            </div>
+    <section className="py-16 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4">
+        {/* HEADER */}
+        <div className="flex justify-between items-end mb-8">
+          <div>
+            <h2 className="text-3xl font-bold">New Arrivals</h2>
+            <p className="text-gray-500">
+              Latest auto parts added to our catalog
+            </p>
           </div>
-        ))}
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => scroll("left")}
+              disabled={!canScrollLeft}
+              className={`p-2 rounded-full border transition 
+                ${canScrollLeft ? "bg-white hover:bg-gray-100" : "opacity-30 cursor-not-allowed"}`}
+            >
+              <FiChevronLeft />
+            </button>
+
+            <button
+              onClick={() => scroll("right")}
+              disabled={!canScrollRight}
+              className={`p-2 rounded-full border transition 
+                ${canScrollRight ? "bg-white hover:bg-gray-100" : "opacity-30 cursor-not-allowed"}`}
+            >
+              <FiChevronRight />
+            </button>
+          </div>
+        </div>
+
+        {/* SCROLLER */}
+        <div
+          ref={scrollRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUpOrLeave}
+          onMouseLeave={handleMouseUpOrLeave}
+          className={`flex gap-6 overflow-x-auto pb-4 
+            ${isDragging ? "cursor-grabbing" : "cursor-grab"}
+            [&::-webkit-scrollbar]:hidden`}
+        >
+          {newArrivals.map((product) => (
+            <Link
+              to={`/product/${product._id}`}
+              key={product._id}
+              draggable="false"
+              onDragStart={(e) => e.preventDefault()}
+              onClick={(e) => {
+                if (hasDragged) e.preventDefault();
+              }}
+              className="min-w-65 bg-white rounded-xl shadow-sm hover:shadow-lg transition group shrink-0 select-none"
+            >
+              {/* IMAGE */}
+              <div className="h-64 overflow-hidden rounded-t-xl">
+                <img
+                  src={product.images[0]?.url}
+                  alt={product.name}
+                  draggable="false"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                />
+              </div>
+
+              {/* CONTENT */}
+              <div className="p-4">
+                <h4 className="font-medium text-gray-800 group-hover:text-black">
+                  {product.name}
+                </h4>
+
+                <p className="mt-2 text-lg font-semibold text-blue-600">
+                  €{product.price}
+                </p>
+
+                <div className="mt-3 text-sm text-gray-500">View details →</div>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );
