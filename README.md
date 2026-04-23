@@ -1,11 +1,11 @@
 
 # NODE packages:
 express
-mongoose
+pg
 dotenv
 jsonwebtoken
 bcryptjs
 cors
 nodemon
 
-npm install express mongoose dotenv jsonwebtoken bcryptjs cors nodemon
+npm install express pg dotenv jsonwebtoken bcryptjs cors nodemon
