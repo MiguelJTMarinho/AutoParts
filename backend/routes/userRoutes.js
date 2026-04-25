@@ -3,13 +3,13 @@ const express = require("express");
 const router = express.Router();
 
 const userService = require("../service/userService");
+const { isAdmin } = require("../middleware/authMiddleware");
 const protect = require("../middleware/authMiddleware").protect;
 
 // @route POST /api/users/register
 // @desc Register a new user
-// @acess Public
-
-router.post("/register", async (req, res) => {
+// @acess Private (Admin)
+router.post("/register", protect, isAdmin, async (req, res) => {
   try {
     const data = await userService.registerUser(req.body);
     res.status(201).json(data);
