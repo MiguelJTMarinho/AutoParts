@@ -76,4 +76,127 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * tags:
+ *   name: Car_Brands
+ *   description: Car Brands management
+ */
+
+/**
+ * @swagger
+ * /api/car_brands:
+ *   post:
+ *     summary: Create a new car brand
+ *     tags: [Car_Brands]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: BMW
+ *     responses:
+ *       201:
+ *         description: Car brand created successfully
+ *       400:
+ *         description: Invalid input
+ *       409:
+ *         description: Car brand already exists
+ */
+
+/**
+ * @swagger
+ * /api/car_brands:
+ *   get:
+ *     summary: Get all car brands
+ *     tags: [Car_Brands]
+ *     responses:
+ *       200:
+ *         description: List of car brands
+ */
+
+/**
+ * @swagger
+ * /api/car_brands/{id}:
+ *   get:
+ *     summary: Get car brand by ID
+ *     tags: [Car_Brands]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Car brand ID
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Car brand found
+ *       404:
+ *         description: Car brand not found
+ */
+
+/**
+ * @swagger
+ * /api/car_brands/{id}:
+ *   put:
+ *     summary: Update car brand
+ *     tags: [Car_Brands]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Car brand ID
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Audi
+ *     responses:
+ *       200:
+ *         description: Car brand updated successfully
+ *       404:
+ *         description: Car brand not found
+ *       409:
+ *         description: Duplicate brand
+ */
+
+/**
+ * @swagger
+ * /api/car_brands/{id}:
+ *   delete:
+ *     summary: Delete car brand
+ *     tags: [Car_Brands]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Car brand ID
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Car brand deleted successfully
+ *       404:
+ *         description: Car brand not found
+ */
+
 module.exports = router;

@@ -90,4 +90,142 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * tags:
+ *   name: Car_Models
+ *   description: Car models management
+ */
+
+/**
+ * @swagger
+ * /api/car_models:
+ *   post:
+ *     summary: Create a new car model
+ *     tags: [Car_Models]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - carbrand_id
+ *               - name
+ *             properties:
+ *               carbrand_id:
+ *                 type: integer
+ *                 example: 1
+ *               name:
+ *                 type: string
+ *                 example: serie 3
+ *     responses:
+ *       201:
+ *         description: Car model created successfully
+ *       400:
+ *         description: Validation error or car brand does not exist
+ *       409:
+ *         description: Duplicate car model
+ */
+
+/**
+ * @swagger
+ * /api/car_models:
+ *   get:
+ *     summary: Get all car models
+ *     tags: [Car_Models]
+ *     responses:
+ *       200:
+ *         description: List of car models
+ */
+
+/**
+ * @swagger
+ * /api/car_models/{id}:
+ *   get:
+ *     summary: Get car model by ID
+ *     tags: [Car_Models]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Car model found
+ *       404:
+ *         description: Car model not found
+ */
+
+/**
+ * @swagger
+ * /api/car_models/brand/{brandId}:
+ *   get:
+ *     summary: Get car models by car brand
+ *     tags: [Car_Models]
+ *     parameters:
+ *       - in: path
+ *         name: brandId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: List of car models for the given brand
+ */
+
+/**
+ * @swagger
+ * /api/car_models/{id}:
+ *   put:
+ *     summary: Update a car model
+ *     tags: [Car_Models]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               carbrand_id:
+ *                 type: integer
+ *                 example: 1
+ *               name:
+ *                 type: string
+ *                 example: serie 5
+ *     responses:
+ *       200:
+ *         description: Car model updated successfully
+ *       400:
+ *         description: Validation error
+ *       404:
+ *         description: Car model not found
+ */
+
+/**
+ * @swagger
+ * /api/car_models/{id}:
+ *   delete:
+ *     summary: Delete a car model
+ *     tags: [Car_Models]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Car model deleted successfully
+ *       404:
+ *         description: Car model not found
+ */
+
 module.exports = router;

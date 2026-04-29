@@ -1,0 +1,1112 @@
+{
+  "info": {
+    "_postman_id": "26a0ec29-df2d-4955-8a6a-c55b09d6d1f8",
+    "name": "DEV",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54206975",
+    "_collection_link": "https://go.postman.co/collection/54206975-26a0ec29-df2d-4955-8a6a-c55b09d6d1f8?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Car Brands",
+      "item": [
+        {
+          "name": "Create Car Brand",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc2OTc5NTI2LCJleHAiOjE3NzcxMjM1MjZ9.K2NNlRr0OoD5TyE2i8r5CUbAPAMfvjpohJ2ynkfRtw0",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": null\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/car_brands/",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "car_brands",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Car Brand",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc2OTc5NTI2LCJleHAiOjE3NzcxMjM1MjZ9.K2NNlRr0OoD5TyE2i8r5CUbAPAMfvjpohJ2ynkfRtw0",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"zontes\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:9000/api/car_brands/466",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9000",
+              "path": [
+                "api",
+                "car_brands",
+                "466"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Car Brands",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:9000/api/car_brands/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9000",
+              "path": [
+                "api",
+                "car_brands",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Car Brand by Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:9000/api/car_brands/469",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9000",
+              "path": [
+                "api",
+                "car_brands",
+                "469"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Car Brand",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc3MTI1MDIzLCJleHAiOjE3NzcyNjkwMjN9.LU_NQWxxaJn-Q9Lb4S9WGFqzLM0NOkSF5gJeyZH3NOU",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9000/api/car_brands/469",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9000",
+              "path": [
+                "api",
+                "car_brands",
+                "469"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc2OTc5NTI2LCJleHAiOjE3NzcxMjM1MjZ9.K2NNlRr0OoD5TyE2i8r5CUbAPAMfvjpohJ2ynkfRtw0",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"external_id\": \"\",\r\n  \"name\": \"Amortecedor Dianteiro VW Golf 7\",\r\n  \"description\": \"Amortecedor dianteiro compatível com Volkswagen Golf 7. Substituição OEM de alta qualidade.\",\r\n  \"summary\": \"Amortecedor VW Golf 7\",\r\n  \"sku\": \"VW-G7-SHOCK-003\",\r\n  \"price\": 78.90,\r\n  \"condition\": \"refurbished\",\r\n  \"stock\": 4,\r\n  \"category_id\": 3,\r\n  \"brand_id\": 4,\r\n  \"status\": \"active\",\r\n  \"is_active\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/products/",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "products",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Car Brand",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc2OTc5NTI2LCJleHAiOjE3NzcxMjM1MjZ9.K2NNlRr0OoD5TyE2i8r5CUbAPAMfvjpohJ2ynkfRtw0",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"zontes\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:9000/api/car_brands/466",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9000",
+              "path": [
+                "api",
+                "car_brands",
+                "466"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Car Brands",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:9000/api/car_brands/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9000",
+              "path": [
+                "api",
+                "car_brands",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Car Brand by Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:9000/api/car_brands/469",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9000",
+              "path": [
+                "api",
+                "car_brands",
+                "469"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Car Brand",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc3MTI1MDIzLCJleHAiOjE3NzcyNjkwMjN9.LU_NQWxxaJn-Q9Lb4S9WGFqzLM0NOkSF5gJeyZH3NOU",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9000/api/car_brands/469",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9000",
+              "path": [
+                "api",
+                "car_brands",
+                "469"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Part Brands",
+      "item": [
+        {
+          "name": "Delete Part Brand",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc3MTI2NDc3LCJleHAiOjE3NzcyNzA0Nzd9.FpRFx74Qd1uO4DyxPxJVi9ltia0D3G6R43OCzhds-vo",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/part_brands/110",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "part_brands",
+                "110"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Part Brand by Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/part_brands/1",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "part_brands",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Part Brands",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/part_brands/",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "part_brands",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Part Brand",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc3MTI2NDc3LCJleHAiOjE3NzcyNzA0Nzd9.FpRFx74Qd1uO4DyxPxJVi9ltia0D3G6R43OCzhds-vo",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"teste123\"\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/part_brands/",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "part_brands",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Part Brand",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc3MTI2NDc3LCJleHAiOjE3NzcyNzA0Nzd9.FpRFx74Qd1uO4DyxPxJVi9ltia0D3G6R43OCzhds-vo",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"prasco\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/part_brands/109",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "part_brands",
+                "109"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Car Models",
+      "item": [
+        {
+          "name": "Create Car Model",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc3MTI1MDIzLCJleHAiOjE3NzcyNjkwMjN9.LU_NQWxxaJn-Q9Lb4S9WGFqzLM0NOkSF5gJeyZH3NOU",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"carbrand_id\": \"1000\",\r\n    \"name\": \"focus st-line\"\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/car_models/",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "car_models",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Car Model",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc3MTI1MDIzLCJleHAiOjE3NzcyNjkwMjN9.LU_NQWxxaJn-Q9Lb4S9WGFqzLM0NOkSF5gJeyZH3NOU",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"carbrand_id\": \"1\",\r\n    \"name\": \"FOCUS\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/car_models/1",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "car_models",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Car Models",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/car_models/",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "car_models",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Car Model by Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/car_models/1",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "car_models",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Car Model",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc2OTc5NTI2LCJleHAiOjE3NzcxMjM1MjZ9.K2NNlRr0OoD5TyE2i8r5CUbAPAMfvjpohJ2ynkfRtw0",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/car_brands/466",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "car_brands",
+                "466"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/categories",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc2OTc5NTI2LCJleHAiOjE3NzcxMjM1MjZ9.K2NNlRr0OoD5TyE2i8r5CUbAPAMfvjpohJ2ynkfRtw0",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"ASD Test\",\r\n    \"description\": \"\",\r\n    \"parent_id\": null\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/categories/",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "categories",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Engine\",\r\n    \"description\": \"Engine components and parts\",\r\n    \"parent_id\": null\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/categories/1",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "categories",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Catregory By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/categories/1",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "categories",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc2OTc5NTI2LCJleHAiOjE3NzcxMjM1MjZ9.K2NNlRr0OoD5TyE2i8r5CUbAPAMfvjpohJ2ynkfRtw0",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/categories/32",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "categories",
+                "32"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Product Images",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/categories",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc2OTc5NTI2LCJleHAiOjE3NzcxMjM1MjZ9.K2NNlRr0OoD5TyE2i8r5CUbAPAMfvjpohJ2ynkfRtw0",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"product_id\": \"1\",\r\n    \"image_url\": \"https://picsum.photos/200/300\",\r\n    \"external_uuid\": null,\r\n    \"sort_order\": \"0\"\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/product_images",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "product_images"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Engine\",\r\n    \"description\": \"Engine components and parts\",\r\n    \"parent_id\": null\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/categories/1",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "categories",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Catregory By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/categories/1",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "categories",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzc2OTc5NTI2LCJleHAiOjE3NzcxMjM1MjZ9.K2NNlRr0OoD5TyE2i8r5CUbAPAMfvjpohJ2ynkfRtw0",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{PROTOCOL}}://{{HOST}}:{{PORT}}/api/categories/32",
+              "protocol": "{{PROTOCOL}}",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{PORT}}",
+              "path": [
+                "api",
+                "categories",
+                "32"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Successful POST request\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"autoparts@email.com\",\n    \"password\": \"teste123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:9000/api/users/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9000",
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            },
+            "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Successful POST request\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"firstName\": \"Auto\",\n    \"lastName\": \"Parts\",\n    \"email\": \"autoparts7@email.com\",\n    \"password\": \"teste1223\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:9000/api/users/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9000",
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            },
+            "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+          },
+          "response": []
+        },
+        {
+          "name": "Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxMCwicm9sZSI6ImN1c3RvbWVyIn0sImlhdCI6MTc3Njk0NTcyMSwiZXhwIjoxNzc3MDg5NzIxfQ.YniVQXOugqcEMnDnGVgNY0Fft5-OIKPbRJDr1uGQrAA",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9000/api/users/profile",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9000",
+              "path": [
+                "api",
+                "users",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "// Get token from collection\r",
+          "let token = pm.collectionVariables.get(\"token\");\r",
+          "\r",
+          "// Simple JWT expiry check (decode payload)\r",
+          "function isTokenExpired(tkn) {\r",
+          "    if (!tkn) return true;\r",
+          "\r",
+          "    try {\r",
+          "        const payload = JSON.parse(atob(tkn.split('.')[1]));\r",
+          "        const now = Math.floor(Date.now() / 1000);\r",
+          "\r",
+          "        return payload.exp < now;\r",
+          "    } catch (e) {\r",
+          "        return true;\r",
+          "    }\r",
+          "}\r",
+          "\r",
+          "// If token is missing or expired → login again\r",
+          "if (!token || isTokenExpired(token)) {\r",
+          "\r",
+          "    console.log(\"🔐 Token missing or expired. Logging in...\");\r",
+          "\r",
+          "    pm.sendRequest({\r",
+          "        url: pm.collectionVariables.get(\"base_url\") + \"/api/users/login\",\r",
+          "        method: \"POST\",\r",
+          "        header: {\r",
+          "            \"Content-Type\": \"application/json\"\r",
+          "        },\r",
+          "        body: {\r",
+          "            mode: \"raw\",\r",
+          "            raw: JSON.stringify({\r",
+          "                email: pm.collectionVariables.get(\"email\"),\r",
+          "                password: pm.collectionVariables.get(\"password\")\r",
+          "            })\r",
+          "        }\r",
+          "    }, function (err, res) {\r",
+          "        if (err) {\r",
+          "            console.log(\"Login failed:\", err);\r",
+          "            return;\r",
+          "        }\r",
+          "\r",
+          "        const json = res.json();\r",
+          "\r",
+          "        // adjust this depending on your login response\r",
+          "        const newToken = json.token || json.data?.token;\r",
+          "\r",
+          "        pm.collectionVariables.set(\"token\", newToken);\r",
+          "\r",
+          "        console.log(\"✅ New token stored\");\r",
+          "    });\r",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "PROTOCOL",
+      "value": ""
+    },
+    {
+      "key": "HOST",
+      "value": ""
+    },
+    {
+      "key": "PORT",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "email",
+      "value": ""
+    },
+    {
+      "key": "password",
+      "value": ""
+    },
+    {
+      "key": "base_url",
+      "value": ""
+    }
+  ]
+}

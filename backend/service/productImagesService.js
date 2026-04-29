@@ -1,4 +1,5 @@
 const productImagesRepository = require("../repository/productImagesRepository");
+const productRepository = require("../repository/productRepository");
 
 // CREATE
 const addProductImage = async (data) => {
@@ -7,6 +8,15 @@ const addProductImage = async (data) => {
   if (!product_id || !image_url) {
     const error = new Error("product_id and image_url are required");
     error.statusCode = 400;
+    throw error;
+  }
+
+  // CHECK IF PRODUCT EXISTS FIRST
+  const product = await productRepository.getProductById(product_id);
+
+  if (!product) {
+    const error = new Error("Product not found. Cannot add image");
+    error.statusCode = 404;
     throw error;
   }
 

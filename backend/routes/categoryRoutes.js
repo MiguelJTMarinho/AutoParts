@@ -67,4 +67,128 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * tags:
+ *   name: Categories
+ *   description: Category management
+ */
+
+/**
+ * @swagger
+ * /api/categories:
+ *   post:
+ *     summary: Create a new category
+ *     tags: [Categories]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               parent_id:
+ *                 type: integer
+ *                 nullable: true
+ *                 example: null
+ *     responses:
+ *       201:
+ *         description: Category created successfully
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/categories:
+ *   get:
+ *     summary: Get all categories
+ *     tags: [Categories]
+ *     responses:
+ *       200:
+ *         description: List of categories
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   get:
+ *     summary: Get category by ID
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Category ID
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Category data
+ *       404:
+ *         description: Category not found
+ */
+
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   put:
+ *     summary: Update category
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Category ID
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               parent_id:
+ *                 type: integer
+ *                 nullable: true
+ *     responses:
+ *       200:
+ *         description: Category updated
+ *       404:
+ *         description: Category not found
+ */
+
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   delete:
+ *     summary: Delete category
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Category ID
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Category deleted successfully
+ *       404:
+ *         description: Category not found
+ */
+
 module.exports = router;
