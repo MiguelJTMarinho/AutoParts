@@ -8,6 +8,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const carBrandsRoutes = require("./routes/carBrandsRoutes");
 const carModelsRoutes = require("./routes/carModelsRoutes");
 const partBrandsRoutes = require("./routes/partBrandsRoutes");
+const productImagesRoutes = require("./routes/productImagesRoutes");
 
 const app = express();
 app.use(express.json());
@@ -26,6 +27,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/car_brands", carBrandsRoutes);
 app.use("/api/car_models", carModelsRoutes);
 app.use("/api/part_brands", partBrandsRoutes);
+app.use("/api/product_images", productImagesRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
