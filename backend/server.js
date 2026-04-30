@@ -16,6 +16,8 @@ const partBrandsRoutes = require("./routes/partBrandsRoutes");
 const productImagesRoutes = require("./routes/productImagesRoutes");
 const productCompatibilityRoutes = require("./routes/productCompatibilityRoutes");
 const productRoutes = require("./routes/productRoutes");
+const addressesRoutes = require("./routes/addressesRoutes");
+const oemReferencesRoutes = require("./routes/oemReferencesRoutes");
 
 const app = express();
 app.use(express.json());
@@ -45,6 +47,8 @@ app.use("/api/part_brands", partBrandsRoutes);
 app.use("/api/product_images", productImagesRoutes);
 app.use("/api/product_compatibility", productCompatibilityRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/addresses", addressesRoutes);
+app.use("/api/oem_references", oemReferencesRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
