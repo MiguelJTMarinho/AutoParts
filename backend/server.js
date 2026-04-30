@@ -43,7 +43,7 @@ app.use("/api/car_brands", carBrandsRoutes);
 app.use("/api/car_models", carModelsRoutes);
 app.use("/api/part_brands", partBrandsRoutes);
 app.use("/api/product_images", productImagesRoutes);
-app.use("/api/product-compatibility", productCompatibilityRoutes);
+app.use("/api/product_compatibility", productCompatibilityRoutes);
 app.use("/api/products", productRoutes);
 
 app.listen(PORT, () => {

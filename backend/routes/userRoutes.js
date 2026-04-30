@@ -12,7 +12,7 @@ const protect = require("../middleware/authMiddleware").protect;
 router.post("/register", async (req, res) => {
   try {
     const data = await userService.registerUser(req.body);
-    res.status(201).json(data);
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -25,7 +25,7 @@ router.post("/login", async (req, res) => {
   try {
     const user = await userService.loginUser(req.body);
 
-    res.status(201).json(user);
+    res.status(200).json(user);
   } catch (err) {
     res.status(401).json({ error: err.message });
   }
@@ -36,6 +36,62 @@ router.post("/login", async (req, res) => {
 // @acess Private
 router.get("/profile", protect, async (req, res) => {
   res.json(req.user);
+});
+
+// @route PUT /api/users/profile
+// @desc Update logged-in user profile
+// @access Private
+router.put("/profile", protect, async (req, res) => {
+  try {
+    const updatedUser = await userService.updateUser(req.user.id, req.body);
+
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
+// @route POST /api/users/forgot_password
+// @desc Request password reset
+// @access Public
+router.post("/forgot_password", async (req, res) => {
+  try {
+    const data = await userService.forgotPassword(req.body.email);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// @route POST /api/users/reset_password
+// @desc Reset user password
+// @access Public
+router.post("/reset_password", async (req, res) => {
+  try {
+    const data = await userService.resetPassword(req.body);
+    res.json(data);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
+// @route PUT /api/users/change_password
+// @desc Change user password (logged in)
+// @access Private
+router.put("/change_password", protect, async (req, res) => {
+  try {
+    const { current_password, new_password } = req.body;
+
+    const data = await userService.changePassword(
+      req.user.id,
+      current_password,
+      new_password,
+    );
+
+    res.json(data);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
 });
 
 /**
@@ -51,7 +107,7 @@ router.get("/profile", protect, async (req, res) => {
  *   post:
  *     summary: Register a new user
  *     tags: [Users]
- *     description: Creates a new user account
+ *     description: Creates a new user account (username is generated automatically)
  *     requestBody:
  *       required: true
  *       content:
@@ -59,15 +115,15 @@ router.get("/profile", protect, async (req, res) => {
  *           schema:
  *             type: object
  *             required:
- *               - firstName
- *               - lastName
+ *               - first_name
+ *               - last_name
  *               - email
  *               - password
  *             properties:
- *               firstName:
+ *               first_name:
  *                 type: string
  *                 example: Miguel
- *               lastName:
+ *               last_name:
  *                 type: string
  *                 example: Marinho
  *               email:
@@ -77,8 +133,10 @@ router.get("/profile", protect, async (req, res) => {
  *                 type: string
  *                 example: 123456
  *     responses:
- *       201:
+ *       200:
  *         description: User created successfully
+ *       400:
+ *         description: Validation error
  *       500:
  *         description: Server error
  */
@@ -102,10 +160,10 @@ router.get("/profile", protect, async (req, res) => {
  *             properties:
  *               email:
  *                 type: string
- *                 example: email@email.com
+ *                 example: miguel@email.com
  *               password:
  *                 type: string
- *                 example: password
+ *                 example: 123456
  *     responses:
  *       200:
  *         description: Login successful (returns user + JWT token)
@@ -127,6 +185,133 @@ router.get("/profile", protect, async (req, res) => {
  *         description: User profile retrieved successfully
  *       401:
  *         description: Unauthorized (missing or invalid token)
+ */
+
+/**
+ * @swagger
+ * /api/users/profile:
+ *   put:
+ *     summary: Update logged-in user profile
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Update user profile (username, first name, last name)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: miguel_dev
+ *               first_name:
+ *                 type: string
+ *                 example: Miguel
+ *               last_name:
+ *                 type: string
+ *                 example: Marinho
+ *               phone_number:
+ *                 type: string
+ *                 example: "+1234567890"
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
+
+/**
+ * @swagger
+ * /api/users/forgot_password:
+ *   post:
+ *     summary: Request password reset
+ *     tags: [Users]
+ *     description: Initiate the password reset process
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: miguel@email.com
+ *     responses:
+ *       200:
+ *         description: Reset token generated
+ *       400:
+ *         description: Invalid email
+ */
+
+/**
+ * @swagger
+ * /api/users/reset_password:
+ *   post:
+ *     summary: Reset user password
+ *     tags: [Users]
+ *     description: Complete the password reset process
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *               - new_password
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 example: abc123def456
+ *               new_password:
+ *                 type: string
+ *                 example: newpassword123
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *       400:
+ *         description: Invalid or expired token
+ */
+
+/**
+ * @swagger
+ * /api/users/change_password:
+ *   put:
+ *     summary: Change user password (logged in)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Update the authenticated user's password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - current_password
+ *               - new_password
+ *             properties:
+ *               current_password:
+ *                 type: string
+ *                 example: currentpassword123
+ *               new_password:
+ *                 type: string
+ *                 example: newpassword123
+ *     responses:
+ *       200:
+ *         description: Password changed successfully
+ *       400:
+ *         description: Invalid current password or weak new password
  */
 
 module.exports = router;

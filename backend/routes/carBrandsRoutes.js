@@ -79,7 +79,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
 /**
  * @swagger
  * tags:
- *   name: Car_Brands
+ *   name: Car Brands
  *   description: Car Brands management
  */
 
@@ -88,7 +88,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * /api/car_brands:
  *   post:
  *     summary: Create a new car brand
- *     tags: [Car_Brands]
+ *     tags: [Car Brands]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -117,7 +117,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * /api/car_brands:
  *   get:
  *     summary: Get all car brands
- *     tags: [Car_Brands]
+ *     tags: [Car Brands]
  *     responses:
  *       200:
  *         description: List of car brands
@@ -128,7 +128,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * /api/car_brands/{id}:
  *   get:
  *     summary: Get car brand by ID
- *     tags: [Car_Brands]
+ *     tags: [Car Brands]
  *     parameters:
  *       - in: path
  *         name: id
@@ -148,7 +148,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * /api/car_brands/{id}:
  *   put:
  *     summary: Update car brand
- *     tags: [Car_Brands]
+ *     tags: [Car Brands]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -182,7 +182,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * /api/car_brands/{id}:
  *   delete:
  *     summary: Delete car brand
- *     tags: [Car_Brands]
+ *     tags: [Car Brands]
  *     security:
  *       - bearerAuth: []
  *     parameters:

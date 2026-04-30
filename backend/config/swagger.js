@@ -1,5 +1,4 @@
 const swaggerJSDoc = require("swagger-jsdoc");
-require("dotenv").config();
 
 const options = {
   definition: {
@@ -9,11 +8,6 @@ const options = {
       version: "1.0.0",
       description: "API documentation for AutoParts platform",
     },
-    servers: [
-      {
-        url: process.env.SERVER_URL,
-      },
-    ],
   },
   apis: ["./routes/*.js"], // onde estão os comentários
 };

@@ -9,7 +9,7 @@ const productImagesService = require("../service/productImagesService");
  *   post:
  *     summary: Add image to a product
  *     description: Creates a new product image
- *     tags: [Product_Images]
+ *     tags: [Product Images]
  *     requestBody:
  *       required: true
  *       content:
@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
  * /api/product_images/{productId}:
  *   get:
  *     summary: Get product images
- *     tags: [Product_Images]
+ *     tags: [Product Images]
  *     parameters:
  *       - in: path
  *         name: productId
@@ -78,7 +78,7 @@ router.get("/:productId", async (req, res) => {
  * /api/product_images/{id}:
  *   delete:
  *     summary: Delete product image
- *     tags: [Product_Images]
+ *     tags: [Product Images]
  *     parameters:
  *       - in: path
  *         name: id

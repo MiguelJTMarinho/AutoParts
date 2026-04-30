@@ -80,7 +80,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
 /**
  * @swagger
  * tags:
- *   name: Part_Brands
+ *   name: Part Brands
  *   description: Part brand management
  */
 
@@ -89,7 +89,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * /api/part_brands:
  *   post:
  *     summary: Create a new Part Brand
- *     tags: [Part_Brands]
+ *     tags: [Part Brands]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -122,7 +122,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * /api/part_brands:
  *   get:
  *     summary: Get all Part_Brands
- *     tags: [Part_Brands]
+ *     tags: [Part Brands]
  *     responses:
  *       200:
  *         description: List of part_brands
@@ -144,7 +144,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * /api/part_brands:
  *   get:
  *     summary: Get all Part_Brands
- *     tags: [Part_Brands]
+ *     tags: [Part Brands]
  *     responses:
  *       200:
  *         description: List of part_brands
@@ -166,7 +166,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * /api/part_brands/{id}:
  *   get:
  *     summary: Get Part Brand by ID
- *     tags: [Part_Brands]
+ *     tags: [Part Brands]
  *     parameters:
  *       - in: path
  *         name: id
@@ -186,7 +186,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * /api/part_brands/{id}:
  *   put:
  *     summary: Update a Part Brand
- *     tags: [Part_Brands]
+ *     tags: [Part Brands]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -226,7 +226,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * /api/part_brands/{id}:
  *   delete:
  *     summary: Delete a Part Brand
- *     tags: [Part_Brands]
+ *     tags: [Part Brands]
  *     security:
  *       - bearerAuth: []
  *     parameters:

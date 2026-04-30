@@ -4,7 +4,7 @@ const router = express.Router();
 const service = require("../service/productCompatibilityService");
 const { protect, isAdmin } = require("../middleware/authMiddleware");
 
-// @route POST /api/product-compatibility
+// @route POST /api/product_compatibility
 // @desc Create product compatibility
 // @access Private (Admin)
 router.post("/", protect, isAdmin, async (req, res) => {
@@ -16,7 +16,7 @@ router.post("/", protect, isAdmin, async (req, res) => {
   }
 });
 
-// @route PUT /api/product-compatibility/:id
+// @route PUT /api/product_compatibility/:id
 // @desc Update product compatibility
 // @access Private (Admin)
 router.put("/:id", protect, isAdmin, async (req, res) => {
@@ -28,7 +28,7 @@ router.put("/:id", protect, isAdmin, async (req, res) => {
   }
 });
 
-// @route GET /api/product-compatibility
+// @route GET /api/product_compatibility
 // @desc Get all compatibility
 // @access Public
 router.get("/", async (req, res) => {
@@ -40,7 +40,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @route GET /api/product-compatibility/product/:product_id
+// @route GET /api/product_compatibility/product/:product_id
 // @desc Get compatibility by product
 // @access Public
 router.get("/product/:product_id", async (req, res) => {
@@ -52,7 +52,7 @@ router.get("/product/:product_id", async (req, res) => {
   }
 });
 
-// @route DELETE /api/product-compatibility/:id
+// @route DELETE /api/product_compatibility/:id
 // @desc Delete compatibility
 // @access Private (Admin)
 router.delete("/:id", protect, isAdmin, async (req, res) => {
@@ -73,7 +73,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
 
 /**
  * @swagger
- * /api/product-compatibility:
+ * /api/product_compatibility:
  *   post:
  *     summary: Create product compatibility
  *     tags: [Product Compatibility]
@@ -117,7 +117,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
 
 /**
  * @swagger
- * /api/product-compatibility/{id}:
+ * /api/product_compatibility/{id}:
  *   put:
  *     summary: Update product compatibility
  *     tags: [Product Compatibility]
@@ -158,7 +158,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
 
 /**
  * @swagger
- * /api/product-compatibility:
+ * /api/product_compatibility:
  *   get:
  *     summary: Get all product compatibility entries
  *     tags: [Product Compatibility]
@@ -170,7 +170,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
 
 /**
  * @swagger
- * /api/product-compatibility/product/{product_id}:
+ * /api/product_compatibility/product/{product_id}:
  *   get:
  *     summary: Get compatibility by product
  *     tags: [Product Compatibility]
@@ -190,7 +190,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
 
 /**
  * @swagger
- * /api/product-compatibility/{id}:
+ * /api/product_compatibility/{id}:
  *   delete:
  *     summary: Delete product compatibility
  *     tags: [Product Compatibility]
