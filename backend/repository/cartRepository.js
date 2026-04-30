@@ -1,0 +1,142 @@
+const pool = require("../config/db");
+
+// GET OR CREATE CART
+const getOrCreateCart = async (user_id) => {
+  let cart = await pool.query(
+    `SELECT * FROM cart WHERE user_id = $1 AND deleted_at IS NULL`,
+    [user_id],
+  );
+
+  if (cart.rows.length > 0) return cart.rows[0];
+
+  const created = await pool.query(
+    `INSERT INTO cart (user_id) VALUES ($1) RETURNING *`,
+    [user_id],
+  );
+
+  return created.rows[0];
+};
+
+// GET CART ITEMS
+const getCartItems = async (cart_id) => {
+  const result = await pool.query(
+    `
+    SELECT ci.*, p.name, p.stock, p.price
+    FROM cart_items ci
+    JOIN products p ON p.id = ci.product_id
+    WHERE ci.cart_id = $1 AND ci.deleted_at IS NULL
+    `,
+    [cart_id],
+  );
+
+  return result.rows;
+};
+
+// FIND ITEM
+const findItem = async (cart_id, product_id) => {
+  const result = await pool.query(
+    `
+    SELECT * FROM cart_items
+    WHERE cart_id = $1 AND product_id = $2 AND deleted_at IS NULL
+    `,
+    [cart_id, product_id],
+  );
+
+  return result.rows[0];
+};
+
+// ADD ITEM
+const addItem = async (cart_id, product_id, quantity, price) => {
+  const result = await pool.query(
+    `
+    INSERT INTO cart_items (cart_id, product_id, quantity, price_at_time)
+    VALUES ($1, $2, $3, $4)
+    RETURNING *
+    `,
+    [cart_id, product_id, quantity, price],
+  );
+
+  return result.rows[0];
+};
+
+// UPDATE QUANTITY (set absoluto)
+const setQuantity = async (id, quantity) => {
+  const result = await pool.query(
+    `
+    UPDATE cart_items
+    SET quantity = $1
+    WHERE id = $2
+    RETURNING *
+    `,
+    [quantity, id],
+  );
+
+  return result.rows[0];
+};
+
+// INCREMENT
+const increment = async (id, amount) => {
+  const result = await pool.query(
+    `
+    UPDATE cart_items
+    SET quantity = quantity + $1
+    WHERE id = $2
+    RETURNING *
+    `,
+    [amount, id],
+  );
+
+  return result.rows[0];
+};
+
+// DECREMENT
+const decrement = async (id, amount) => {
+  const result = await pool.query(
+    `
+    UPDATE cart_items
+    SET quantity = quantity - $1
+    WHERE id = $2
+    RETURNING *
+    `,
+    [amount, id],
+  );
+
+  return result.rows[0];
+};
+
+// REMOVE ITEM
+const removeItem = async (cart_id, product_id) => {
+  const result = await pool.query(
+    `
+    UPDATE cart_items
+    SET deleted_at = NOW()
+    WHERE cart_id = $1 AND product_id = $2
+    RETURNING *
+    `,
+    [cart_id, product_id],
+  );
+
+  return result.rows[0];
+};
+
+//CLEAR CART (SOFT DELETE ALL ITEMS)
+const clearCart = async (cart_id) => {
+  const result = await pool.query(
+    `UPDATE cart_items SET deleted_at = NOW() WHERE cart_id = $1`,
+    [cart_id],
+  );
+
+  return result.rows[0];
+};
+
+module.exports = {
+  getOrCreateCart,
+  getCartItems,
+  findItem,
+  addItem,
+  setQuantity,
+  increment,
+  decrement,
+  removeItem,
+  clearCart,
+};

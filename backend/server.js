@@ -19,6 +19,8 @@ const productRoutes = require("./routes/productRoutes");
 const addressesRoutes = require("./routes/addressesRoutes");
 const oemReferencesRoutes = require("./routes/oemReferencesRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
+const cartRoutes = require("./routes/cartRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 const app = express();
 app.use(express.json());
@@ -51,6 +53,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/addresses", addressesRoutes);
 app.use("/api/oem_references", oemReferencesRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

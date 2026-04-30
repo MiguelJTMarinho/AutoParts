@@ -121,10 +121,28 @@ const deleteProduct = async (id) => {
   return result.rows[0];
 };
 
+const getProductStockAndPrice = async (product_id) => {
+  const result = await pool.query(
+    `SELECT stock, price FROM products WHERE id = $1`,
+    [product_id],
+  );
+  return result.rows[0];
+};
+
+const updateProductStock = async (product_id, newStock) => {
+  const result = await pool.query(
+    `UPDATE products SET stock = $1 WHERE id = $2 RETURNING *`,
+    [newStock, product_id],
+  );
+  return result.rows[0];
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProduct,
   deleteProduct,
+  getProductStockAndPrice,
+  updateProductStock,
 };
