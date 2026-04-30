@@ -25,8 +25,8 @@ const createProduct = async (data) => {
 };
 
 // GET ALL
-const getProducts = async () => {
-  return await productRepository.getAllProducts();
+const getProducts = async (filters) => {
+  return await productRepository.getAllProducts(filters);
 };
 
 // GET BY ID
@@ -68,10 +68,24 @@ const deleteProduct = async (id) => {
   return await productRepository.deleteProduct(id);
 };
 
+// GET SIMILAR PRODUCTS
+const getSimilarProducts = async (productId) => {
+  const products = await productRepository.getSimilarProducts(productId);
+
+  return products;
+};
+
+//Get new arrivals
+const getNewArrivals = async () => {
+  return await productRepository.getNewArrivals();
+};
+
 module.exports = {
   createProduct,
   getProducts,
   getProduct,
   updateProduct,
   deleteProduct,
+  getSimilarProducts,
+  getNewArrivals,
 };

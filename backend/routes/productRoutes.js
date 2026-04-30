@@ -21,7 +21,19 @@ router.post("/", protect, isAdmin, async (req, res) => {
 // @access Public
 router.get("/", async (req, res) => {
   try {
-    const data = await service.getProducts();
+    const data = await service.getProducts(req.query);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// @route GET /api/products/new-arrivals
+// @desc Get latest 8 products
+// @access Public
+router.get("/new_arrivals", async (req, res) => {
+  try {
+    const data = await service.getNewArrivals();
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -59,6 +71,18 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
   try {
     const data = await service.deleteProduct(req.params.id);
     res.json({ message: "Deleted successfully", data });
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
+// @route GET /api/products/:id/similar
+// @desc Get similar products
+// @access Public
+router.get("/similar/:id", async (req, res) => {
+  try {
+    const data = await service.getSimilarProducts(req.params.id);
+    res.json(data);
   } catch (err) {
     res.status(err.statusCode || 500).json({ error: err.message });
   }
@@ -138,12 +162,77 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  * @swagger
  * /api/products:
  *   get:
- *     summary: Get all products
+ *     summary: Get all products with filters
  *     tags: [Products]
- *     description: Returns all active (non-deleted) products
+ *     description: Returns products with optional filters (category, brand, price range, search, stock, sorting)
+ *     parameters:
+ *       - in: query
+ *         name: category_id
+ *         schema:
+ *           type: integer
+ *         description: Filter by category ID
+ *
+ *       - in: query
+ *         name: brand_id
+ *         schema:
+ *           type: integer
+ *         description: Filter by brand ID
+ *
+ *       - in: query
+ *         name: min_price
+ *         schema:
+ *           type: number
+ *         description: Minimum price filter
+ *
+ *       - in: query
+ *         name: max_price
+ *         schema:
+ *           type: number
+ *         description: Maximum price filter
+ *
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by product name or SKU
+ *
+ *       - in: query
+ *         name: in_stock
+ *         schema:
+ *           type: boolean
+ *         description: Filter only products with stock > 0
+ *
+ *       - in: query
+ *         name: sort_by
+ *         schema:
+ *           type: string
+ *           enum: [price_asc, price_desc, newest]
+ *         description: Sorting option
+ *
  *     responses:
  *       200:
- *         description: List of products
+ *         description: List of filtered products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ *                   price:
+ *                     type: number
+ *                   stock:
+ *                     type: integer
+ *                   category_id:
+ *                     type: integer
+ *                   brand_id:
+ *                     type: integer
+ *       500:
+ *         description: Server error
  */
 
 /**
@@ -237,6 +326,55 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *         description: Product deleted successfully
  *       404:
  *         description: Product not found
+ */
+
+/**
+ * @swagger
+ * /api/products/similar/{prodID}:
+ *   get:
+ *     summary: Get similar products
+ *     tags: [Products]
+ *     description: Returns 4 products similar to the given product (same category, fallback to brand)
+ *     parameters:
+ *       - in: path
+ *         name: prodID
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Product ID
+ *     responses:
+ *       200:
+ *         description: List of similar products (max 4)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       404:
+ *         description: Product not found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/products/new_arrivals:
+ *   get:
+ *     summary: Get latest products
+ *     tags: [Products]
+ *     description: Returns the 8 most recently added products
+ *     responses:
+ *       200:
+ *         description: List of latest products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       500:
+ *         description: Server error
  */
 
 module.exports = router;
