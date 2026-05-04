@@ -1,7 +1,7 @@
 const pool = require("../config/db");
 
 // CREATE ORDER
-const createOrder = async (user_id, total, status = "pending") => {
+const createOrder = async (user_id, total, status) => {
   const result = await pool.query(
     `
     INSERT INTO orders (user_id, total, status)
@@ -67,10 +67,23 @@ const updateOrderStatus = async (order_id, status) => {
   return result.rows[0];
 };
 
+//Get order by id
+const getOrderById = async (order_id) => {
+  const result = await pool.query(
+    `
+    SELECT * FROM orders
+    WHERE id = $1`,
+    [order_id],
+  );
+
+  return result.rows[0];
+};
+
 module.exports = {
   createOrder,
   addOrderItem,
   getOrdersByUser,
+  getOrderById,
   getOrderItems,
   updateOrderStatus,
 };

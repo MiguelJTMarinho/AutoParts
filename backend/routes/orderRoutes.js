@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-const service = require("../service/orderService");
-const { protect } = require("../middleware/authMiddleware");
+const orderService = require("../service/orderService");
+const { protect, isAdmin } = require("../middleware/authMiddleware");
 
 // CREATE ORDER FROM CART (CHECKOUT)
 router.post("/checkout", protect, async (req, res) => {
   try {
-    const data = await service.createOrderFromCart(req.user.id);
+    const data = await orderService.createOrderFromCart(req.user.id);
     res.status(201).json(data);
   } catch (err) {
     res.status(err.statusCode || 500).json({
@@ -19,7 +19,7 @@ router.post("/checkout", protect, async (req, res) => {
 // GET USER ORDERS
 router.get("/", protect, async (req, res) => {
   try {
-    const data = await service.getUserOrders(req.user.id);
+    const data = await orderService.getUserOrders(req.user.id);
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -29,10 +29,27 @@ router.get("/", protect, async (req, res) => {
 // GET ORDER DETAILS
 router.get("/:id", protect, async (req, res) => {
   try {
-    const data = await service.getOrderDetails(req.params.id);
+    const data = await orderService.getOrderDetails(req.params.id);
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// UPDATE ORDER STATUS (ADMIN)
+router.patch("/:id/status", protect, isAdmin, async (req, res) => {
+  try {
+    const data = await orderService.updateOrderStatus(
+      req.params.id,
+      req.body.status,
+    );
+
+    res.json({
+      data: data,
+      message: `Order ID ${req.params.id} status updated successfully to ${req.body.status}`,
+    });
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
   }
 });
 
@@ -86,6 +103,46 @@ router.get("/:id", protect, async (req, res) => {
  *     responses:
  *       200:
  *         description: Order details
+ */
+
+/**
+ * @swagger
+ * /api/orders/{id}/status:
+ *   patch:
+ *     summary: Update order status (Admin)
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Update the status of an order (e.g. shipped, delivered)
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Order ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - status
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [pending, paid, shipped, delivered, cancelled, failed]
+ *                 example: shipped
+ *     responses:
+ *       200:
+ *         description: Order status updated successfully
+ *       400:
+ *         description: Invalid status
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Order not found
  */
 
 module.exports = router;

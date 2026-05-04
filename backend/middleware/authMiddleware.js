@@ -35,4 +35,23 @@ const isAdmin = (req, res, next) => {
   }
 };
 
-module.exports = { protect, isAdmin };
+const optionalAuth = async (req, res, next) => {
+  const header = req.headers.authorization;
+
+  if (!header || !header.startsWith("Bearer ")) {
+    return next(); // segue como guest
+  }
+
+  try {
+    token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = await findUserById(decoded.user.id); //Exclude password
+  } catch (err) {
+    // ignora erro → trata como guest
+  }
+
+  next();
+};
+
+module.exports = { protect, isAdmin, optionalAuth };

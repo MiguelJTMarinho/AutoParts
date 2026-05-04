@@ -1,17 +1,32 @@
 const pool = require("../config/db");
 
 // GET OR CREATE CART
-const getOrCreateCart = async (user_id) => {
-  let cart = await pool.query(
-    `SELECT * FROM cart WHERE user_id = $1 AND deleted_at IS NULL`,
-    [user_id],
+const getOrCreateCart = async ({ user_id, guest_id }) => {
+  let cart;
+  console.log(
+    "Getting or creating cart for user_id:",
+    user_id,
+    "guest_id:",
+    guest_id,
   );
+
+  if (user_id) {
+    cart = await pool.query(
+      `SELECT * FROM cart WHERE user_id = $1 AND deleted_at IS NULL`,
+      [user_id],
+    );
+  } else {
+    cart = await pool.query(
+      `SELECT * FROM cart WHERE guest_id = $1 AND deleted_at IS NULL`,
+      [guest_id],
+    );
+  }
 
   if (cart.rows.length > 0) return cart.rows[0];
 
   const created = await pool.query(
-    `INSERT INTO cart (user_id) VALUES ($1) RETURNING *`,
-    [user_id],
+    `INSERT INTO cart (user_id, guest_id) VALUES ($1, $2) RETURNING *`,
+    [user_id || null, guest_id || null],
   );
 
   return created.rows[0];
@@ -116,7 +131,12 @@ const removeItem = async (cart_id, product_id) => {
     [cart_id, product_id],
   );
 
-  return result.rows[0];
+  if (!result.rows.length) return null;
+
+  return {
+    success: true,
+    removed_item: result.rows[0],
+  };
 };
 
 //CLEAR CART (SOFT DELETE ALL ITEMS)
@@ -129,6 +149,46 @@ const clearCart = async (cart_id) => {
   return result.rows[0];
 };
 
+//Delelte items and cart
+const deleteCartandItems = async (cart_id) => {
+  await pool.query(`DELETE FROM cart_items WHERE cart_id = $1`, [cart_id]);
+
+  await pool.query(`DELETE FROM cart WHERE id = $1`, [cart_id]);
+};
+
+const mergeGuestIntoUserCart = async (guest_id, user_id) => {
+  return await pool.query(
+    `
+    WITH guest_cart AS (
+      SELECT * FROM cart
+      WHERE guest_id = $1 AND deleted_at IS NULL
+    ),
+    user_cart AS (
+      SELECT * FROM cart
+      WHERE user_id = $2 AND deleted_at IS NULL
+    )
+
+    -- 1. If both exist, merge items
+    INSERT INTO cart_items (cart_id, product_id, quantity, price_at_time)
+    SELECT
+      uc.id,
+      gi.product_id,
+      gi.quantity,
+      gi.price_at_time
+    FROM cart_items gi
+    JOIN guest_cart gc ON gc.id = gi.cart_id
+    JOIN user_cart uc ON true
+    WHERE gi.deleted_at IS NULL
+
+    ON CONFLICT (cart_id, product_id)
+    DO UPDATE SET
+      quantity = cart_items.quantity + EXCLUDED.quantity;
+
+    `,
+    [guest_id, user_id],
+  );
+};
+
 module.exports = {
   getOrCreateCart,
   getCartItems,
@@ -139,4 +199,6 @@ module.exports = {
   decrement,
   removeItem,
   clearCart,
+  mergeGuestIntoUserCart,
+  deleteCartandItems,
 };
