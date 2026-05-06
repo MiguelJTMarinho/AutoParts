@@ -1,26 +1,43 @@
 const productImagesRepository = require("../repository/productImagesRepository");
 const productRepository = require("../repository/productRepository");
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
 
-// CREATE
-const addProductImage = async (data) => {
-  const { product_id, image_url } = data;
+require("dotenv").config();
 
-  if (!product_id || !image_url) {
-    const error = new Error("product_id and image_url are required");
-    error.statusCode = 400;
-    throw error;
-  }
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-  // CHECK IF PRODUCT EXISTS FIRST
-  const product = await productRepository.getProductById(product_id);
+const uploadStream = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "products" },
+      (error, result) => {
+        if (result) resolve(result);
+        else reject(error);
+      },
+    );
 
-  if (!product) {
-    const error = new Error("Product not found. Cannot add image");
-    error.statusCode = 404;
-    throw error;
-  }
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
+};
 
-  return await productImagesRepository.createProductImage(data);
+const uploadAndCreate = async ({ fileBuffer, product_id, sort_order }) => {
+  // Upload to Cloudinary
+  const result = await uploadStream(fileBuffer);
+
+  // Save in DB
+  const image = await productImagesRepository.createProductImage({
+    product_id,
+    image_url: result.secure_url,
+    sort_order: sort_order || 0,
+  });
+
+  return image;
 };
 
 // GET BY PRODUCT
@@ -48,7 +65,7 @@ const deleteProductImage = async (id) => {
 };
 
 module.exports = {
-  addProductImage,
+  uploadAndCreate,
   getProductImages,
   deleteProductImage,
 };
