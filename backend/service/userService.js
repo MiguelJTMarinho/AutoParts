@@ -70,7 +70,7 @@ const loginUser = async ({ email, password }) => {
 };
 
 // UPDATE USER PROFILE
-const updateUser = async (userId, data) => {
+const updateUserProfile = async (userId, data) => {
   const { username, first_name, last_name, phone_number } = data;
 
   const existingUser = await userRepository.findUserById(userId);
@@ -87,7 +87,7 @@ const updateUser = async (userId, data) => {
     throw error;
   }
 
-  const updatedUser = await userRepository.updateUser(userId, {
+  const updatedUser = await userRepository.updateUserProfile(userId, {
     username,
     first_name,
     last_name,
@@ -167,11 +167,44 @@ const changePassword = async (userId, current_password, new_password) => {
   return { message: "Password changed successfully" };
 };
 
+// Get all users (admin only)
+const getAllUsers = async () => {
+  const users = await userRepository.getAllUsers();
+  if (!users) {
+    const error = new Error("No users found");
+    error.statusCode = 404;
+    throw error;
+  }
+  return users;
+};
+
+const updateUser = async (id, data) => {
+  const { username, first_name, last_name, role, phone_number, is_active } =
+    data;
+  const updatedUser = await userRepository.updateUser(id, {
+    username,
+    first_name,
+    last_name,
+    role,
+    phone_number,
+    is_active,
+  });
+  return updatedUser;
+};
+
+const deleteUser = async (id) => {
+  const deletedUser = await userRepository.deleteUser(id);
+  return deletedUser;
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  updateUserProfile,
   updateUser,
   forgotPassword,
   resetPassword,
   changePassword,
+  getAllUsers,
+  deleteUser,
 };

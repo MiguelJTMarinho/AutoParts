@@ -60,64 +60,66 @@ const getCart = async ({ user_id, guest_id }) => {
   };
 };
 
-// UPDATE QUANTITY (central method)
-const updateQuantity = async ({
+const updateItemQuantity = async ({
   user_id,
   guest_id,
   product_id,
-  action,
-  value = 1,
+  quantity,
 }) => {
-  const cart = await cartRepository.getOrCreateCart({ user_id, guest_id });
+  if (quantity == null) {
+    const error = new Error("Quantity is required");
+    error.statusCode = 400;
+    throw error;
+  }
 
-  const item = await cartRepository.findItem(cart.id, product_id);
+  if (quantity < 0) {
+    const error = new Error("Quantity cannot be negative");
+    error.statusCode = 400;
+    throw error;
+  }
 
-  if (!item) {
-    const error = new Error("Item not found");
+  const cart = await cartRepository.getOrCreateCart({
+    user_id,
+    guest_id,
+  });
+
+  const product = await productRepository.getProductById(product_id);
+
+  if (!product) {
+    const error = new Error("Product not found");
     error.statusCode = 404;
     throw error;
   }
 
-  const product = await productRepository.getProductById(product_id);
+  const item = await cartRepository.findItem(cart.id, product_id);
 
-  let updated;
+  // remove item if quantity = 0
+  if (quantity === 0) {
+    if (!item) return { message: "Item already not in cart" };
 
-  switch (action) {
-    case "increase":
-      if (item.quantity + value > product.stock) {
-        throw Object.assign(new Error("Not enough stock"), {
-          statusCode: 400,
-        });
-      }
-      updated = await cartRepository.increment(item.id, value);
-      break;
+    await cartRepository.removeItem(cart.id, product_id);
 
-    case "decrease":
-      if (item.quantity - value <= 0) {
-        return await cartRepository.removeItem(cart.id, product_id);
-      }
-      updated = await cartRepository.decrement(item.id, value);
-      break;
-
-    case "set":
-      if (value <= 0) {
-        return await cartRepository.removeItem(cart.id, product_id);
-      }
-      if (value > product.stock) {
-        throw Object.assign(new Error("Not enough stock"), {
-          statusCode: 400,
-        });
-      }
-      updated = await cartRepository.setQuantity(item.id, value);
-      break;
-
-    default:
-      const error = new Error("Invalid action");
-      error.statusCode = 400;
-      throw error;
+    return { message: "Item removed" };
   }
 
-  return updated;
+  // stock validation
+  if (quantity > product.stock) {
+    const error = new Error("Not enough stock");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  // create or update
+  if (!item) {
+    return await cartRepository.addItem({
+      cart_id: cart.id,
+      product_id,
+      quantity,
+      price_at_time: product.price,
+    });
+  }
+
+  return await cartRepository.setQuantity(item.id, quantity);
 };
 
 // REMOVE ITEM
@@ -209,7 +211,7 @@ const mergeCart = async ({ guest_id, user_id }) => {
 module.exports = {
   addToCart,
   getCart,
-  updateQuantity,
+  updateItemQuantity,
   removeItem,
   mergeCart,
 };

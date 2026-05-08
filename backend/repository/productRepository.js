@@ -44,53 +44,106 @@ const createProduct = async (data) => {
   return result.rows[0];
 };
 
-// GET ALL
 const getAllProducts = async (filters) => {
-  let query = `SELECT * FROM products WHERE deleted_at IS NULL`;
+  let query = `
+    SELECT DISTINCT p.*
+    FROM products p
+    LEFT JOIN categories c ON c.id = p.category_id
+    LEFT JOIN part_brands pb ON pb.id = p.brand_id
+    LEFT JOIN oem_references oem ON oem.product_id = p.id
+    LEFT JOIN product_compatibility pc ON pc.product_id = p.id
+    LEFT JOIN car_brands cb ON cb.id = pc.carbrand_id
+    LEFT JOIN car_models cm ON cm.id = pc.carmodel_id
+    WHERE p.deleted_at IS NULL
+  `;
+
   const values = [];
   let index = 1;
 
-  // CATEGORY
-  if (filters.category_id) {
-    query += ` AND category_id = $${index++}`;
-    values.push(filters.category_id);
+  // COLLECTION / CATEGORY
+  if (filters.collection || filters.category) {
+    query += ` AND c.name ILIKE $${index++}`;
+    values.push(`%${filters.collection || filters.category}%`);
   }
 
-  // BRAND
-  if (filters.brand_id) {
-    query += ` AND brand_id = $${index++}`;
-    values.push(filters.brand_id);
+  // OEM
+  if (filters.oem) {
+    query += ` AND oem.reference_code ILIKE $${index++}`;
+    values.push(`%${filters.oem}%`);
   }
 
-  // PRICE RANGE
-  if (filters.min_price) {
-    query += ` AND price >= $${index++}`;
-    values.push(filters.min_price);
+  // CAR BRAND
+  if (filters.carBrand) {
+    query += ` AND cb.name ILIKE $${index++}`;
+    values.push(`%${filters.carBrand}%`);
   }
 
-  if (filters.max_price) {
-    query += ` AND price <= $${index++}`;
-    values.push(filters.max_price);
+  // CAR MODEL
+  if (filters.carModel) {
+    query += ` AND cm.name ILIKE $${index++}`;
+    values.push(`%${filters.carModel}%`);
   }
 
-  // SEARCH (nome / sku)
+  // CAR YEAR
+  if (filters.carYear) {
+    query += `
+      AND (
+        (pc.year_start IS NULL OR pc.year_start <= $${index})
+        AND
+        (pc.year_end IS NULL OR pc.year_end >= $${index})
+      )
+    `;
+    values.push(filters.carYear);
+    index++;
+  }
+
+  // PART BRAND
+  if (filters.partBrand) {
+    query += ` AND pb.name ILIKE $${index++}`;
+    values.push(`%${filters.partBrand}%`);
+  }
+
+  // PRICE MIN
+  if (filters.minPrice) {
+    query += ` AND p.price >= $${index++}`;
+    values.push(filters.minPrice);
+  }
+
+  // PRICE MAX
+  if (filters.maxPrice) {
+    query += ` AND p.price <= $${index++}`;
+    values.push(filters.maxPrice);
+  }
+
+  // STOCK
+  if (filters.inStock === "true") {
+    query += ` AND p.stock > 0`;
+  }
+
+  // SEARCH
   if (filters.search) {
-    query += ` AND (name ILIKE $${index} OR sku ILIKE $${index})`;
+    query += `
+      AND (
+        p.name ILIKE $${index}
+        OR p.sku ILIKE $${index}
+        OR p.description ILIKE $${index}
+      )
+    `;
     values.push(`%${filters.search}%`);
     index++;
   }
 
-  // STOCK
-  if (filters.in_stock === "true") {
-    query += ` AND stock > 0`;
+  // SORT
+  if (filters.sort_by === "price_asc") {
+    query += ` ORDER BY p.price ASC`;
+  } else if (filters.sort_by === "price_desc") {
+    query += ` ORDER BY p.price DESC`;
+  } else {
+    query += ` ORDER BY p.created_at DESC`;
   }
 
-  // SORT
-  if (filters.sort_by === "price_asc") query += ` ORDER BY price ASC`;
-  else if (filters.sort_by === "price_desc") query += ` ORDER BY price DESC`;
-  else query += ` ORDER BY id DESC`;
-
   const result = await pool.query(query, values);
+
   return result.rows;
 };
 

@@ -8,7 +8,7 @@ const protect = require("../middleware/authMiddleware").protect;
 
 // @route POST /api/users/register
 // @desc Register a new user
-// @acess Private (Admin)
+// @acess Public
 router.post("/register", async (req, res) => {
   try {
     const data = await userService.registerUser(req.body);
@@ -43,7 +43,10 @@ router.get("/profile", protect, async (req, res) => {
 // @access Private
 router.put("/profile", protect, async (req, res) => {
   try {
-    const updatedUser = await userService.updateUser(req.user.id, req.body);
+    const updatedUser = await userService.updateUserProfile(
+      req.user.id,
+      req.body,
+    );
 
     res.json(updatedUser);
   } catch (err) {
@@ -89,6 +92,53 @@ router.put("/change_password", protect, async (req, res) => {
     );
 
     res.json(data);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
+// @route GET /api/users
+// @desc Get all users (Admin only)
+// @access Private/Admin
+router.get("/", protect, isAdmin, async (req, res) => {
+  try {
+    const users = await userService.getAllUsers();
+    res.json(users);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
+// @route PUT /api/users/:id/role
+// @desc Update user role (Admin only)
+// @access Private/Admin
+router.put("/:id", protect, isAdmin, async (req, res) => {
+  try {
+    const { username, first_name, last_name, role, phone_number, is_active } =
+      req.body;
+
+    const updatedUser = await userService.updateUser(req.params.id, {
+      username,
+      first_name,
+      last_name,
+      role,
+      phone_number,
+      is_active,
+    });
+
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
+// @route DELETE /api/users/:id
+// @desc Soft Delete user (Admin only)
+// @access Private/Admin
+router.delete("/:id", protect, isAdmin, async (req, res) => {
+  try {
+    const deletedUser = await userService.deleteUser(req.params.id);
+    res.json({ message: "User deleted successfully", user: deletedUser });
   } catch (err) {
     res.status(err.statusCode || 500).json({ error: err.message });
   }
@@ -312,6 +362,118 @@ router.put("/change_password", protect, async (req, res) => {
  *         description: Password changed successfully
  *       400:
  *         description: Invalid current password or weak new password
+ */
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Get all users (Admin only)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Retrieves a list of all registered users. Only accessible by administrators.
+ *     responses:
+ *       200:
+ *         description: List of users retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   role:
+ *                     type: string
+ *       401:
+ *         description: Unauthorized (Not logged in)
+ *       403:
+ *         description: Forbidden (Not an admin)
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   put:
+ *     summary: Update any user (Admin only)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Allows an administrator to edit any user's profile, including their role.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the user to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               phone_number:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *                 example: admin
+ *                 description: The user role ('customer' or 'admin')
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden (Not an admin)
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Delete a user (Soft Delete, Admin only)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Marks a user as inactive (Soft Delete). Keeps order history intact. Only accessible by administrators.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the user to delete
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden (Not an admin)
+ *       404:
+ *         description: User not found or already deleted
+ *       500:
+ *         description: Server error
  */
 
 module.exports = router;

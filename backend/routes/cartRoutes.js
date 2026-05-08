@@ -5,7 +5,7 @@ const cartService = require("../service/cartService");
 const { protect, optionalAuth } = require("../middleware/authMiddleware");
 
 // ADD TO CART (USER OR GUEST)
-router.post("/", async (req, res) => {
+router.post("/items", optionalAuth, async (req, res) => {
   try {
     const data = await cartService.addToCart({
       user_id: req.user?.id || null,
@@ -34,15 +34,25 @@ router.get("/", optionalAuth, async (req, res) => {
   }
 });
 
-// UPDATE CART ITEM
-router.patch("/", optionalAuth, async (req, res) => {
+// UPDATE ITEM QUANTITY (PUT)
+router.put("/items", optionalAuth, async (req, res) => {
   try {
-    const data = await cartService.updateQuantity({
+    if (!req.body.product_id) {
+      throw Object.assign(new Error("product_id is required"), {
+        statusCode: 400,
+      });
+    }
+    if (typeof req.body.quantity !== "number") {
+      throw Object.assign(new Error("quantity must be a number"), {
+        statusCode: 400,
+      });
+    }
+
+    const data = await cartService.updateItemQuantity({
       user_id: req.user?.id || null,
       guest_id: req.headers["x-guest-id"] || null,
       product_id: req.body.product_id,
-      action: req.body.action,
-      value: req.body.value,
+      quantity: req.body.quantity,
     });
 
     res.json(data);
@@ -54,12 +64,12 @@ router.patch("/", optionalAuth, async (req, res) => {
 });
 
 // REMOVE ITEM
-router.delete("/:product_id", optionalAuth, async (req, res) => {
+router.delete("/items", optionalAuth, async (req, res) => {
   try {
     const data = await cartService.removeItem({
       user_id: req.user?.id || null,
       guest_id: req.headers["x-guest-id"] || null,
-      product_id: req.params.product_id,
+      product_id: req.body.product_id,
     });
 
     res.json({ message: "Removed", data });
@@ -72,7 +82,7 @@ router.delete("/:product_id", optionalAuth, async (req, res) => {
 router.post("/merge", protect, async (req, res) => {
   try {
     const data = await cartService.mergeCart({
-      guest_id: req.body.guestId,
+      guest_id: req.body.guest_id,
       user_id: req.user.id,
     });
 
@@ -83,7 +93,6 @@ router.post("/merge", protect, async (req, res) => {
     });
   }
 });
-
 /**
  * @swagger
  * tags:
@@ -93,172 +102,11 @@ router.post("/merge", protect, async (req, res) => {
 
 /**
  * @swagger
- * /api/cart:
+ * /api/cart/items:
  *   post:
  *     summary: Add product to cart (user or guest)
  *     tags: [Cart]
- *     description: Adds a product to the cart. Works for authenticated users or guests using guest_id header.
- *     parameters:
- *       - in: header
- *         name: x-guest-id
- *         required: false
- *         schema:
- *           type: string
- *         description: Guest session ID (required for guest users)
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - product_id
- *             properties:
- *               product_id:
- *                 type: integer
- *                 example: 1
- *               quantity:
- *                 type: integer
- *                 example: 2
- *     responses:
- *       201:
- *         description: Product added to cart
- *       400:
- *         description: Invalid request or insufficient stock
- *       404:
- *         description: Product not found
- */
-
-/**
- * @swagger
- * /api/cart:
- *   get:
- *     summary: Get current cart (user or guest)
- *     tags: [Cart]
- *     description: Returns cart contents for authenticated user or guest session
- *     parameters:
- *       - in: header
- *         name: x-guest-id
- *         required: false
- *         schema:
- *           type: string
- *         description: Guest session ID (required if not logged in)
- *     responses:
- *       200:
- *         description: Cart retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 cart_id:
- *                   type: integer
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       product_id:
- *                         type: integer
- *                       quantity:
- *                         type: integer
- *                       price_at_time:
- *                         type: number
- *                       subtotal:
- *                         type: number
- *                 total:
- *                   type: number
- *       400:
- *         description: Missing user or guest session
- */
-
-/**
- * @swagger
- * /api/cart:
- *   patch:
- *     summary: Update cart item quantity
- *     tags: [Cart]
- *     description: Update quantity of a product in cart (increase, decrease or set value)
- *     parameters:
- *       - in: header
- *         name: x-guest-id
- *         required: false
- *         schema:
- *           type: string
- *         description: Guest session ID
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - product_id
- *               - action
- *             properties:
- *               product_id:
- *                 type: integer
- *                 example: 1
- *               action:
- *                 type: string
- *                 enum: [increase, decrease, set]
- *                 example: increase
- *               value:
- *                 type: integer
- *                 example: 1
- *     responses:
- *       200:
- *         description: Cart updated successfully
- *       400:
- *         description: Invalid action or stock limit exceeded
- *       404:
- *         description: Cart item not found
- */
-
-/**
- * @swagger
- * /api/cart/{product_id}:
- *   delete:
- *     summary: Remove item from cart
- *     tags: [Cart]
- *     description: Removes a product from the cart (user or guest)
- *     parameters:
- *       - in: path
- *         name: product_id
- *         required: true
- *         schema:
- *           type: integer
- *         description: Product ID to remove
- *       - in: header
- *         name: x-guest-id
- *         required: false
- *         schema:
- *           type: string
- *         description: Guest session ID
- *     responses:
- *       200:
- *         description: Item removed successfully
- *       404:
- *         description: Item not found
- */
-/**
- * @swagger
- * tags:
- *   name: Cart
- *   description: Shopping cart management (supports guest and authenticated users)
- */
-
-/**
- * @swagger
- * /api/cart:
- *   post:
- *     summary: Add product to cart (user or guest)
- *     tags: [Cart]
- *     description: |
- *       Adds a product to the cart.
- *       Works with:
- *       - Authenticated user (JWT)
- *       - Guest user (x-guest-id header)
+ *     description: Adds a product to the cart. Works with Authenticated user (JWT) or Guest user (x-guest-id header).
  *     parameters:
  *       - in: header
  *         name: x-guest-id
@@ -283,7 +131,7 @@ router.post("/merge", protect, async (req, res) => {
  *                 example: 2
  *     responses:
  *       201:
- *         description: Product added to cart
+ *         description: Product added to cart successfully
  *       400:
  *         description: Invalid request or insufficient stock
  *       404:
@@ -296,17 +144,13 @@ router.post("/merge", protect, async (req, res) => {
  *   get:
  *     summary: Get current cart (user or guest)
  *     tags: [Cart]
- *     description: |
- *       Returns cart contents.
- *       Requires either:
- *       - JWT authentication
- *       - x-guest-id header
+ *     description: Returns cart contents. Requires either JWT authentication or x-guest-id header.
  *     parameters:
  *       - in: header
  *         name: x-guest-id
  *         schema:
  *           type: string
- *         description: Guest session ID
+ *         description: Guest session ID (required if not logged in)
  *     responses:
  *       200:
  *         description: Cart retrieved successfully
@@ -336,26 +180,25 @@ router.post("/merge", protect, async (req, res) => {
  *                         type: number
  *                 total:
  *                   type: number
+ *       400:
+ *         description: Missing user or guest session
+ *       500:
+ *         description: Server error
  */
 
 /**
  * @swagger
- * /api/cart:
- *   patch:
+ * /api/cart/items:
+ *   put:
  *     summary: Update cart item quantity
  *     tags: [Cart]
- *     description: |
- *       Update quantity of a product in cart.
- *       Actions:
- *       - increase
- *       - decrease
- *       - set
+ *     description: Updates the quantity of a product in the cart. Works for both authenticated users and guest carts.
  *     parameters:
  *       - in: header
  *         name: x-guest-id
  *         schema:
  *           type: string
- *         description: Guest session ID
+ *         description: Guest session ID (required for guest users)
  *     requestBody:
  *       required: true
  *       content:
@@ -364,51 +207,71 @@ router.post("/merge", protect, async (req, res) => {
  *             type: object
  *             required:
  *               - product_id
- *               - action
+ *               - quantity
  *             properties:
  *               product_id:
  *                 type: integer
  *                 example: 1
- *               action:
- *                 type: string
- *                 enum: [increase, decrease, set]
- *                 example: increase
- *               value:
+ *               quantity:
  *                 type: integer
- *                 example: 1
+ *                 example: 3
+ *                 description: New quantity of the product in cart
  *     responses:
  *       200:
- *         description: Cart updated successfully
+ *         description: Cart item updated successfully
  *       400:
- *         description: Invalid action or stock exceeded
+ *         description: Invalid input (e.g., missing product_id or quantity not a number)
  *       404:
- *         description: Item not found
+ *         description: Cart item not found
+ *       500:
+ *         description: Server error
  */
 
 /**
  * @swagger
- * /api/cart/{product_id}:
+ * /api/cart/items:
  *   delete:
- *     summary: Remove item from cart
+ *     summary: Remove an item from the cart
  *     tags: [Cart]
- *     description: Removes a product from the cart (user or guest)
+ *     description: Removes a specific product from the cart using the product_id in the request body.
  *     parameters:
- *       - in: path
- *         name: product_id
- *         required: true
- *         schema:
- *           type: integer
- *         description: Product ID
  *       - in: header
  *         name: x-guest-id
  *         schema:
  *           type: string
- *         description: Guest session ID
+ *         description: Guest session ID (required for guest users)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - product_id
+ *             properties:
+ *               product_id:
+ *                 type: integer
+ *                 example: 1
+ *                 description: ID of the product to remove
  *     responses:
  *       200:
- *         description: Item removed successfully
+ *         description: Product removed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Removed
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Invalid request
  *       404:
- *         description: Item not found
+ *         description: Cart item not found
+ *       500:
+ *         description: Server error
  */
 
 /**
@@ -419,10 +282,7 @@ router.post("/merge", protect, async (req, res) => {
  *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
- *     description: |
- *       Merges a guest cart into the authenticated user's cart.
- *       - Combines quantities if products already exist
- *       - Deletes guest cart after merge
+ *     description: Merges a guest cart into the authenticated user's cart. Combines quantities if products already exist and deletes the guest cart.
  *     requestBody:
  *       required: true
  *       content:
@@ -430,9 +290,9 @@ router.post("/merge", protect, async (req, res) => {
  *           schema:
  *             type: object
  *             required:
- *               - guestId
+ *               - guest_id
  *             properties:
- *               guestId:
+ *               guest_id:
  *                 type: string
  *                 example: guest_17123456789
  *     responses:
@@ -442,6 +302,8 @@ router.post("/merge", protect, async (req, res) => {
  *         description: Guest cart empty or not found
  *       401:
  *         description: Unauthorized
+ *       500:
+ *         description: Server error
  */
 
 module.exports = router;

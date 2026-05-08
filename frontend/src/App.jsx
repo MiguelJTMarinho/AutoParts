@@ -22,36 +22,44 @@ import CategoriesManagement from "../components/Admin/CategoriesManagement";
 import PartBrandsManagement from "../components/Admin/PartBrandManagement";
 import ScrollToTop from "../components/Common/ScrollToTop";
 
+import { Provider } from "react-redux";
+import store from "../redux/store";
+
 const App = () => {
   return (
-    <BrowserRouter>
-      <Toaster position="top-right" />
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<UserLayout />}>
-          <Route index element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="my-orders" element={<MyOrdersPage />} />
-          <Route path="collections/:collection" element={<CollectionPage />} />
-          <Route path="product/:id" element={<ProductDetails />} />
-          <Route path="checkout" element={<Checkout />} />
-          <Route path="order-confirmation" element={<OrderConfirmation />} />
-          <Route path="order/:id" element={<OrderDetailsPage />} />
-          <Route path="my-orders" element={<MyOrdersPage />} />
-        </Route>
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminHomePage />} />
-          <Route path="users" element={<UserManagement />} />
-          <Route path="products" element={<ProductManagement />} />
-          <Route path="products/:id/edit" element={<EditProductPage />} />
-          <Route path="orders" element={<OrderManagement />} />
-          <Route path="categories" element={<CategoriesManagement />} />
-          <Route path="part-brands" element={<PartBrandsManagement />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Toaster position="top-right" />
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<UserLayout />}>
+            <Route index element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="my-orders" element={<MyOrdersPage />} />
+            <Route
+              path="collections/:collection"
+              element={<CollectionPage />}
+            />
+            <Route path="product/:id" element={<ProductDetails />} />
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="order-confirmation" element={<OrderConfirmation />} />
+            <Route path="order/:id" element={<OrderDetailsPage />} />
+            <Route path="my-orders" element={<MyOrdersPage />} />
+          </Route>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminHomePage />} />
+            <Route path="users" element={<UserManagement />} />
+            <Route path="products" element={<ProductManagement />} />
+            <Route path="products/:id/edit" element={<EditProductPage />} />
+            <Route path="orders" element={<OrderManagement />} />
+            <Route path="categories" element={<CategoriesManagement />} />
+            <Route path="part-brands" element={<PartBrandsManagement />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 };
 

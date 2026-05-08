@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { HiCheck } from "react-icons/hi";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../redux/slices/authSlice";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -18,9 +20,22 @@ const Register = () => {
     }));
   };
 
+  const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("User Registred: ", { formData });
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    dispatch(
+      registerUser({
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+      }),
+    );
   };
 
   return (

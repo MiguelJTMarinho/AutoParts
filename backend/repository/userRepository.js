@@ -18,7 +18,7 @@ const createUser = async ({
   return result.rows[0];
 };
 
-const updateUser = async (id, data) => {
+const updateUserProfile = async (id, data) => {
   const { username, first_name, last_name, phone_number } = data;
 
   const result = await pool.query(
@@ -27,7 +27,7 @@ const updateUser = async (id, data) => {
          first_name = COALESCE($2, first_name),
          last_name = COALESCE($3, last_name),
          phone_number = COALESCE($4, phone_number)
-     WHERE id = $5
+     WHERE id = $5 and is_active = true
      RETURNING id, username, first_name, last_name, phone_number, role`,
     [username, first_name, last_name, phone_number, id],
   );
@@ -36,16 +36,17 @@ const updateUser = async (id, data) => {
 };
 
 const findUserByEmail = async (email) => {
-  const result = await pool.query("SELECT * FROM users WHERE email = $1", [
-    email,
-  ]);
+  const result = await pool.query(
+    "SELECT * FROM users WHERE email = $1 AND is_active = true",
+    [email],
+  );
 
   return result.rows[0];
 };
 
 const findByUsername = async (username) => {
   const result = await pool.query(
-    "SELECT id, username, first_name, last_name, email, role FROM users WHERE username = $1",
+    "SELECT id, username, first_name, last_name, email, role FROM users WHERE username = $1 AND is_active = true",
     [username],
   );
 
@@ -54,7 +55,7 @@ const findByUsername = async (username) => {
 
 const findUserById = async (id) => {
   const result = await pool.query(
-    "SELECT id, username, first_name, last_name, email, phone_number, role FROM users WHERE id = $1",
+    "SELECT id, username, first_name, last_name, email, phone_number, role, is_active FROM users WHERE id = $1 AND is_active = true",
     [id],
   );
 
@@ -62,7 +63,10 @@ const findUserById = async (id) => {
 };
 
 const findUserWithPasswordById = async (id) => {
-  const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+  const result = await pool.query(
+    "SELECT * FROM users WHERE id = $1 AND is_active = true",
+    [id],
+  );
 
   return result.rows[0];
 };
@@ -72,7 +76,7 @@ const setResetPasswordToken = async (email, token, expires) => {
     `UPDATE users
      SET reset_password_token = $1,
          reset_password_expires = $2
-     WHERE email = $3
+     WHERE email = $3 AND is_active = true
      RETURNING id, email`,
     [token, expires, email],
   );
@@ -84,7 +88,8 @@ const findByResetToken = async (token) => {
   const result = await pool.query(
     `SELECT * FROM users 
      WHERE reset_password_token = $1 
-       AND reset_password_expires > NOW()`,
+       AND reset_password_expires > NOW()
+       AND is_active = true`,
     [token],
   );
 
@@ -97,9 +102,48 @@ const updatePassword = async (id, password_hash) => {
      SET password_hash = $1,
          reset_password_token = NULL,
          reset_password_expires = NULL
-     WHERE id = $2
+     WHERE id = $2 AND is_active = true
      RETURNING id, email`,
     [password_hash, id],
+  );
+
+  return result.rows[0];
+};
+
+const getAllUsers = async () => {
+  const result = await pool.query(
+    `SELECT id, username, first_name, last_name, email, phone_number, role, is_active FROM users`,
+  );
+
+  return result.rows;
+};
+
+const updateUser = async (id, data) => {
+  const { username, first_name, last_name, role, phone_number, is_active } =
+    data;
+  const result = await pool.query(
+    `UPDATE users
+     SET username = COALESCE($1, username),
+          first_name = COALESCE($2, first_name),
+          last_name = COALESCE($3, last_name),
+          role = COALESCE($4, role),
+          phone_number = COALESCE($5, phone_number)
+          is_active = COALESCE($6, is_active)
+      WHERE id = $7
+      RETURNING id, username, first_name, last_name, email, phone_number, role, is_active`,
+    [username, first_name, last_name, role, phone_number, is_active, id],
+  );
+
+  return result.rows[0];
+};
+
+const deleteUser = async (id) => {
+  const result = await pool.query(
+    `UPDATE users
+     SET is_active = false
+     WHERE id = $1
+     RETURNING id`,
+    [id],
   );
 
   return result.rows[0];
@@ -110,9 +154,12 @@ module.exports = {
   findUserByEmail,
   findUserById,
   findByUsername,
-  updateUser,
+  updateUserProfile,
   setResetPasswordToken,
   findByResetToken,
   updatePassword,
   findUserWithPasswordById,
+  getAllUsers,
+  updateUser,
+  deleteUser,
 };
