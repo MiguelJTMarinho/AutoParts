@@ -288,6 +288,14 @@ const getNewArrivals = async () => {
   return result.rows;
 };
 
+const getAllProductsForAdmin = async () => {
+  const result = await pool.query(
+    `SELECT * FROM products ORDER BY created_at DESC`,
+  );
+
+  return result.rows;
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -298,4 +306,5 @@ module.exports = {
   updateProductStock,
   getSimilarProducts,
   getNewArrivals,
+  getAllProductsForAdmin,
 };

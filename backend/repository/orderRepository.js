@@ -79,6 +79,18 @@ const getOrderById = async (order_id) => {
   return result.rows[0];
 };
 
+// Get all orders (for admin)
+const getAllOrders = async () => {
+  const result = await pool.query(
+    `SELECT o.*, u.username
+     FROM orders o
+     JOIN users u ON u.id = o.user_id
+     ORDER BY o.created_at DESC`,
+  );
+
+  return result.rows;
+};
+
 module.exports = {
   createOrder,
   addOrderItem,
@@ -86,4 +98,5 @@ module.exports = {
   getOrderById,
   getOrderItems,
   updateOrderStatus,
+  getAllOrders,
 };

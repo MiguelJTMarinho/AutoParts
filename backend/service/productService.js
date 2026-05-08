@@ -80,6 +80,11 @@ const getNewArrivals = async () => {
   return await productRepository.getNewArrivals();
 };
 
+// Get all products for admin
+const getAllProductsForAdmin = async () => {
+  return await productRepository.getAllProductsForAdmin();
+};
+
 module.exports = {
   createProduct,
   getProducts,
@@ -88,4 +93,5 @@ module.exports = {
   deleteProduct,
   getSimilarProducts,
   getNewArrivals,
+  getAllProductsForAdmin,
 };

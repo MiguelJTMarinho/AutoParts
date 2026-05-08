@@ -88,6 +88,18 @@ router.get("/similar/:id", async (req, res) => {
   }
 });
 
+// @route GET /api/products/admin
+// @desc Get all products for admin (including inactive/deleted)
+// @access private (Admin)
+router.get("/admin", protect, isAdmin, async (req, res) => {
+  try {
+    const data = await service.getAllProductsForAdmin();
+    res.json(data);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
 /**
  * @swagger
  * tags:
@@ -373,6 +385,91 @@ router.get("/similar/:id", async (req, res) => {
  *               type: array
  *               items:
  *                 type: object
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 12
+ *         external_id:
+ *           type: string
+ *           example: "IN-1005"
+ *         name:
+ *           type: string
+ *           example: "Shock Absorbers Volvo XC60"
+ *         description:
+ *           type: string
+ *           example: "Front shock absorbers"
+ *         summary:
+ *           type: string
+ *           example: "Suspension Volvo"
+ *         sku:
+ *           type: string
+ *           example: "SH-XC60-001"
+ *         price:
+ *           type: string
+ *           example: "180.00"
+ *         condition:
+ *           type: string
+ *           example: "used"
+ *         stock:
+ *           type: integer
+ *           example: 6
+ *         category_id:
+ *           type: integer
+ *           example: 3
+ *         brand_id:
+ *           type: integer
+ *           example: 31
+ *         status:
+ *           type: string
+ *           example: "active"
+ *         is_active:
+ *           type: boolean
+ *           example: true
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *           example: "2026-04-30T17:54:51.037Z"
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           example: null
+ *         deleted_at:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           example: null
+ *
+ * /api/products/admin:
+ *   get:
+ *     summary: Get all products for admin
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Returns all products including inactive and deleted (Admin only)
+ *     responses:
+ *       200:
+ *         description: List of all products for admin
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden (Not an admin)
  *       500:
  *         description: Server error
  */

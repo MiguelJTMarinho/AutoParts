@@ -107,9 +107,15 @@ const updateOrderStatus = async (order_id, status) => {
   return await orderRepository.updateOrderStatus(order_id, status);
 };
 
+// Get all orders (admin only)
+const getAllOrders = async () => {
+  return await orderRepository.getAllOrders();
+};
+
 module.exports = {
   createOrderFromCart,
   getUserOrders,
   getOrderDetails,
   updateOrderStatus,
+  getAllOrders,
 };

@@ -16,6 +16,18 @@ router.post("/checkout", protect, async (req, res) => {
   }
 });
 
+// @route GET /api/orders/admin
+// @desc Get all orders (Admin only)
+// @access Private/Admin
+router.get("/admin", protect, isAdmin, async (req, res) => {
+  try {
+    const data = await orderService.getAllOrders();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET USER ORDERS
 router.get("/", protect, async (req, res) => {
   try {
@@ -143,6 +155,54 @@ router.patch("/:id/status", protect, isAdmin, async (req, res) => {
  *         description: Unauthorized
  *       404:
  *         description: Order not found
+ */
+
+/**
+ * @swagger
+ * /api/orders/admin:
+ *   get:
+ *     summary: Get all orders (Admin only)
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Retrieves a comprehensive list of all orders in the store. Only accessible by administrators.
+ *     responses:
+ *       200:
+ *         description: A list of all orders retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 101
+ *                   user_id:
+ *                     type: integer
+ *                     example: 5
+ *                   total:
+ *                     type: string
+ *                     example: "350.50"
+ *                   status:
+ *                     type: string
+ *                     example: "processing"
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ *                     example: "2026-05-08T10:30:00.000Z"
+ *                   updated_at:
+ *                     type: string
+ *                     format: date-time
+ *                     nullable: true
+ *                     example: null
+ *       401:
+ *         description: Unauthorized (missing or invalid token)
+ *       403:
+ *         description: Forbidden (user is not an admin)
+ *       500:
+ *         description: Server error
  */
 
 module.exports = router;
