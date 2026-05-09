@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const NewArrivals = () => {
   const scrollRef = useRef(null);
@@ -13,38 +14,21 @@ const NewArrivals = () => {
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
 
-  const newArrivals = [
-    {
-      _id: "1",
-      name: "Farol BMW Série 3",
-      price: 120,
-      images: [{ url: "https://picsum.photos/500/500?random=1" }],
-    },
-    {
-      _id: "2",
-      name: "Parachoques Audi A4",
-      price: 180,
-      images: [{ url: "https://picsum.photos/500/500?random=2" }],
-    },
-    {
-      _id: "3",
-      name: "Espelho Mercedes C",
-      price: 75,
-      images: [{ url: "https://picsum.photos/500/500?random=3" }],
-    },
-    {
-      _id: "4",
-      name: "Jante 18'' VW",
-      price: 95,
-      images: [{ url: "https://picsum.photos/500/500?random=4" }],
-    },
-    {
-      _id: "5",
-      name: "Radiador Peugeot 308",
-      price: 140,
-      images: [{ url: "https://picsum.photos/500/500?random=5" }],
-    },
-  ];
+  const [newArrivals, setNewArrivals] = useState([]);
+
+  useEffect(() => {
+    const fetchNewArrivals = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/products/new_arrivals`,
+        );
+        setNewArrivals(response.data);
+      } catch (error) {
+        console.error("Error fetching new arrivals:", error);
+      }
+    };
+    fetchNewArrivals();
+  }, []);
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
@@ -102,7 +86,7 @@ const NewArrivals = () => {
     el.addEventListener("scroll", updateScrollButtons);
 
     return () => el.removeEventListener("scroll", updateScrollButtons);
-  }, [updateScrollButtons]);
+  }, [newArrivals, updateScrollButtons]);
 
   return (
     <section className="py-16 bg-gray-50">
@@ -150,8 +134,8 @@ const NewArrivals = () => {
         >
           {newArrivals.map((product) => (
             <Link
-              to={`/product/${product._id}`}
-              key={product._id}
+              to={`/product/${product.id}`}
+              key={product.id}
               draggable="false"
               onDragStart={(e) => e.preventDefault()}
               onClick={(e) => {
@@ -162,7 +146,7 @@ const NewArrivals = () => {
               {/* IMAGE */}
               <div className="h-64 overflow-hidden rounded-t-xl">
                 <img
-                  src={product.images[0]?.url}
+                  src={product.images[0]?.image_url}
                   alt={product.name}
                   draggable="false"
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-300"

@@ -1,23 +1,78 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const ProductGrid = ({ products }) => {
+const ProductGrid = ({ products, loading, error }) => {
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <p className="text-gray-500 animate-pulse text-lg">
+          Loading products...
+        </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <p className="text-red-500">Error: {error.message || error}</p>
+      </div>
+    );
+  }
+
+  if (!products || products.length === 0) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <p className="text-gray-500 text-lg">No products found.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-      {products.map((product, index) => (
-        <Link key={index} to={`/product/${products._id}`} className="block">
-          <div className="bg-white p-4 rounded-lg">
-            <div className="w-full h-96 mb-4">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+      {/* Alterado de key={index} para key={product.id} (Boa prática React) */}
+      {products.map((product) => (
+        <Link
+          key={product.id}
+          to={`/product/${product.id}`}
+          className="group block h-full"
+        >
+          <div className="bg-white rounded-xl border border-gray-100 p-3 hover:border-transparent hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+            {/* Image Container com efeito de Zoom */}
+            <div className="relative w-full aspect-square overflow-hidden rounded-lg bg-gray-50 mb-4">
               <img
-                src={product.images[0].url}
-                alt={product.images[0].altText || product.name}
-                className="w-full h-full object-cover rounded-lg"
+                // Optional Chaining para não dar crash se o produto não tiver imagens!
+                src={
+                  product.images?.[0]?.image_url ||
+                  "https://placehold.co/600x400?text=No+Image"
+                }
+                alt={product.name}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
+
+              {/* Etiqueta de Esgotado (Opcional, mas muito útil) */}
+              {product.stock === 0 && (
+                <div className="absolute top-2 left-2 bg-black/80 text-white text-xs font-bold px-2 py-1 rounded">
+                  Out of Stock
+                </div>
+              )}
             </div>
-            <h3 className="text-sm mb-2">{product.name}</h3>
-            <p className="text-gray-500 font-medium text-sm tracking-tighter">
-              $ {product.price}
-            </p>
+
+            {/* Product Details (cresce para preencher espaço vazio) */}
+            <div className="flex flex-col flex-grow">
+              <h3
+                className="text-gray-800 font-medium mb-1 line-clamp-2"
+                title={product.name}
+              >
+                {product.name}
+              </h3>
+
+              <div className="mt-auto pt-3">
+                <p className="text-lg font-bold text-gray-900 tracking-tight">
+                  ${Number(product.price).toFixed(2)}
+                </p>
+              </div>
+            </div>
           </div>
         </Link>
       ))}

@@ -46,7 +46,21 @@ const createProduct = async (data) => {
 
 const getAllProducts = async (filters) => {
   let query = `
-    SELECT DISTINCT p.*
+    SELECT DISTINCT p.*,
+      COALESCE(
+         (
+           SELECT jsonb_agg(
+             jsonb_build_object(
+               'id', pi.id,
+               'image_url', pi.image_url,
+               'sort_order', pi.sort_order
+             ) ORDER BY pi.sort_order ASC
+           )
+           FROM product_images pi
+           WHERE pi.product_id = p.id
+         ), 
+         '[]'::jsonb
+       ) AS images
     FROM products p
     LEFT JOIN categories c ON c.id = p.category_id
     LEFT JOIN part_brands pb ON pb.id = p.brand_id
@@ -147,10 +161,71 @@ const getAllProducts = async (filters) => {
   return result.rows;
 };
 
-// GET BY ID
+// GET BY ID (Com Nomes de Categoria/Marca, Imagens, Compatibilidades e Referências OEM)
 const getProductById = async (id) => {
   const result = await pool.query(
-    `SELECT * FROM products WHERE id = $1 AND deleted_at IS NULL`,
+    `SELECT 
+       p.*,
+       
+       -- Nomes da Categoria e Marca da Peça
+       c.name AS category,
+       pb.name AS part_brand,
+       
+       -- 1. Array de Imagens
+       COALESCE(
+         (
+           SELECT json_agg(
+             json_build_object(
+               'id', pi.id,
+               'image_url', pi.image_url,
+               'sort_order', pi.sort_order
+             ) ORDER BY pi.sort_order ASC
+           )
+           FROM product_images pi
+           WHERE pi.product_id = p.id
+         ), 
+         '[]'::json
+       ) AS images,
+
+       -- 2. Array de Compatibilidade
+       COALESCE(
+         (
+           SELECT json_agg(
+             json_build_object(
+               'brand', cb.name,
+               'model', cm.name,
+               'year_start', pc.year_start,
+               'year_end', pc.year_end
+             )
+           )
+           FROM product_compatibility pc
+           JOIN car_brands cb ON pc.carbrand_id = cb.id
+           JOIN car_models cm ON pc.carmodel_id = cm.id
+           WHERE pc.product_id = p.id
+         ), 
+         '[]'::json
+       ) AS compatibility,
+
+       -- 3. Array de Referências OEM 
+       COALESCE(
+         (
+           SELECT json_agg(
+             json_build_object(
+               'reference_code', oem.reference_code,
+               'brand', oem.brand,
+               'type', oem.type
+             )
+           )
+           FROM oem_references oem
+           WHERE oem.product_id = p.id
+         ), 
+         '[]'::json
+       ) AS oem_references
+
+     FROM products p
+     LEFT JOIN categories c ON p.category_id = c.id
+     LEFT JOIN part_brands pb ON p.brand_id = pb.id
+     WHERE p.id = $1 AND p.deleted_at IS NULL`,
     [id],
   );
 
@@ -230,7 +305,6 @@ const updateProductStock = async (product_id, newStock) => {
   );
   return result.rows[0];
 };
-
 const getSimilarProducts = async (productId) => {
   // 1. buscar produto base
   const productResult = await pool.query(
@@ -244,27 +318,59 @@ const getSimilarProducts = async (productId) => {
 
   if (!product) return [];
 
-  // 2. tentar pela mesma categoria primeiro
+  // 2. tentar pela mesma categoria primeiro (COM IMAGENS)
   const result = await pool.query(
-    `SELECT * FROM products
-     WHERE deleted_at IS NULL
-     AND id != $1
-     AND category_id = $2
+    `SELECT 
+       p.*,
+       COALESCE(
+         (
+           SELECT json_agg(
+             json_build_object(
+               'id', pi.id,
+               'image_url', pi.image_url,
+               'sort_order', pi.sort_order
+             ) ORDER BY pi.sort_order ASC
+           )
+           FROM product_images pi
+           WHERE pi.product_id = p.id
+         ), 
+         '[]'::json
+       ) AS images
+     FROM products p
+     WHERE p.deleted_at IS NULL
+     AND p.id != $1
+     AND p.category_id = $2
      ORDER BY RANDOM()
      LIMIT 4`,
     [productId, product.category_id],
   );
 
-  // 3. se não tiver 4, completa por brand
+  // 3. se não tiver 4, completa por brand (COM IMAGENS)
   if (result.rows.length < 4) {
     const remaining = 4 - result.rows.length;
 
     const fallback = await pool.query(
-      `SELECT * FROM products
-       WHERE deleted_at IS NULL
-       AND id != $1
-       AND brand_id = $2
-       AND category_id != $3
+      `SELECT 
+         p.*,
+         COALESCE(
+           (
+             SELECT json_agg(
+               json_build_object(
+                 'id', pi.id,
+                 'image_url', pi.image_url,
+                 'sort_order', pi.sort_order
+               ) ORDER BY pi.sort_order ASC
+             )
+             FROM product_images pi
+             WHERE pi.product_id = p.id
+           ), 
+           '[]'::json
+         ) AS images
+       FROM products p
+       WHERE p.deleted_at IS NULL
+       AND p.id != $1
+       AND p.brand_id = $2
+       AND p.category_id != $3
        ORDER BY RANDOM()
        LIMIT $4`,
       [productId, product.brand_id, product.category_id, remaining],
@@ -278,10 +384,25 @@ const getSimilarProducts = async (productId) => {
 
 const getNewArrivals = async () => {
   const result = await pool.query(
-    `SELECT *
-     FROM products
-     WHERE deleted_at IS NULL
-     ORDER BY created_at DESC
+    `SELECT 
+       p.*,
+       COALESCE(
+         (
+           SELECT json_agg(
+             json_build_object(
+               'id', pi.id,
+               'image_url', pi.image_url,
+               'sort_order', pi.sort_order
+             ) ORDER BY pi.sort_order ASC
+           )
+           FROM product_images pi
+           WHERE pi.product_id = p.id
+         ), 
+         '[]'::json
+       ) AS images
+     FROM products p
+     WHERE p.deleted_at IS NULL
+     ORDER BY p.created_at DESC
      LIMIT 8`,
   );
 

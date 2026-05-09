@@ -34,7 +34,7 @@ export const addToCart = createAsyncThunk(
   async ({ guestId, productId, quantity }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/cart`,
+        `${import.meta.env.VITE_API_URL}/cart/items`,
         {
           product_id: productId,
           quantity,
