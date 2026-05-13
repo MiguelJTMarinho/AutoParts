@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-/* ================= CONSTANTS ================= */
-
 const VEHICLE_DATA = {
-  Audi: {
-    A4: ["2014", "2015", "2016"],
-    A3: ["2013", "2014"],
+  audi: {
+    a4: ["2014", "2015", "2016"],
+    a3: ["2013", "2014"],
   },
-  BMW: {
-    "Série 3": ["2010", "2011", "2012"],
-    "Série 5": ["2015", "2016"],
+  bmw: {
+    "serie 3": ["2010", "2011", "2012"],
+    "serie 5": ["2015", "2016"],
   },
 };
 
@@ -27,12 +25,8 @@ const BRANDS = ["Bosch", "Brembo", "NGK", "Denso"];
 const PRICE_MIN = 0;
 const PRICE_MAX = 500;
 
-/* ================= COMPONENT ================= */
-
 const FilterSidebar = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-
-  /* ================= HELPERS ================= */
 
   const getParam = (key) => searchParams.get(key);
   const getAll = (key) => searchParams.getAll(key);
@@ -73,28 +67,24 @@ const FilterSidebar = () => {
   const updateStock = (value) => {
     const params = new URLSearchParams(searchParams);
 
-    if (value) params.set("stock", "true");
-    else params.delete("stock");
+    if (value) params.set("inStock", "true");
+    else params.delete("inStock");
 
     setSearchParams(params);
   };
 
   const clearAll = () => setSearchParams({});
 
-  /* ================= VALUES ================= */
-
-  const selectedBrand = getParam("vehicleBrand");
-  const selectedModel = getParam("vehicleModel");
+  const selectedBrand = getParam("carBrand");
+  const selectedModel = getParam("carModel");
 
   const selectedCategories = getAll("category");
-  const selectedBrands = getAll("brand");
+  const selectedBrands = getAll("partBrand");
 
   const minPrice = Number(getParam("minPrice") || PRICE_MIN);
   const maxPrice = Number(getParam("maxPrice") || PRICE_MAX);
 
-  const inStockOnly = getParam("stock") === "true";
-
-  /* ================= DERIVED ================= */
+  const inStockOnly = getParam("inStock") === "true";
 
   const models = selectedBrand ? Object.keys(VEHICLE_DATA[selectedBrand]) : [];
   const years =
@@ -108,8 +98,6 @@ const FilterSidebar = () => {
     minPrice > PRICE_MIN ||
     maxPrice < PRICE_MAX ||
     selectedBrand;
-
-  /* ================= UI ================= */
 
   return (
     <div className="w-full p-4 space-y-6 bg-white">
@@ -153,9 +141,9 @@ const FilterSidebar = () => {
             const value = e.target.value;
 
             const params = new URLSearchParams(searchParams);
-            params.set("vehicleBrand", value);
-            params.delete("vehicleModel");
-            params.delete("vehicleYear");
+            params.set("carBrand", value);
+            params.delete("carModel");
+            params.delete("carYear");
 
             setSearchParams(params);
           }}
@@ -176,8 +164,8 @@ const FilterSidebar = () => {
             const value = e.target.value;
 
             const params = new URLSearchParams(searchParams);
-            params.set("vehicleModel", value);
-            params.delete("vehicleYear");
+            params.set("carModel", value);
+            params.delete("carYear");
 
             setSearchParams(params);
           }}
@@ -195,12 +183,12 @@ const FilterSidebar = () => {
 
         {/* YEAR */}
         <select
-          value={getParam("vehicleYear") || ""}
+          value={getParam("carYear") || ""}
           onChange={(e) => {
             const value = e.target.value;
 
             const params = new URLSearchParams(searchParams);
-            params.set("vehicleYear", value);
+            params.set("carYear", value);
 
             setSearchParams(params);
           }}
@@ -246,7 +234,7 @@ const FilterSidebar = () => {
             <input
               type="checkbox"
               checked={selectedBrands.includes(b)}
-              onChange={() => updateArrayParam("brand", b)}
+              onChange={() => updateArrayParam("partBrand", b)}
               className="accent-main-blue"
             />
             {b}

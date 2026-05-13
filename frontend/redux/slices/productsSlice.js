@@ -20,17 +20,17 @@ export const fetchProductsByFilters = createAsyncThunk(
   }) => {
     const query = new URLSearchParams();
     if (oem) query.append("oem", oem);
-    if (carBrand) query.append("car_brand", carBrand);
-    if (carModel) query.append("car_model", carModel);
-    if (carYear) query.append("car_year", carYear);
+    if (carBrand) query.append("carBrand", carBrand);
+    if (carModel) query.append("carModel", carModel);
+    if (carYear) query.append("carYear", carYear);
     if (category) query.append("category", category);
-    if (partBrand) query.append("part_brand", partBrand);
-    if (minPrice) query.append("min_price", minPrice);
-    if (maxPrice) query.append("max_price", maxPrice);
-    if (inStock) query.append("in_stock", inStock);
+    if (partBrand) query.append("partBrand", partBrand);
+    if (minPrice) query.append("minPrice", minPrice);
+    if (maxPrice) query.append("maxPrice", maxPrice);
+    if (inStock) query.append("inStock", inStock);
     if (search) query.append("search", search);
     if (limit) query.append("limit", limit);
-    if (sortBy) query.append("sort_by", sortBy);
+    if (sortBy) query.append("sortBy", sortBy);
 
     const response = await axios.get(
       `${import.meta.env.VITE_API_URL}/products?${query.toString()}`,

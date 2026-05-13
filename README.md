@@ -23,7 +23,8 @@ Express
 PostgeSQL
 JSONWebToken
 Couldinary
-React
+React + Vite
 Tailwindcss
 Nodejs
 Redux Toolkit
+Sentry

@@ -6,6 +6,7 @@ import ProductGrid from "../components/Products/ProductGrid";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsByFilters } from "../redux/slices/productsSlice";
+
 const AllProductsPage = () => {
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();

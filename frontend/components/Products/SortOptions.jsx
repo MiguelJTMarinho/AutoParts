@@ -2,23 +2,31 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 
 const SortOptions = () => {
-  const [searchParms, setSearchParms] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const handleSortChange = (e) => {
     const sortBy = e.target.value;
-    searchParms.set("SortBy", sortBy);
-    setSearchParms(searchParms);
+    const params = new URLSearchParams(searchParams);
+
+    if (sortBy) {
+      params.set("sortBy", sortBy);
+    } else {
+      params.delete("sortBy");
+    }
+
+    setSearchParams(params);
   };
   return (
     <div className="mb-4 flex items-center justify-end">
       <select
         id="sort"
         onChange={handleSortChange}
-        value={searchParms.get("sortBy" || "")}
+        value={searchParams.get("sortBy") || ""}
         className="border p-2 rounded-md focus:outline-none"
       >
         <option value="">Default</option>
-        <option value="priceAsc">Price: Low to High</option>
-        <option value="priceDesc">Price: High to Low</option>
+        <option value="price_asc">Price: Low to High</option>
+        <option value="price_desc">Price: High to Low</option>
       </select>
     </div>
   );

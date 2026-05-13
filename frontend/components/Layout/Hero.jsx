@@ -19,7 +19,7 @@ const Hero = () => {
             Explore our wide range of auto parts.
           </p>
           <Link
-            to="/collections/all"
+            to="/products"
             className="bg-white text-gray-950 px-6 py-2 rounded-sm text-lg"
           >
             Shop Now

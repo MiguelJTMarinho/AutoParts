@@ -1,6 +1,18 @@
+// Initialize Sentry First
+const dotenv = require("dotenv");
+dotenv.config();
+const Sentry = require("@sentry/node");
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  debug: true,
+  tracesSampleRate: 1.0,
+  environment: process.env.NODE_ENV || "development",
+  enableLogs: true,
+});
+
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 //const connectDB = require("./config/db").connectDB;
 
 //API documentation
@@ -27,12 +39,19 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-dotenv.config();
-
 const PORT = process.env.PORT || 9000;
+const URL = process.env.SERVER_URL || "http://localhost:9000";
 
 //Connect to the database
 //connectDB();
+
+app.use((req, res, next) => {
+  res.on("finish", () => {
+    Sentry.setUser(null);
+  });
+
+  next();
+});
 
 // API routes
 app.use(
@@ -42,6 +61,10 @@ app.use(
     swaggerOptions: { supportedSubmitMethods: [] },
   }),
 );
+
+app.get("/debug-sentry", function mainHandler(req, res) {
+  throw new Error("Sentry Test Error: " + new Date().toISOString());
+});
 
 app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -58,6 +81,13 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/newsletter", newsletterSubscribersRoutes);
 
+Sentry.setupExpressErrorHandler(app);
+// Error fall-through
+app.use((err, req, res, next) => {
+  res.statusCode = 500;
+  res.end(res.sentry + "\n");
+});
+
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on ${URL}`);
 });

@@ -46,21 +46,65 @@ const createProduct = async (data) => {
 
 const getAllProducts = async (filters) => {
   let query = `
-    SELECT DISTINCT p.*,
+    SELECT DISTINCT 
+      p.*,
+
+      -- Category + Brand names
+      c.name AS category,
+      pb.name AS part_brand,
+
+      -- Images
       COALESCE(
-         (
-           SELECT jsonb_agg(
-             jsonb_build_object(
-               'id', pi.id,
-               'image_url', pi.image_url,
-               'sort_order', pi.sort_order
-             ) ORDER BY pi.sort_order ASC
-           )
-           FROM product_images pi
-           WHERE pi.product_id = p.id
-         ), 
-         '[]'::jsonb
-       ) AS images
+        (
+          SELECT jsonb_agg(
+            jsonb_build_object(
+              'id', pi.id,
+              'image_url', pi.image_url,
+              'sort_order', pi.sort_order
+            )
+            ORDER BY pi.sort_order ASC
+          )
+          FROM product_images pi
+          WHERE pi.product_id = p.id
+        ),
+        '[]'::jsonb
+      ) AS images,
+
+      -- Compatibility
+      COALESCE(
+        (
+          SELECT jsonb_agg(
+            jsonb_build_object(
+              'brand', cb2.name,
+              'model', cm2.name,
+              'year_start', pc2.year_start,
+              'year_end', pc2.year_end
+            )
+          )
+          FROM product_compatibility pc2
+          JOIN car_brands cb2 ON cb2.id = pc2.carbrand_id
+          JOIN car_models cm2 ON cm2.id = pc2.carmodel_id
+          WHERE pc2.product_id = p.id
+        ),
+        '[]'::jsonb
+      ) AS compatibility,
+
+      -- OEM References
+      COALESCE(
+        (
+          SELECT jsonb_agg(
+            jsonb_build_object(
+              'reference_code', oem2.reference_code,
+              'brand', oem2.brand,
+              'type', oem2.type
+            )
+          )
+          FROM oem_references oem2
+          WHERE oem2.product_id = p.id
+        ),
+        '[]'::jsonb
+      ) AS oem_references
+
     FROM products p
     LEFT JOIN categories c ON c.id = p.category_id
     LEFT JOIN part_brands pb ON pb.id = p.brand_id
@@ -68,16 +112,21 @@ const getAllProducts = async (filters) => {
     LEFT JOIN product_compatibility pc ON pc.product_id = p.id
     LEFT JOIN car_brands cb ON cb.id = pc.carbrand_id
     LEFT JOIN car_models cm ON cm.id = pc.carmodel_id
+
     WHERE p.deleted_at IS NULL
   `;
 
   const values = [];
   let index = 1;
 
-  // COLLECTION / CATEGORY
-  if (filters.collection || filters.category) {
-    query += ` AND c.name ILIKE $${index++}`;
-    values.push(`%${filters.collection || filters.category}%`);
+  // CATEGORY
+  if (filters.category) {
+    const categories = Array.isArray(filters.category)
+      ? filters.category
+      : [filters.category];
+
+    query += ` AND c.name = ANY($${index++})`;
+    values.push(categories);
   }
 
   // OEM
@@ -113,23 +162,27 @@ const getAllProducts = async (filters) => {
 
   // PART BRAND
   if (filters.partBrand) {
-    query += ` AND pb.name ILIKE $${index++}`;
-    values.push(`%${filters.partBrand}%`);
+    const brands = Array.isArray(filters.partBrand)
+      ? filters.partBrand
+      : [filters.partBrand];
+
+    query += ` AND pb.name = ANY($${index++})`;
+    values.push(brands);
   }
 
-  // PRICE MIN
+  // MIN PRICE
   if (filters.minPrice) {
     query += ` AND p.price >= $${index++}`;
     values.push(filters.minPrice);
   }
 
-  // PRICE MAX
+  // MAX PRICE
   if (filters.maxPrice) {
     query += ` AND p.price <= $${index++}`;
     values.push(filters.maxPrice);
   }
 
-  // STOCK
+  // IN STOCK
   if (filters.inStock === "true") {
     query += ` AND p.stock > 0`;
   }
@@ -154,6 +207,12 @@ const getAllProducts = async (filters) => {
     query += ` ORDER BY p.price DESC`;
   } else {
     query += ` ORDER BY p.created_at DESC`;
+  }
+
+  // LIMIT
+  if (filters.limit) {
+    query += ` LIMIT $${index++}`;
+    values.push(filters.limit);
   }
 
   const result = await pool.query(query, values);
