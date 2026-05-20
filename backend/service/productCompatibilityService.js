@@ -96,10 +96,22 @@ const remove = async (id) => {
   return deleted;
 };
 
+// Get Compatibility years
+const getYears = async (carbrand_id, carmodel_id) => {
+  if (!carbrand_id || !carmodel_id) {
+    const error = new Error("carbrand_id and carmodel_id are required");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  return await prodCompatRepository.getAvailableYears(carbrand_id, carmodel_id);
+};
+
 module.exports = {
   createCompatibility,
   getAll,
   getByProduct,
   remove,
   update,
+  getYears,
 };

@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const cleanName = (val) => {
+  if (!val) return "";
+  return val.includes("_") ? val.split("_")[1] : val;
+};
+
 // Async thunk to fetch products by optional filters
 export const fetchProductsByFilters = createAsyncThunk(
   "products/fetchByFilters",
@@ -19,12 +24,27 @@ export const fetchProductsByFilters = createAsyncThunk(
     sortBy,
   }) => {
     const query = new URLSearchParams();
+
     if (oem) query.append("oem", oem);
-    if (carBrand) query.append("carBrand", carBrand);
-    if (carModel) query.append("carModel", carModel);
+    if (carBrand) query.append("carBrand", cleanName(carBrand));
+    if (carModel) query.append("carModel", cleanName(carModel));
     if (carYear) query.append("carYear", carYear);
-    if (category) query.append("category", category);
-    if (partBrand) query.append("partBrand", partBrand);
+    if (category) {
+      if (Array.isArray(category)) {
+        category.forEach((cat) => query.append("category", cleanName(cat)));
+      } else {
+        query.append("category", cleanName(category));
+      }
+    }
+    if (partBrand) {
+      if (Array.isArray(partBrand)) {
+        partBrand.forEach((brand) =>
+          query.append("partBrand", cleanName(brand)),
+        );
+      } else {
+        query.append("partBrand", cleanName(partBrand));
+      }
+    }
     if (minPrice) query.append("minPrice", minPrice);
     if (maxPrice) query.append("maxPrice", maxPrice);
     if (inStock) query.append("inStock", inStock);

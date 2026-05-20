@@ -64,6 +64,23 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
   }
 });
 
+// @route GET /api/product_compatibility/years
+// @desc Get Compatibility years by car model and brand
+// @access Public
+router.get("/years/:carbrand_id/:carmodel_id", async (req, res) => {
+  try {
+    const { carbrand_id, carmodel_id } = req.params;
+
+    const data = await service.getYears(carbrand_id, carmodel_id);
+
+    res.json(data);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({
+      error: err.message,
+    });
+  }
+});
+
 /**
  * @swagger
  * tags:

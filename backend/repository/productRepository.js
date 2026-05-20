@@ -125,8 +125,10 @@ const getAllProducts = async (filters) => {
       ? filters.category
       : [filters.category];
 
-    query += ` AND c.name = ANY($${index++})`;
-    values.push(categories);
+    const placeholders = categories.map((_, i) => `$${index + i}`).join(", ");
+    query += ` AND c.name IN (${placeholders})`;
+    values.push(...categories);
+    index += categories.length;
   }
 
   // OEM
@@ -166,8 +168,10 @@ const getAllProducts = async (filters) => {
       ? filters.partBrand
       : [filters.partBrand];
 
-    query += ` AND pb.name = ANY($${index++})`;
-    values.push(brands);
+    const placeholders = brands.map((_, i) => `$${index + i}`).join(", ");
+    query += ` AND pb.name IN (${placeholders})`;
+    values.push(...brands);
+    index += brands.length;
   }
 
   // MIN PRICE

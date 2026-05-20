@@ -76,6 +76,24 @@ const deleteCompatibility = async (id) => {
   return result.rows[0];
 };
 
+// Get compatibility years
+const getAvailableYears = async (carbrand_id, carmodel_id) => {
+  const result = await pool.query(
+    `
+    SELECT DISTINCT generate_series(year_start, year_end) AS year
+    FROM product_compatibility
+    WHERE carbrand_id = $1
+      AND carmodel_id = $2
+      AND year_start IS NOT NULL
+      AND year_end IS NOT NULL
+    ORDER BY year ASC
+    `,
+    [carbrand_id, carmodel_id],
+  );
+
+  return result.rows.map((r) => r.year);
+};
+
 module.exports = {
   createCompatibility,
   updateCompatibility,
@@ -83,4 +101,5 @@ module.exports = {
   getByProductId,
   getById,
   deleteCompatibility,
+  getAvailableYears,
 };
