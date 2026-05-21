@@ -6,35 +6,43 @@ require("dotenv").config();
 
 // Middleware to protect routes
 const protect = async (req, res, next) => {
-  let token;
+  //let token;
   //console.log("AUTH HEADER:", req.headers.authorization);
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    try {
-      token = req.headers.authorization.split(" ")[1];
+  //if (
+  //  req.headers.authorization &&
+  //  req.headers.authorization.startsWith("Bearer")
+  //) {
+  try {
+    //token = req.headers.authorization.split(" ")[1];
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const token = req.cookies.token;
 
-      req.user = await findUserById(decoded.user.id); //Exclude password
-
-      // Attach user to Sentry Context
-      Sentry.setUser({
-        id: req.user.id,
-        email: req.user.email,
+    if (!token) {
+      return res.status(401).json({
+        message: "Not authorized",
       });
-
-      next();
-    } catch (error) {
-      console.error("Token verification failed: ", error);
-      Sentry.captureException(error);
-      res.status(401).json({ message: "Not authorized, token failed" });
     }
-  } else {
-    res.status(401).json({ message: "Not Authorized, no token provided" });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = await findUserById(decoded.user.id); //Exclude password
+
+    // Attach user to Sentry Context
+    Sentry.setUser({
+      id: req.user.id,
+      email: req.user.email,
+    });
+
+    next();
+  } catch (error) {
+    console.error("Token verification failed: ", error);
+    Sentry.captureException(error);
+    res.status(401).json({ message: "Not authorized, token failed" });
   }
+  //} else {
+  //  res.status(401).json({ message: "Not Authorized, no token provided" });
+  //}
 };
 
 const isAdmin = (req, res, next) => {
@@ -46,14 +54,16 @@ const isAdmin = (req, res, next) => {
 };
 
 const optionalAuth = async (req, res, next) => {
-  const header = req.headers.authorization;
+  //const header = req.headers.authorization;
+  const token = req.cookies.token;
 
-  if (!header || !header.startsWith("Bearer ")) {
+  //if (!token || !header.startsWith("Bearer ")) {
+  if (!token) {
     return next(); // segue como guest
   }
 
   try {
-    token = req.headers.authorization.split(" ")[1];
+    //token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     req.user = await findUserById(decoded.user.id); //Exclude password

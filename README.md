@@ -18,6 +18,9 @@ npm install multer cloudinary streamifier
 npm install react-redux @reduxjs/tollkit axios
 npm install i18next react-i18next i18next-browser-languagedetector
 
+//backend
+npm install cookie-parser
+
 # Tecnologias usadas
 Express
 PostgeSQL

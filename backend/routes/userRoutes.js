@@ -1,6 +1,7 @@
 // userRoutes.js
 const express = require("express");
 const router = express.Router();
+require("dotenv").config();
 
 const userService = require("../service/userService");
 const { isAdmin } = require("../middleware/authMiddleware");
@@ -11,10 +12,21 @@ const protect = require("../middleware/authMiddleware").protect;
 // @acess Public
 router.post("/register", async (req, res) => {
   try {
-    const data = await userService.registerUser(req.body);
-    res.status(200).json(data);
+    const { user, token } = await userService.registerUser(req.body);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
+    });
+
+    res.status(201).json({ user });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("ERRO NO REGISTO:", err);
+    res
+      .status(500)
+      .json({ message: err.message || "Erro interno do servidor" });
   }
 });
 
@@ -23,11 +35,20 @@ router.post("/register", async (req, res) => {
 // @acess Public
 router.post("/login", async (req, res) => {
   try {
-    const user = await userService.loginUser(req.body);
+    const { user, token } = await service.loginUser(req.body);
 
-    res.status(200).json(user);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.json({ user });
   } catch (err) {
-    res.status(401).json({ error: err.message });
+    res.status(401).json({
+      message: err.message,
+    });
   }
 });
 
@@ -139,6 +160,29 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
   try {
     const deletedUser = await userService.deleteUser(req.params.id);
     res.json({ message: "User deleted successfully", user: deletedUser });
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+  });
+
+  res.json({
+    message: "Logged out successfully",
+  });
+});
+
+// @route GET /api/users/me
+// @desc Get information of logged user
+// @access Private/Admin
+router.get("/me", protect, async (req, res) => {
+  try {
+    res.json(req.user);
   } catch (err) {
     res.status(err.statusCode || 500).json({ error: err.message });
   }

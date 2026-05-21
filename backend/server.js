@@ -12,6 +12,7 @@ Sentry.init({
 
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 //const connectDB = require("./config/db").connectDB;
 
 //API documentation
@@ -35,8 +36,14 @@ const orderRoutes = require("./routes/orderRoutes");
 const newsletterSubscribersRoutes = require("./routes/newsletterSubscribersRoutes");
 
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 
 const PORT = process.env.PORT || 9000;
 const URL = process.env.SERVER_URL || "http://localhost:9000";

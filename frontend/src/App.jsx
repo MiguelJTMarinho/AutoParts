@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import store from "../redux/store";
+
+import { checkAuthStatus } from "../redux/slices/authSlice";
+import { fetchCart } from "../redux/slices/cartSlice";
+
+import { Toaster, toast } from "sonner";
+
 import UserLayout from "../components/Layout/UserLayout";
 import Home from "../Pages/Home";
-import { Toaster, toast } from "sonner";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import Profile from "../Pages/Profile";
@@ -22,40 +29,58 @@ import CategoriesManagement from "../components/Admin/CategoriesManagement";
 import PartBrandsManagement from "../components/Admin/PartBrandManagement";
 import ScrollToTop from "../components/Common/ScrollToTop";
 
-import { Provider } from "react-redux";
-import store from "../redux/store";
+const AppContent = () => {
+  const dispatch = useDispatch();
+  const { guestId } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    // 1. Check if user has session via HttpOnly Cookie
+    dispatch(checkAuthStatus())
+      .unwrap()
+      .then(() => {
+        // 2a. If user is logged, get cart
+        dispatch(fetchCart({ guestId: null }));
+      })
+      .catch(() => {
+        // 2b. If fails, fetch guest cart
+        dispatch(fetchCart({ guestId }));
+      });
+  }, [dispatch, guestId]);
+  return (
+    <BrowserRouter>
+      <Toaster position="top-right" />
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<UserLayout />}>
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="my-orders" element={<MyOrdersPage />} />
+          <Route path="products" element={<AllProductsPage />} />
+          <Route path="product/:id" element={<ProductDetails />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="order-confirmation" element={<OrderConfirmation />} />
+          <Route path="order/:id" element={<OrderDetailsPage />} />
+        </Route>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminHomePage />} />
+          <Route path="users" element={<UserManagement />} />
+          <Route path="products" element={<ProductManagement />} />
+          <Route path="products/:id/edit" element={<EditProductPage />} />
+          <Route path="orders" element={<OrderManagement />} />
+          <Route path="categories" element={<CategoriesManagement />} />
+          <Route path="part-brands" element={<PartBrandsManagement />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 const App = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Toaster position="top-right" />
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<UserLayout />}>
-            <Route index element={<Home />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="my-orders" element={<MyOrdersPage />} />
-            <Route path="products" element={<AllProductsPage />} />
-            <Route path="product/:id" element={<ProductDetails />} />
-            <Route path="checkout" element={<Checkout />} />
-            <Route path="order-confirmation" element={<OrderConfirmation />} />
-            <Route path="order/:id" element={<OrderDetailsPage />} />
-            <Route path="my-orders" element={<MyOrdersPage />} />
-          </Route>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminHomePage />} />
-            <Route path="users" element={<UserManagement />} />
-            <Route path="products" element={<ProductManagement />} />
-            <Route path="products/:id/edit" element={<EditProductPage />} />
-            <Route path="orders" element={<OrderManagement />} />
-            <Route path="categories" element={<CategoriesManagement />} />
-            <Route path="part-brands" element={<PartBrandsManagement />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <AppContent />
     </Provider>
   );
 };
