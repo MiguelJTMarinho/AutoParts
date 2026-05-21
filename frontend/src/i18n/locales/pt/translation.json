@@ -396,7 +396,8 @@
   "cartDrawer": {
     "title": "O seu Carrinho",
     "checkout": "Finalizar Compra",
-    "disclaimer": "Portes e impostos calculados na finalização da compra."
+    "disclaimer": "Portes e impostos calculados na finalização da compra.",
+    "emptyCart": "O seu carrinho está vazio."
   },
 
   "hero": {

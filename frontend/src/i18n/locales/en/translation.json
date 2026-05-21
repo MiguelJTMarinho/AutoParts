@@ -396,7 +396,8 @@
   "cartDrawer": {
     "title": "Your Cart",
     "checkout": "Checkout",
-    "disclaimer": "Shipping and taxes calculated at checkout."
+    "disclaimer": "Shipping and taxes calculated at checkout.",
+    "emptyCart": "Your cart is empty."
   },
 
   "hero": {

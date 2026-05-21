@@ -395,7 +395,8 @@
   "cartDrawer": {
     "title": "Tu Carrito",
     "checkout": "Finalizar Compra",
-    "disclaimer": "El envío y los impuestos se calculan al finalizar la compra."
+    "disclaimer": "El envío y los impuestos se calculan al finalizar la compra.",
+    "emptyCart": "Tu carrito está vacío."
   },
 
   "hero": {

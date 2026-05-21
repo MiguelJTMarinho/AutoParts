@@ -2,13 +2,22 @@ import { IoMdClose } from "react-icons/io";
 import CartContents from "../Cart/CartContents";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
 const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { userInfo, guestId } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
+  const userId = userInfo ? userInfo.id : null;
+
   const handleCheckout = () => {
     toggleCartDrawer();
-    navigate("/checkout");
+    if (!userInfo) {
+      navigate("/login?redirect=checkout");
+    } else {
+      navigate("/checkout");
+    }
   };
 
   return (
@@ -26,21 +35,29 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
       {/* cart contents with scrollabe area */}
       <div className="grow p-4 overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4">{t("cartDrawer.title")}</h2>
+        {cart && cart?.products?.length > 0 ? (
+          <CartContents cart={cart} userId={userId} guestId={guestId} />
+        ) : (
+          <p>{t("cartDrawer.emptyCart")}</p>
+        )}
         {/* Components for cart Contents */}
-        <CartContents />
       </div>
 
       {/* Checkout Button Fixed at the bottom */}
       <div className="p-4 bg-white sticky bottom-0">
-        <button
-          onClick={handleCheckout}
-          className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 cursor-pointer"
-        >
-          {t("cartDrawer.checkout")}
-        </button>
-        <p className="text-sm tracking-tighter text-gray-500 mt-2 text-center">
-          {t("cartDrawer.disclaimer")}
-        </p>
+        {cart && cart?.products?.length > 0 && (
+          <>
+            <button
+              onClick={handleCheckout}
+              className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 cursor-pointer"
+            >
+              {t("cartDrawer.checkout")}
+            </button>
+            <p className="text-sm tracking-tighter text-gray-500 mt-2 text-center">
+              {t("cartDrawer.disclaimer")}
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

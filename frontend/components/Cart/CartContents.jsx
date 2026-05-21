@@ -1,32 +1,25 @@
 import React from "react";
 import { RiDeleteBin3Line } from "react-icons/ri";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
 
-const CartContents = () => {
+const CartContents = ({ cart, userId, guestId }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-  const cartProducts = [
-    {
-      product: 1,
-      name: "RIDEX 854S0720 Amortecedor para FORD FOCUS, C-MAX",
-      category: "Suspension",
-      make: "Ford",
-      model: "Focus",
-      quantity: "1",
-      price: "50",
-      image: "https://picsum.photos/200?random=1",
-    },
-    {
-      product: 2,
-      name: "Amortecedor para FORD Fiesta, C-MAX",
-      category: "Suspension",
-      make: "Ford",
-      model: "Fiesta",
-      quantity: "1",
-      price: "45",
-      image: "https://picsum.photos/200?random=2",
-    },
-  ];
+  const handleAddToCart = (productId, delta, quantity) => {
+    const newQuantity = quantity + delta;
+    if (newQuantity >= 1) {
+      dispatch(
+        updateCartItemQuantity({
+          productId,
+          quantity: newQuantity,
+          userId,
+        }),
+      );
+    }
+  };
+
   return (
     <div>
       {cartProducts.map((product, index) => (

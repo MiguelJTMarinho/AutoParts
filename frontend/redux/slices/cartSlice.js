@@ -52,9 +52,9 @@ export const addToCart = createAsyncThunk(
 );
 
 // Update item quantity in cart for a user or guest
-export const updateCartQuantity = createAsyncThunk(
+export const updateCartItemQuantity = createAsyncThunk(
   "cart/updateCartQuantity",
-  async ({ guestId, productId, quantity }, { rejectWithValue }) => {
+  async ({ guestId, userId, productId, quantity }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/cart/items`,
