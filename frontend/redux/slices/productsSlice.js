@@ -50,7 +50,7 @@ export const fetchProductsByFilters = createAsyncThunk(
     if (inStock) query.append("inStock", inStock);
     if (search) query.append("search", search);
     if (limit) query.append("limit", limit);
-    if (sortBy) query.append("sortBy", sortBy);
+    if (sortBy) query.append("sort_by", sortBy);
 
     const response = await axios.get(
       `${import.meta.env.VITE_API_URL}/products?${query.toString()}`,

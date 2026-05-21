@@ -64,7 +64,7 @@ const ProductGrid = ({ products, loading, error }) => {
             </div>
 
             {/* Product Details (cresce para preencher espaço vazio) */}
-            <div className="flex flex-col flex-grow">
+            <div className="flex flex-col grow">
               <h3
                 className="text-gray-800 font-medium mb-1 line-clamp-2"
                 title={product.name}

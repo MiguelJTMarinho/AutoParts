@@ -21,7 +21,7 @@ const FeaturedCollection = () => {
             {t("featuredCollection.description")}
           </p>
           <Link
-            to="/collections/all"
+            to="/products"
             className="bg-black text-white px-6 py-3 rounded-lg text-lg hover:bg-gray-800"
           >
             {t("featuredCollection.shopNow")}

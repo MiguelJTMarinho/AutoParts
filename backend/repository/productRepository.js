@@ -45,6 +45,7 @@ const createProduct = async (data) => {
 };
 
 const getAllProducts = async (filters) => {
+  console.log(filters);
   let query = `
     SELECT DISTINCT 
       p.*,
