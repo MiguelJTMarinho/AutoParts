@@ -3,6 +3,7 @@ import { Toaster, toast } from "sonner";
 import ProductGrid from "./ProductGrid";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
   fetchProductDetails,
   fetchSimilarProducts,
@@ -10,6 +11,7 @@ import {
 import { addToCart } from "../../redux/slices/cartSlice";
 
 const ProductDetails = ({ productId }) => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedProduct, similarProducts, loading, error } = useSelector(
@@ -63,12 +65,9 @@ const ProductDetails = ({ productId }) => {
     }
   }, [selectedProduct]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
+  if (loading) return <p>{t("productDetails.loading")}</p>;
+  if (error)
+    return <p>{t("productDetails.error", { message: error.message })}</p>;
 
   return (
     <div className="py-10">
@@ -129,7 +128,9 @@ const ProductDetails = ({ productId }) => {
 
               {/* quantity */}
               <div className="mb-6">
-                <p className="mb-2 font-medium">Quantity</p>
+                <p className="mb-2 font-medium">
+                  {t("productDetails.quantity")}
+                </p>
 
                 <div className="flex gap-3">
                   <button
@@ -156,41 +157,57 @@ const ProductDetails = ({ productId }) => {
                 disabled={isButtonDisabled}
                 className={`w-full bg-main-blue text-white py-3 rounded font-semibold hover:opacity-90 cursor-pointer ${isButtonDisabled ? "cursor-not-allowed opacity-50" : ""}`}
               >
-                {isButtonDisabled ? "Adding..." : "Add to cart"}
+                {isButtonDisabled
+                  ? t("productDetails.addToCart.loading")
+                  : t("productDetails.addToCart.default")}
               </button>
 
               {/* characteristics */}
               <div className="mt-8">
-                <h3 className="text-lg font-semibold mb-3">Characteristics</h3>
+                <h3 className="text-lg font-semibold mb-3">
+                  {t("productDetails.characteristics.title")}
+                </h3>
 
                 <table className="w-full text-sm">
                   <tbody className="divide-y">
                     <tr>
-                      <td className="py-2 text-gray-500">SKU</td>
+                      <td className="py-2 text-gray-500">
+                        {t("productDetails.characteristics.sku")}
+                      </td>
                       <td>{selectedProduct.sku}</td>
                     </tr>
 
                     <tr>
-                      <td className="py-2 text-gray-500">Category</td>
+                      <td className="py-2 text-gray-500">
+                        {t("productDetails.characteristics.category")}
+                      </td>
                       <td>{selectedProduct.category}</td>
                     </tr>
 
                     <tr>
-                      <td className="py-2 text-gray-500">Part Brand</td>
+                      <td className="py-2 text-gray-500">
+                        {t("productDetails.characteristics.partBrand")}
+                      </td>
                       <td>{selectedProduct.part_brand}</td>
                     </tr>
 
                     <tr>
-                      <td className="py-2 text-gray-500">Condition</td>
+                      <td className="py-2 text-gray-500">
+                        {t("productDetails.characteristics.condition")}
+                      </td>
                       <td>{selectedProduct.condition}</td>
                     </tr>
 
                     <tr>
-                      <td className="py-2 text-gray-500">Stock</td>
+                      <td className="py-2 text-gray-500">
+                        {t("productDetails.characteristics.stock")}
+                      </td>
                       <td>
                         {selectedProduct.stock > 0
-                          ? `${selectedProduct.stock} available`
-                          : "Out of stock"}
+                          ? t("productDetails.characteristics.available", {
+                              count: selectedProduct.stock,
+                            })
+                          : t("productDetails.characteristics.outOfStock")}
                       </td>
                     </tr>
                   </tbody>
@@ -198,7 +215,9 @@ const ProductDetails = ({ productId }) => {
               </div>
             </div>
             <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-3">Compatibility</h3>
+              <h3 className="text-lg font-semibold mb-3">
+                {t("productDetails.similarProducts")}
+              </h3>
 
               <div className="space-y-2">
                 {selectedProduct.compatibility.map((item, index) => (
@@ -218,7 +237,9 @@ const ProductDetails = ({ productId }) => {
               </div>
             </div>
             <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-3">OEM References</h3>
+              <h3 className="text-lg font-semibold mb-3">
+                {t("productDetails.oem.title")}
+              </h3>
 
               <div className="space-y-2">
                 {selectedProduct.oem_references.map((oem, index) => (
@@ -239,7 +260,7 @@ const ProductDetails = ({ productId }) => {
           <div className="mt-20">
             <h2 className="text-2xl text-center font-medium mb-4">
               {" "}
-              You May Also Like
+              {t("productDetails.similarProducts")}
             </h2>
             <ProductGrid
               products={similarProducts}

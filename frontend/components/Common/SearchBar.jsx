@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { HiMagnifyingGlass } from "react-icons/hi2";
-import { useSearchParams, useNavigate } from "react-router-dom"; // ALTERAÇÃO: Importado o useNavigate
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const SearchBar = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate(); // ALTERAÇÃO: Inicializado o navegador de rotas
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
   // Sincroniza o input apenas se já estivermos na página de produtos
@@ -20,7 +22,6 @@ const SearchBar = () => {
 
     if (searchTerm.trim()) {
       params.set("search", searchTerm.trim());
-      // ALTERAÇÃO: Navega explicitamente para /products com o termo na URL
       navigate(`/products?${params.toString()}`);
     } else {
       // Se pesquisar em branco, apenas vai para a página de produtos limpa
@@ -32,7 +33,7 @@ const SearchBar = () => {
     <form onSubmit={handleSearch} className="w-full md:max-w-[50%] relative">
       <input
         type="text"
-        placeholder="Search parts..."
+        placeholder={t("searchBar.placeholder")}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="w-full border border-gray-700 rounded-md pl-3 pr-10 py-2 focus:outline-none focus:ring-1 focus:ring-main-blue placeholder:text-gray-700"

@@ -1,0 +1,509 @@
+{
+  "adminHome": {
+    "title": "Admin Dashboard",
+    "revenue": "Revenue",
+    "totalOrders": "Total Orders",
+    "manageOrders": "Manage Orders",
+    "totalProducts": "Total Products",
+    "manageProducts": "Manage Products",
+    "recentOrders": "Recent Orders",
+    "table": {
+      "orderId": "Order ID",
+      "user": "User",
+      "totalPrice": "Total Price",
+      "status": "Status",
+      "noOrders": "No recent orders found"
+    }
+  },
+  "orderStatus": {
+    "Processing": "Processing",
+    "Delivered": "Delivered",
+    "Shipped": "Shipped",
+    "Cancelled": "Cancelled",
+    "approved": "Approved",
+    "pending": "Pending",
+    "delivered": "Delivered",
+    "paid": "Paid",
+    "unpaid": "Unpaid"
+  },
+
+
+  "allProductsPage": {
+    "filters": "Filters",
+    "title": "ALL PRODUCTS"
+  },
+
+
+  "loginPage": {
+    "title": "Sign in",
+    "form": {
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot your password?",
+      "submitButton": "Sign In"
+    },
+    "registerPromo": {
+      "title": "Don’t have an account?",
+      "subtitle": "Quick and Easy!",
+      "benefits": {
+        "trackOrders": "Track your orders",
+        "saveDetails": "Save your shipping and billing details",
+        "manageReturns": "Manage returns online"
+      },
+      "createAccountButton": "Create Account"
+    }
+  },
+
+
+  "myOrdersPage": {
+    "backButton": "Back",
+    "title": "My Orders",
+    "table": {
+      "image": "Image",
+      "orderId": "Order ID",
+      "created": "Created",
+      "shippingAddress": "Shipping Address",
+      "items": "Items",
+      "price": "Price",
+      "status": "Status",
+      "noOrders": "You have no orders",
+      "notAvailable": "N/A"
+    },
+    "paymentStatus": {
+      "paid": "Paid",
+      "pending": "Pending"
+    }
+  },
+
+  "orderConfirmation": {
+    "title": "Thank You for Your Order!",
+    "orderId": "Order ID",
+    "orderDate": "Order date",
+    "estimatedDelivery": "Estimated Delivery",
+    "quantity": "Quantity",
+    "paymentTitle": "Payment",
+    "deliveryTitle": "Delivery"
+  },
+
+  "orderDetailsPage": {
+    "title": "Order Details",
+    "notFound": "No order details found",
+    "orderId": "Order ID",
+    "paymentInfo": {
+      "title": "Payment info",
+      "method": "Payment Method",
+      "status": "Status"
+    },
+    "shippingInfo": {
+      "title": "Shipping info",
+      "method": "Shipping Method",
+      "address": "Address"
+    },
+    "productsList": {
+      "title": "Products",
+      "name": "Name",
+      "unitPrice": "Unit Price",
+      "quantity": "Quantity",
+      "total": "Total"
+    },
+    "backLink": "Back to My Orders"
+  },
+
+  "profilePage": {
+    "buttons": {
+      "orders": "Orders",
+      "logOut": "Log Out",
+      "editProfile": "Edit Profile",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "changePhoto": "Change"
+    },
+    "sections": {
+      "personalInfo": "Personal Information",
+      "address": "Address"
+    },
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "addressLine1": "Address Line 1",
+      "addressLine2": "Address Line 2",
+      "city": "City",
+      "postalCode": "Postal Code",
+      "country": "Country"
+    }
+  },
+
+  "registerPage": {
+    "title": "Create your account",
+    "form": {
+      "firstNameLabel": "First Name *",
+      "firstNamePlaceholder": "John",
+      "lastNameLabel": "Last Name *",
+      "lastNamePlaceholder": "Doe",
+      "emailLabel": "Email *",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password *",
+      "passwordPlaceholder": "Create a password",
+      "confirmPasswordLabel": "Confirm Password *",
+      "confirmPasswordPlaceholder": "Repeat your password",
+      "submitButton": "Create Account",
+      "alreadyHaveAccount": "Already have an account?",
+      "signInHere": "Sign in here"
+    },
+    "alerts": {
+      "passwordMismatch": "Passwords do not match"
+    },
+    "promo": {
+      "title": "Why create an account?",
+      "subtitle": "Fast. Secure. Convenient.",
+      "benefits": {
+        "trackOrders": "Track your orders in real time",
+        "saveInfo": "Save shipping and billing information",
+        "offers": "Access exclusive offers and promotions",
+        "fastCheckout": "Faster checkout experience"
+      }
+    }
+  },
+
+  "adminLayout": {
+    "title": "Admin Dashboard"
+  },
+
+  "adminSidebar": {
+    "title": "Admin Dashboard",
+    "users": "Users",
+    "products": "Products",
+    "categories": "Categories",
+    "partBrands": "Part Brands",
+    "orders": "Orders",
+    "shop": "Shop",
+    "logout": "Logout"
+  },
+
+  "categoriesManagement": {
+    "title": "Categories Management",
+    "addTitle": "Add New Category",
+    "form": {
+      "name": "Name",
+      "description": "Description",
+      "addButton": "Add Category"
+    },
+    "table": {
+      "name": "Name",
+      "description": "Description",
+      "actions": "Actions",
+      "deleteButton": "Delete"
+    },
+    "alerts": {
+      "confirmDelete": "Delete this category?"
+    }
+  },
+
+  "editProductPage": {
+    "title": "Edit Product",
+    "form": {
+      "productNameLabel": "Product Name",
+      "productNamePlaceholder": "Product Name",
+      "descriptionLabel": "Description",
+      "priceLabel": "Price (€)",
+      "stockLabel": "Stock",
+      "categoryLabel": "Category",
+      "selectCategory": "Select Category",
+      "partBrandLabel": "Part Brand",
+      "selectBrand": "Select Brand",
+      "isActive": "Active Product",
+      "submitButton": "Update Product"
+    },
+    "compatibility": {
+      "title": "Compatibility",
+      "brandLabel": "Brand",
+      "modelLabel": "Model",
+      "yearFromLabel": "Year From",
+      "yearToLabel": "Year To",
+      "addButton": "Add Compatibility"
+    },
+    "oem": {
+      "title": "OEM References",
+      "codeLabel": "Code",
+      "codePlaceholder": "OEM Code",
+      "brandLabel": "Brand",
+      "brandPlaceholder": "Brand",
+      "typeLabel": "Type",
+      "types": {
+        "oem": "OEM",
+        "compatible": "Compatible",
+        "aftermarket": "Aftermarket"
+      }
+    },
+    "images": {
+      "title": "Images",
+      "urlPlaceholder": "Image URL",
+      "orderPlaceholder": "Order",
+      "addButton": "Add Image"
+    }
+  },
+
+  "orderManagement": {
+    "title": "Order Management",
+    "table": {
+      "orderId": "Order ID",
+      "customer": "Customer",
+      "total": "Total",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "canceled": "Canceled"
+    },
+    "actions": {
+      "markDelivered": "Mark as Delivered"
+    },
+    "noOrders": "No orders found."
+  },
+
+  "partBrandsManagement": {
+    "title": "Part Brands Management",
+    "addTitle": "Add New Brand",
+    "form": {
+      "name": "Name",
+      "addButton": "Add Brand"
+    },
+    "table": {
+      "name": "Name",
+      "actions": "Actions",
+      "deleteButton": "Delete"
+    },
+    "alerts": {
+      "confirmDelete": "Delete this brand?"
+    }
+  },
+
+  "productManagement": {
+    "title": "Product Management",
+    "table": {
+      "name": "Name",
+      "price": "Price",
+      "sku": "SKU",
+      "actions": "Actions"
+    },
+    "buttons": {
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "alerts": {
+      "confirmDelete": "Are you sure you want to delete this product?"
+    },
+    "noProducts": "No Products found."
+  },
+
+  "userManagement": {
+    "title": "User Management",
+    "addTitle": "Add New User",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "role": "Role",
+      "addButton": "Add New User"
+    },
+    "roles": {
+      "customer": "Customer",
+      "admin": "Admin"
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "actions": "Actions",
+      "deleteButton": "Delete"
+    },
+    "alerts": {
+      "confirmDelete": "Are you sure you want to delete this user?"
+    }
+  },
+
+  "cartContents": {
+    "category": "Category",
+    "car": "Car"
+  },
+
+  "checkoutPage": {
+    "title": "Checkout",
+    "sections": {
+      "contactDetails": "Contact Details",
+      "delivery": "Delivery",
+      "orderSummary": "Order Summary"
+    },
+    "form": {
+      "email": "Email",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "address": "Address",
+      "city": "City",
+      "postalCode": "Postal Code",
+      "country": "Country",
+      "phone": "Phone"
+    },
+    "buttons": {
+      "continuePayment": "Continue to Payment"
+    },
+    "payment": {
+      "title": "Pay with PayPal"
+    },
+    "alerts": {
+      "paymentFailed": "Payment Failed. Try again."
+    },
+    "summary": {
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "shippingFree": "Free",
+      "total": "Total"
+    }
+  },
+
+  "footer": {
+    "newsletter": {
+      "title": "Newsletter",
+      "subtitle": "Be the first to hear about new products.",
+      "placeholder": "Enter your email",
+      "subscribe": "Subscribe"
+    },
+    "support": {
+      "title": "Support",
+      "contactUs": "Contact us",
+      "aboutUs": "About us",
+      "faqs": "FAQs",
+      "features": "Features"
+    },
+    "followUs": {
+      "title": "Follow us",
+      "callUs": "Call Us"
+    },
+    "copyright": "© 2025 AutoParts. All Rights Reserved."
+  },
+
+  "searchBar": {
+    "placeholder": "Search parts..."
+  },
+
+  "cartDrawer": {
+    "title": "Your Cart",
+    "checkout": "Checkout",
+    "disclaimer": "Shipping and taxes calculated at checkout."
+  },
+
+  "hero": {
+    "subtitle": "Explore our wide range of auto parts.",
+    "shopNow": "Shop Now"
+  },
+
+  "topbar": {
+    "shippingMessage": "We ship nationwide - Fast and reliable shipping!"
+  },
+
+  "featuredCollection": {
+    "subtitle": "Qualidade e Desempenho",
+    "title": "Peças Automóveis Premium para Todos os Veículos",
+    "description": "Explore a nossa seleção rigorosa de componentes automóveis de alta qualidade que combinam fiabilidade e desempenho. Concebidas para manter o seu veículo a funcionar de forma suave e segura, todos os dias.",
+    "shopNow": "Comprar Agora"
+  },
+
+  "featuresSection": {
+    "feature1": {
+      "title": "FAST SHIPPING IN PORTUGAL & SPAIN",
+      "description": "Reliable delivery across mainland Portugal and Spain."
+    },
+    "feature2": {
+      "title": "QUALITY YOU CAN TRUST",
+      "description": "Carefully inspected auto parts to ensure performance and durability."
+    },
+    "feature3": {
+      "title": "SECURE CHECKOUT",
+      "description": "100% secured checkout process"
+    }
+  },
+
+  "filterSidebar": {
+    "title": "Filters",
+    "clearAll": "Clear All",
+    "oem": {
+      "title": "OEM Part Number",
+      "placeholder": "Enter OEM number..."
+    },
+    "vehicle": {
+      "title": "Vehicle",
+      "allBrands": "All brands",
+      "allModels": "All models",
+      "allYears": "All years"
+    },
+    "category": {
+      "title": "Category",
+      "allCategories": "All Categories",
+      "allSubcategories": "All Subcategories"
+    },
+    "partBrand": {
+      "title": "Part Brand",
+      "allPartBrands": "All part brands"
+    },
+    "price": {
+      "title": "Price",
+      "min": "Min.",
+      "max": "Max."
+    },
+    "stock": "In Stock Only"
+  },
+
+  "newArrivals": {
+    "title": "New Arrivals",
+    "subtitle": "Latest auto parts added to our catalog",
+    "viewDetails": "View details →"
+  },
+
+  "productDetails": {
+    "loading": "Loading...",
+    "error": "Error: {{message}}",
+    "quantity": "Quantity",
+    "addToCart": {
+      "default": "Add to cart",
+      "loading": "Adding..."
+    },
+    "characteristics": {
+      "title": "Characteristics",
+      "sku": "SKU",
+      "category": "Category",
+      "partBrand": "Part Brand",
+      "condition": "Condition",
+      "stock": "Stock",
+      "available": "{{count}} available",
+      "outOfStock": "Out of stock"
+    },
+    "compatibility": {
+      "title": "Compatibility"
+    },
+    "oem": {
+      "title": "OEM References"
+    },
+    "similarProducts": "You May Also Like"
+  },
+
+  "productGrid": {
+    "loading": "Loading products...",
+    "error": "Error: {{message}}",
+    "noProducts": "No products found.",
+    "outOfStock": "Out of Stock"
+  },
+
+  "sortOptions": {
+    "default": "Default",
+    "priceAsc": "Price: Low to High",
+    "priceDesc": "Price: High to Low"
+  }
+  
+}

@@ -1,8 +1,10 @@
 import { IoMdClose } from "react-icons/io";
 import CartContents from "../Cart/CartContents";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const handleCheckout = () => {
     toggleCartDrawer();
@@ -23,7 +25,7 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
       </div>
       {/* cart contents with scrollabe area */}
       <div className="grow p-4 overflow-y-auto">
-        <h2 className="text-xl font-semibold mb-4">Your Cart</h2>
+        <h2 className="text-xl font-semibold mb-4">{t("cartDrawer.title")}</h2>
         {/* Components for cart Contents */}
         <CartContents />
       </div>
@@ -34,10 +36,10 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
           onClick={handleCheckout}
           className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 cursor-pointer"
         >
-          Checkout
+          {t("cartDrawer.checkout")}
         </button>
         <p className="text-sm tracking-tighter text-gray-500 mt-2 text-center">
-          Shipping and taxes calculated at checkout.
+          {t("cartDrawer.disclaimer")}
         </p>
       </div>
     </div>

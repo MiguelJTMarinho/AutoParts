@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const CategoriesManagement = () => {
+  const { t } = useTranslation();
+
   const categories = [
     {
       _id: 1,
@@ -39,15 +42,21 @@ const CategoriesManagement = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Categories Management</h2>
+      <h2 className="text-2xl font-bold mb-4">
+        {t("categoriesManagement.title")}
+      </h2>
 
       {/* FORM */}
       <div className="p-6 rounded-lg mb-6">
-        <h3 className="text-lg font-bold">Add New Category</h3>
+        <h3 className="text-lg font-bold">
+          {t("categoriesManagement.addTitle")}
+        </h3>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700">Name</label>
+            <label className="block text-gray-700">
+              {t("categoriesManagement.form.name")}
+            </label>
             <input
               type="text"
               name="name"
@@ -59,7 +68,9 @@ const CategoriesManagement = () => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700">Description</label>
+            <label className="block text-gray-700">
+              {t("categoriesManagement.form.description")}
+            </label>
             <input
               type="text"
               name="description"
@@ -73,7 +84,7 @@ const CategoriesManagement = () => {
             type="submit"
             className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
           >
-            Add Category
+            {t("categoriesManagement.form.addButton")}
           </button>
         </form>
       </div>
@@ -83,9 +94,15 @@ const CategoriesManagement = () => {
         <table className="min-w-full text-left text-gray-500">
           <thead className="bg-gray-100 text-xs uppercase text-gray-700">
             <tr>
-              <th className="py-3 px-4">Name</th>
-              <th className="py-3 px-4">Description</th>
-              <th className="py-3 px-4">Actions</th>
+              <th className="py-3 px-4">
+                {t("categoriesManagement.table.name")}
+              </th>
+              <th className="py-3 px-4">
+                {t("categoriesManagement.table.description")}
+              </th>
+              <th className="py-3 px-4">
+                {t("categoriesManagement.table.actions")}
+              </th>
             </tr>
           </thead>
 
@@ -99,7 +116,7 @@ const CategoriesManagement = () => {
                     onClick={() => handleDelete(cat._id)}
                     className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
                   >
-                    Delete
+                    {t("categoriesManagement.table.deleteButton")}
                   </button>
                 </td>
               </tr>

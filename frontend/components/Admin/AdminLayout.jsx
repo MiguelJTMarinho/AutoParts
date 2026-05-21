@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import AdminSidebar from "./AdminSidebar";
 import { Outlet } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const AdminLayout = () => {
+  const { t } = useTranslation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -17,7 +19,7 @@ const AdminLayout = () => {
         <button onClick={toggleSidebar}>
           <FaBars size={24} />
         </button>
-        <h1 className="ml-4 text-xl font-medium">Admin Dashboard</h1>
+        <h1 className="ml-4 text-xl font-medium">{t("adminLayout.title")}</h1>
       </div>
       {/* Overlay for Mobile Sidebar */}
       {isSidebarOpen && (

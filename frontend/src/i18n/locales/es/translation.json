@@ -1,0 +1,507 @@
+{
+  "adminHome": {
+    "title": "Panel de Administración",
+    "revenue": "Ingresos",
+    "totalOrders": "Total de Pedidos",
+    "manageOrders": "Gestionar Pedidos",
+    "totalProducts": "Total de Productos",
+    "manageProducts": "Gestionar Productos",
+    "recentOrders": "Pedidos Recientes",
+    "table": {
+      "orderId": "ID del Pedido",
+      "user": "Usuario",
+      "totalPrice": "Precio Total",
+      "status": "Estado",
+      "noOrders": "No se encontraron pedidos recientes"
+    }
+  },
+  "orderStatus": {
+    "Processing": "En Proceso",
+    "Delivered": "Entregado",
+    "Shipped": "Enviado",
+    "Cancelled": "Cancelado",
+    "approved": "Aprobado",
+    "pending": "Pendiente",
+    "delivered": "Entregado",
+    "paid": "Pagado",
+    "unpaid": "No Pagado"
+  },
+
+
+  "allProductsPage": {
+    "filters": "Filtros",
+    "title": "TODOS LOS PRODUCTOS"
+  },
+
+
+  "loginPage": {
+    "title": "Iniciar Sesión",
+    "form": {
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "Introduce tu correo",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Introduce tu contraseña",
+      "forgotPassword": "¿Has olvidado tu contraseña?",
+      "submitButton": "Entrar"
+    },
+    "registerPromo": {
+      "title": "¿No tienes una cuenta?",
+      "subtitle": "¡Rápido y Fácil!",
+      "benefits": {
+        "trackOrders": "Rastrea tus pedidos",
+        "saveDetails": "Guarda tus datos de envío y facturación",
+        "manageReturns": "Gestiona devoluciones online"
+      },
+      "createAccountButton": "Crear Cuenta"
+    }
+  },
+
+  "myOrdersPage": {
+    "backButton": "Volver",
+    "title": "Mis Pedidos",
+    "table": {
+      "image": "Imagen",
+      "orderId": "ID del Pedido",
+      "created": "Fecha",
+      "shippingAddress": "Dirección de Envío",
+      "items": "Artículos",
+      "price": "Precio",
+      "status": "Estado",
+      "noOrders": "No tienes pedidos",
+      "notAvailable": "N/D"
+    },
+    "paymentStatus": {
+      "paid": "Pagado",
+      "pending": "Pendiente"
+    }
+  },
+
+  "orderConfirmation": {
+    "title": "¡Gracias por tu pedido!",
+    "orderId": "ID del Pedido",
+    "orderDate": "Fecha del pedido",
+    "estimatedDelivery": "Entrega Estimada",
+    "quantity": "Cantidad",
+    "paymentTitle": "Pago",
+    "deliveryTitle": "Entrega"
+  },
+
+  "orderDetailsPage": {
+    "title": "Detalles del Pedido",
+    "notFound": "No se encontraron detalles para este pedido",
+    "orderId": "ID del Pedido",
+    "paymentInfo": {
+      "title": "Información de Pago",
+      "method": "Método de Pago",
+      "status": "Estado"
+    },
+    "shippingInfo": {
+      "title": "Información de Envío",
+      "method": "Método de Envío",
+      "address": "Dirección"
+    },
+    "productsList": {
+      "title": "Productos",
+      "name": "Nombre",
+      "unitPrice": "Precio Unitario",
+      "quantity": "Cantidad",
+      "total": "Total"
+    },
+    "backLink": "Volver a Mis Pedidos"
+  },
+
+  "profilePage": {
+    "buttons": {
+      "orders": "Pedidos",
+      "logOut": "Cerrar Sesión",
+      "editProfile": "Editar Perfil",
+      "cancel": "Cancelar",
+      "saveChanges": "Guardar Cambios",
+      "changePhoto": "Cambiar"
+    },
+    "sections": {
+      "personalInfo": "Información Personal",
+      "address": "Dirección"
+    },
+    "fields": {
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo Electrónico",
+      "phone": "Número de Teléfono",
+      "addressLine1": "Línea de Dirección 1",
+      "addressLine2": "Línea de Dirección 2",
+      "city": "Ciudad",
+      "postalCode": "Código Postal",
+      "country": "País"
+    }
+  },
+
+  "registerPage": {
+    "title": "Crea tu cuenta",
+    "form": {
+      "firstNameLabel": "Nombre *",
+      "firstNamePlaceholder": "Juan",
+      "lastNameLabel": "Apellido *",
+      "lastNamePlaceholder": "Pérez",
+      "emailLabel": "Correo Electrónico *",
+      "emailPlaceholder": "Introduce tu correo",
+      "passwordLabel": "Contraseña *",
+      "passwordPlaceholder": "Crea una contraseña",
+      "confirmPasswordLabel": "Confirmar Contraseña *",
+      "confirmPasswordPlaceholder": "Repite tu contraseña",
+      "submitButton": "Crear Cuenta",
+      "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+      "signInHere": "Inicia sesión aquí"
+    },
+    "alerts": {
+      "passwordMismatch": "Las contraseñas no coinciden"
+    },
+    "promo": {
+      "title": "¿Por qué crear una cuenta?",
+      "subtitle": "Rápido. Seguro. Práctico.",
+      "benefits": {
+        "trackOrders": "Rastrea tus pedidos en tiempo real",
+        "saveInfo": "Guarda información de envío y facturación",
+        "offers": "Accede a ofertas y promociones exclusivas",
+        "fastCheckout": "Proceso de compra más rápido"
+      }
+    }
+  },
+
+  "adminLayout": {
+    "title": "Panel de Administración"
+  },
+
+  "adminSidebar": {
+    "title": "Panel de Administración",
+    "users": "Usuarios",
+    "products": "Productos",
+    "categories": "Categorías",
+    "partBrands": "Marcas de Piezas",
+    "orders": "Pedidos",
+    "shop": "Tienda",
+    "logout": "Cerrar Sesión"
+  },
+
+  "categoriesManagement": {
+    "title": "Gestión de Categorías",
+    "addTitle": "Añadir Nueva Categoría",
+    "form": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "addButton": "Añadir Categoría"
+    },
+    "table": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "actions": "Acciones",
+      "deleteButton": "Eliminar"
+    },
+    "alerts": {
+      "confirmDelete": "¿Estás seguro de que deseas eliminar esta categoría?"
+    }
+  },
+
+  "editProductPage": {
+    "title": "Editar Producto",
+    "form": {
+      "productNameLabel": "Nombre del Producto",
+      "productNamePlaceholder": "Nombre del Producto",
+      "descriptionLabel": "Descripción",
+      "priceLabel": "Precio (€)",
+      "stockLabel": "Stock",
+      "categoryLabel": "Categoría",
+      "selectCategory": "Seleccionar Categoría",
+      "partBrandLabel": "Marca de la Pieza",
+      "selectBrand": "Seleccionar Marca",
+      "isActive": "Producto Activo",
+      "submitButton": "Actualizar Producto"
+    },
+    "compatibility": {
+      "title": "Compatibilidad",
+      "brandLabel": "Marca",
+      "modelLabel": "Modelo",
+      "yearFromLabel": "Año (Desde)",
+      "yearToLabel": "Año (Hasta)",
+      "addButton": "Añadir Compatibilidad"
+    },
+    "oem": {
+      "title": "Referencias OEM",
+      "codeLabel": "Código",
+      "codePlaceholder": "Código OEM",
+      "brandLabel": "Marca",
+      "brandPlaceholder": "Marca",
+      "typeLabel": "Tipo",
+      "types": {
+        "oem": "OEM",
+        "compatible": "Compatible",
+        "aftermarket": "Aftermarket"
+      }
+    },
+    "images": {
+      "title": "Imágenes",
+      "urlPlaceholder": "URL de la Imagen",
+      "orderPlaceholder": "Orden",
+      "addButton": "Añadir Imagen"
+    }
+  },
+
+  "orderManagement": {
+    "title": "Gestión de Pedidos",
+    "table": {
+      "orderId": "ID del Pedido",
+      "customer": "Cliente",
+      "total": "Total",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "status": {
+      "processing": "En Proceso",
+      "shipped": "Enviado",
+      "delivered": "Entregado",
+      "canceled": "Cancelado"
+    },
+    "actions": {
+      "markDelivered": "Marcar como Entregado"
+    },
+    "noOrders": "No se encontraron pedidos."
+  },
+
+  "partBrandsManagement": {
+    "title": "Gestión de Marcas de Piezas",
+    "addTitle": "Añadir Nueva Marca",
+    "form": {
+      "name": "Nombre",
+      "addButton": "Añadir Marca"
+    },
+    "table": {
+      "name": "Nombre",
+      "actions": "Acciones",
+      "deleteButton": "Eliminar"
+    },
+    "alerts": {
+      "confirmDelete": "¿Estás seguro de que deseas eliminar esta marca?"
+    }
+  },
+
+  "productManagement": {
+    "title": "Gestión de Productos",
+    "table": {
+      "name": "Nombre",
+      "price": "Precio",
+      "sku": "SKU",
+      "actions": "Acciones"
+    },
+    "buttons": {
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "alerts": {
+      "confirmDelete": "¿Estás seguro de que deseas eliminar este producto?"
+    },
+    "noProducts": "No se encontraron productos."
+  },
+
+  "userManagement": {
+    "title": "Gestión de Usuarios",
+    "addTitle": "Añadir Nuevo Usuario",
+    "form": {
+      "name": "Nombre",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "role": "Rol",
+      "addButton": "Añadir Usuario"
+    },
+    "roles": {
+      "customer": "Cliente",
+      "admin": "Administrador"
+    },
+    "table": {
+      "name": "Nombre",
+      "email": "Correo Electrónico",
+      "role": "Rol",
+      "actions": "Acciones",
+      "deleteButton": "Eliminar"
+    },
+    "alerts": {
+      "confirmDelete": "¿Estás seguro de que deseas eliminar este usuario?"
+    }
+  },
+
+  "cartContents": {
+    "category": "Categoría",
+    "car": "Coche"
+  },
+
+  "checkoutPage": {
+    "title": "Finalizar Compra",
+    "sections": {
+      "contactDetails": "Datos de Contacto",
+      "delivery": "Entrega",
+      "orderSummary": "Resumen del Pedido"
+    },
+    "form": {
+      "email": "Correo Electrónico",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "address": "Dirección",
+      "city": "Ciudad",
+      "postalCode": "Código Postal",
+      "country": "País",
+      "phone": "Teléfono"
+    },
+    "buttons": {
+      "continuePayment": "Continuar al Pago"
+    },
+    "payment": {
+      "title": "Pagar con PayPal"
+    },
+    "alerts": {
+      "paymentFailed": "El Pago ha fallado. Inténtelo de nuevo."
+    },
+    "summary": {
+      "subtotal": "Subtotal",
+      "shipping": "Envío",
+      "shippingFree": "Gratis",
+      "total": "Total"
+    }
+  },
+
+  "footer": {
+    "newsletter": {
+      "title": "Boletín informativo",
+      "subtitle": "Sé el primero en enterarte de nuevos productos.",
+      "placeholder": "Introduce tu correo",
+      "subscribe": "Suscribirse"
+    },
+    "support": {
+      "title": "Soporte",
+      "contactUs": "Contáctanos",
+      "aboutUs": "Sobre nosotros",
+      "faqs": "Preguntas Frecuentes",
+      "features": "Características"
+    },
+    "followUs": {
+      "title": "Síguenos",
+      "callUs": "Llámanos"
+    },
+    "copyright": "© 2025 AutoParts. Todos los derechos reservados."
+  },
+
+  "searchBar": {
+    "placeholder": "Buscar piezas..."
+  },
+
+  "cartDrawer": {
+    "title": "Tu Carrito",
+    "checkout": "Finalizar Compra",
+    "disclaimer": "El envío y los impuestos se calculan al finalizar la compra."
+  },
+
+  "hero": {
+    "subtitle": "Explora nuestra amplia gama de repuestos.",
+    "shopNow": "Comprar Ahora"
+  },
+
+  "topbar": {
+    "shippingMessage": "Enviamos para todo o país - Envio rápido e fiável!"
+  },
+
+  "featuredCollection": {
+    "subtitle": "Qualidade e Desempenho",
+    "title": "Peças Automóveis Premium para Todos os Veículos",
+    "description": "Explore a nossa seleção rigorosa de componentes automóveis de alta qualidade que combinam fiabilidade e desempenho. Concebidas para manter o seu veículo a funcionar de forma suave e segura, todos os dias.",
+    "shopNow": "Comprar Agora"
+  },
+
+  "featuresSection": {
+    "feature1": {
+      "title": "ENVÍO RÁPIDO EN PORTUGAL Y ESPAÑA",
+      "description": "Entrega segura en Portugal Continental y España."
+    },
+    "feature2": {
+      "title": "CALIDAD EN LA QUE PUEDES CONFIAR",
+      "description": "Piezas de coche cuidadosamente inspeccionadas para garantizar rendimiento y durabilidad."
+    },
+    "feature3": {
+      "title": "PAGO SEGURO",
+      "description": "Proceso de pago 100% seguro."
+    }
+  },
+
+  "filterSidebar": {
+    "title": "Filtros",
+    "clearAll": "Borrar Todo",
+    "oem": {
+      "title": "Número de Pieza OEM",
+      "placeholder": "Introducir número OEM..."
+    },
+    "vehicle": {
+      "title": "Vehículo",
+      "allBrands": "Todas las marcas",
+      "allModels": "Todos los modelos",
+      "allYears": "Todos los años"
+    },
+    "category": {
+      "title": "Categoría",
+      "allCategories": "Todas las Categorías",
+      "allSubcategories": "Todas las Subcategorías"
+    },
+    "partBrand": {
+      "title": "Marca de la Pieza",
+      "allPartBrands": "Todas las marcas de piezas"
+    },
+    "price": {
+      "title": "Precio",
+      "min": "Mín.",
+      "max": "Máx."
+    },
+    "stock": "Solo en Stock"
+  },
+
+  "newArrivals": {
+    "title": "Novedades",
+    "subtitle": "Últimos repuestos añadidos a nuestro catálogo",
+    "viewDetails": "Ver detalles →"
+  },
+
+  "productDetails": {
+    "loading": "Cargando...",
+    "error": "Error: {{message}}",
+    "quantity": "Cantidad",
+    "addToCart": {
+      "default": "Añadir al carrito",
+      "loading": "Añadiendo..."
+    },
+    "characteristics": {
+      "title": "Características",
+      "sku": "SKU",
+      "category": "Categoría",
+      "partBrand": "Marca de la Pieza",
+      "condition": "Estado",
+      "stock": "Stock",
+      "available": "{{count}} disponibles",
+      "outOfStock": "Agotado"
+    },
+    "compatibility": {
+      "title": "Compatibilidad"
+    },
+    "oem": {
+      "title": "Referencias OEM"
+    },
+    "similarProducts": "También te podría interesar"
+  },
+
+  "productGrid": {
+    "loading": "Cargando productos...",
+    "error": "Error: {{message}}",
+    "noProducts": "No se encontraron productos.",
+    "outOfStock": "Agotado"
+  },
+
+  "sortOptions": {
+    "default": "Predeterminado",
+    "priceAsc": "Precio: De menor a mayor",
+    "priceDesc": "Precio: De mayor a menor"
+  }
+}

@@ -4,6 +4,7 @@ import { HiOutlineUser, HiOutlineShoppingCart } from "react-icons/hi2";
 import SearchBar from "./SearchBar";
 import CartDrawer from "../Layout/CartDrawer";
 import logo from "../../src/assets/LogoNoBg.png";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(true);
@@ -31,6 +32,9 @@ const Navbar = () => {
           >
             Admin
           </Link>
+
+          <LanguageSwitcher />
+
           <Link to="/profile" className="hove:text-black">
             <HiOutlineUser className="h-6 w-6 text-gray-700" />
           </Link>

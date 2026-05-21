@@ -5,8 +5,12 @@ import { TbBrandFacebook, TbBrandInstagram } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { FiPhoneCall } from "react-icons/fi";
 import logo from "../../src/assets/LogoNoBg.png";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation();
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="border-t py-12">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 px-4 lg:px-0">
@@ -17,9 +21,11 @@ const Footer = () => {
         </div>
         {/* Column 1 - Newsletter */}
         <div>
-          <h3 className="text-lg text-gray-800 mb-4">Newsletter</h3>
+          <h3 className="text-lg text-gray-800 mb-4">
+            {t("footer.newsletter.title")}
+          </h3>
           <p className="text-gray-500 mb-6">
-            Be the first to hear about new products.
+            {t("footer.newsletter.subtitle")}
           </p>
 
           <form className="flex">
@@ -33,7 +39,7 @@ const Footer = () => {
               type="submit"
               className="bg-black text-white px-6 py-3 text-sm rounded-r-md hover:bg-gray-800"
             >
-              Subscribe
+              {t("footer.newsletter.subscribe")}
             </button>
           </form>
         </div>
@@ -43,23 +49,25 @@ const Footer = () => {
           <h3 className="text-lg text-gray-800 mb-4">Support</h3>
           <ul className="space-y-2 text-gray-600">
             <li>
-              <Link to="#">Contact us</Link>
+              <Link to="#">{t("footer.support.contactUs")}</Link>
             </li>
             <li>
-              <Link to="#">About us</Link>
+              <Link to="#">{t("footer.support.aboutUs")}</Link>
             </li>
             <li>
-              <Link to="#">FAQs</Link>
+              <Link to="#">{t("footer.support.faqs")}</Link>
             </li>
             <li>
-              <Link to="#">Features</Link>
+              <Link to="#">{t("footer.support.features")}</Link>
             </li>
           </ul>
         </div>
 
         {/* Column 3 - Follow Us */}
         <div>
-          <h3 className="text-lg text-gray-800 mb-4">Follow us</h3>
+          <h3 className="text-lg text-gray-800 mb-4">
+            {t("footer.followUs.title")}
+          </h3>
 
           <div className="flex items-center space-x-4 mb-6">
             <TbBrandFacebook className="h-5 w-5" />
@@ -67,7 +75,7 @@ const Footer = () => {
             <RiTwitterXLine className="h-4 w-4" />
           </div>
 
-          <p className="text-gray-500">Call Us</p>
+          <p className="text-gray-500">{t("footer.followUs.callUs")}</p>
           <p className="flex items-center mt-2">
             <FiPhoneCall className="mr-2" />
             912 123 123
@@ -78,7 +86,7 @@ const Footer = () => {
       {/* Bottom */}
       <div className="container mx-auto mt-12 px-4 lg:px-0 border-t border-gray-200 pt-6">
         <p className="text-gray-500 text-sm text-center">
-          ©2025 AutoParts. All Rights Reserved.
+          {t("footer.copyright").replace("2025", currentYear)}
         </p>
       </div>
     </footer>

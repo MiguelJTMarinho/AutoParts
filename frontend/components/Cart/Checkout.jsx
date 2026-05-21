@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PaypalButton from "./PaypalButton";
+import { useTranslation } from "react-i18next";
 
 const cart = {
   products: [
@@ -29,6 +30,7 @@ const cart = {
 };
 
 const Checkout = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [checkoutId, setCheckoutId] = useState();
   const [shippingAddress, setShippingAddress] = useState({
@@ -55,11 +57,15 @@ const Checkout = () => {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter">
       {/* Left Section */}
       <div className="bg-white rounded-lg p-6">
-        <h2 className="text-2xl uppercase mb-6">Checkout</h2>
+        <h2 className="text-2xl uppercase mb-6">{t("checkoutPage.title")}</h2>
         <form onSubmit={handleCreateCheckout}>
-          <h3 className="text-lg mb-4">Contact Details</h3>
+          <h3 className="text-lg mb-4">
+            {t("checkoutPage.sections.contactDetails")}
+          </h3>
           <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
+            <label className="block text-gray-700">
+              {t("checkoutPage.form.email")}
+            </label>
             <input
               type="email"
               value="user@example.com"
@@ -67,10 +73,14 @@ const Checkout = () => {
               disabled
             />
           </div>
-          <h3 className="text-lg mb-4">Delivery</h3>
+          <h3 className="text-lg mb-4">
+            {t("checkoutPage.sections.delivery")}
+          </h3>
           <div className="mb-4 grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-gray-700">First Name</label>
+              <label className="block text-gray-700">
+                {t("checkoutPage.form.firstName")}
+              </label>
               <input
                 type="text"
                 value={shippingAddress.firstName}
@@ -85,7 +95,9 @@ const Checkout = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700">Last Name</label>
+              <label className="block text-gray-700">
+                {t("checkoutPage.form.lastName")}
+              </label>
               <input
                 type="text"
                 value={shippingAddress.lastName}
@@ -101,7 +113,9 @@ const Checkout = () => {
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Address</label>
+            <label className="block text-gray-700">
+              {t("checkoutPage.form.address")}
+            </label>
             <input
               type="text"
               value={shippingAddress.address}
@@ -117,7 +131,9 @@ const Checkout = () => {
           </div>
           <div className="mb-4 grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-gray-700">City</label>
+              <label className="block text-gray-700">
+                {t("checkoutPage.form.city")}
+              </label>
               <input
                 type="text"
                 value={shippingAddress.city}
@@ -132,7 +148,9 @@ const Checkout = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700">Postal Code</label>
+              <label className="block text-gray-700">
+                {t("checkoutPage.form.postalCode")}
+              </label>
               <input
                 type="text"
                 value={shippingAddress.postalCode}
@@ -148,7 +166,9 @@ const Checkout = () => {
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Country</label>
+            <label className="block text-gray-700">
+              {t("checkoutPage.form.country")}
+            </label>
             <input
               type="text"
               value={shippingAddress.country}
@@ -163,7 +183,9 @@ const Checkout = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Phone</label>
+            <label className="block text-gray-700">
+              {t("checkoutPage.form.phone")}
+            </label>
             <input
               type="tel"
               value={shippingAddress.phone}
@@ -184,15 +206,19 @@ const Checkout = () => {
                 type="submit"
                 className="w-full bg-black text-white py-3 rounded"
               >
-                Continue to Payment
+                {t("checkoutPage.buttons.continuePayment")}
               </button>
             ) : (
               <div>
-                <h3 className="text-lg mb-4">Pay with Paypall</h3>
+                <h3 className="text-lg mb-4">
+                  {t("checkoutPage.payment.title")}
+                </h3>
                 <PaypalButton
                   amount={"100"}
                   onSuccess={handlePaymentSuccess}
-                  onError={(err) => alert("Payment Failed. Try again.")}
+                  onError={(err) =>
+                    alert(t("checkoutPage.alerts.paymentFailed"))
+                  }
                 />
               </div>
             )}
@@ -201,7 +227,9 @@ const Checkout = () => {
       </div>
       {/* Right Section */}
       <div className="bg-gray-50 p-6 rounded-lg">
-        <h3 className="text-lg mb-4">Order Summary</h3>
+        <h3 className="text-lg mb-4">
+          {t("checkoutPage.sections.orderSummary")}
+        </h3>
         <div className="border-t py-4 mb-4">
           {cart.products.map((product, index) => (
             <div
@@ -227,15 +255,17 @@ const Checkout = () => {
           ))}
         </div>
         <div className="flex justify-between items-center text-lg mb-4">
-          <p>Subtotal</p>
+          <p>{t("checkoutPage.summary.subtotal")}</p>
           <p>€{cart.totalprice?.toLocaleString()}</p>
         </div>
         <div className="flex justify-between items-center text-lg mb-4">
-          <p>Shipping</p>
-          <p>Free</p>
+          <p>{t("checkoutPage.summary.shipping")}</p>
+          <p className="text-green-600">
+            {t("checkoutPage.summary.shippingFree")}
+          </p>
         </div>
         <div className="flex justify-between items-center text-lg mt-4 border-t pt-4">
-          <p>Total</p>
+          <p>{t("checkoutPage.summary.total")}</p>
           <p>€{cart.totalprice?.toLocaleString()}</p>
         </div>
       </div>

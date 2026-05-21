@@ -1,7 +1,10 @@
 import React from "react";
 import { RiDeleteBin3Line } from "react-icons/ri";
+import { useTranslation } from "react-i18next";
 
 const CartContents = () => {
+  const { t } = useTranslation();
+
   const cartProducts = [
     {
       product: 1,
@@ -40,8 +43,8 @@ const CartContents = () => {
             <div>
               <h3>{product.name}</h3>
               <p className="text-sm text-gray-500">
-                category: {product.category} | car: {product.make}{" "}
-                {product.model}
+                {t("cartContents.category")}: {product.category} |{" "}
+                {t("cartContents.car")}: {product.make} {product.model}
               </p>
               <div className="flex items-center mt-2">
                 <button className="border rounded px-2 py-1 text-xl font-medium cursor-pointer">

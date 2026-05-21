@@ -6,8 +6,10 @@ import ProductGrid from "../components/Products/ProductGrid";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsByFilters } from "../redux/slices/productsSlice";
+import { useTranslation } from "react-i18next";
 
 const AllProductsPage = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.products);
@@ -46,7 +48,7 @@ const AllProductsPage = () => {
         onClick={toggleSidebar}
         className="lg:hidden border p-2 flex justify-center items-center"
       >
-        <FaFilter className="mr-2" /> Filters
+        <FaFilter className="mr-2" /> {t("allProductsPage.filters")}
       </button>
 
       {/* Filter bar */}
@@ -62,7 +64,9 @@ const AllProductsPage = () => {
         <FilterSidebar />
       </div>
       <div className="grow p-4">
-        <h2 className="text-2xl uppercase mb-4">ALL Products</h2>
+        <h2 className="text-2xl uppercase mb-4">
+          {t("allProductsPage.title")}
+        </h2>
         {/* Sort */}
         <SortOptions />
 

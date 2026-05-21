@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const checkout = {
   _id: "123123",
@@ -33,15 +34,17 @@ const checkout = {
 };
 
 const OrderConfirmation = () => {
+  const { t, i18n } = useTranslation();
+
   const calculateEstimatedDelivery = (createdAt) => {
     const orderDate = new Date(createdAt);
     orderDate.setDate(orderDate.getDate() + 10); // Add 10 days to the order date
-    return orderDate.toLocaleDateString();
+    return orderDate.toLocaleDateString(i18n.language);
   };
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white">
       <h1 className="text-4xl font-bold text-center text-emerald-700 mb-6">
-        Thank You for Your Order!
+        {t("orderConfirmation.title")}
       </h1>
       {checkout && (
         <div className="p-6 rounded-lg border">
@@ -49,16 +52,17 @@ const OrderConfirmation = () => {
             {/* Order ID and Date */}
             <div>
               <h2 className="text-xl font-semibold">
-                Order ID: {checkout._id}
+                {t("orderConfirmation.orderId")}: {checkout._id}
               </h2>
               <p className="text-gray-500">
-                Order date: {new Date(checkout.createdAt).toLocaleDateString()}
+                {t("orderConfirmation.orderDate")}:{" "}
+                {new Date(checkout.createdAt).toLocaleDateString(i18n.language)}
               </p>
             </div>
             {/* Estimated Delivery */}
             <div>
               <p className="text-emerald-700 text-sm">
-                Estimated Delivery:{" "}
+                {t("orderConfirmation.estimatedDelivery")}:{" "}
                 {calculateEstimatedDelivery(checkout.createdAt)}
               </p>
             </div>
@@ -81,7 +85,7 @@ const OrderConfirmation = () => {
                 <div className="ml-auto text-right">
                   <p className="text-md">€{item.price}</p>
                   <p className="text-sm text-gray-500">
-                    Quantity: {item.quantity}
+                    {t("orderConfirmation.quantity")}: {item.quantity}
                   </p>
                 </div>
               </div>
@@ -91,12 +95,16 @@ const OrderConfirmation = () => {
           <div className="grid grid-cols-2 gap-8">
             {/* Payment Info */}
             <div>
-              <h4 className="text-lg font-semibold mb-2">Payment</h4>
+              <h4 className="text-lg font-semibold mb-2">
+                {t("orderConfirmation.paymentTitle")}
+              </h4>
               <p className="text-gray-600">Paypal</p>
             </div>
             {/* Delivery Info */}
             <div>
-              <h4 className="text-lg font-semibold mb-2">Delivery</h4>
+              <h4 className="text-lg font-semibold mb-2">
+                {t("orderConfirmation.deliveryTitle")}
+              </h4>
               <p className="text-gray-600">
                 {checkout.shippingAddress.address}
               </p>

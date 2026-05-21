@@ -2,8 +2,10 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const NewArrivals = () => {
+  const { t } = useTranslation();
   const scrollRef = useRef(null);
 
   const [isDragging, setIsDragging] = useState(false);
@@ -94,10 +96,8 @@ const NewArrivals = () => {
         {/* HEADER */}
         <div className="flex justify-between items-end mb-8">
           <div>
-            <h2 className="text-3xl font-bold">New Arrivals</h2>
-            <p className="text-gray-500">
-              Latest auto parts added to our catalog
-            </p>
+            <h2 className="text-3xl font-bold">{t("newArrivals.title")}</h2>
+            <p className="text-gray-500">{t("newArrivals.subtitle")}</p>
           </div>
 
           <div className="flex gap-2">
@@ -163,7 +163,9 @@ const NewArrivals = () => {
                   €{product.price}
                 </p>
 
-                <div className="mt-3 text-sm text-gray-500">View details →</div>
+                <div className="mt-3 text-sm text-gray-500">
+                  {t("newArrivals.viewDetails")}
+                </div>
               </div>
             </Link>
           ))}

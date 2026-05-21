@@ -5,6 +5,8 @@ import * as Sentry from "@sentry/react";
 import "./index.css";
 import App from "./App.jsx";
 
+import "./i18n";
+
 Sentry.init({
   dsn: import.meta.env.SENTRY_DSN,
   sendDefaultPii: true,

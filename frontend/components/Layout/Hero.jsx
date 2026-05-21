@@ -1,8 +1,10 @@
 import React from "react";
 import heroImg from "../../src/assets/hero.png";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Hero = () => {
+  const { t } = useTranslation();
   return (
     <section className="relative">
       <img
@@ -16,13 +18,13 @@ const Hero = () => {
             Auto Parts
           </h1>
           <p className="text-sm tracking-tighter md:text-lg mb-6">
-            Explore our wide range of auto parts.
+            {t("hero.subtitle")}
           </p>
           <Link
             to="/products"
             className="bg-white text-gray-950 px-6 py-2 rounded-sm text-lg"
           >
-            Shop Now
+            {t("hero.shopNow")}
           </Link>
         </div>
       </div>

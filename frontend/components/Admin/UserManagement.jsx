@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const UserManagement = () => {
+  const { t } = useTranslation();
+
   const users = [
     {
       _id: 123123,
@@ -14,7 +17,7 @@ const UserManagement = () => {
     name: "",
     email: "",
     password: "",
-    role: "Customer", //Default role
+    role: "customer", //Default role
   });
 
   const handleChange = (e) => {
@@ -33,7 +36,7 @@ const UserManagement = () => {
       name: "",
       email: "",
       password: "",
-      role: "Customer",
+      role: "customer",
     });
   };
 
@@ -42,20 +45,22 @@ const UserManagement = () => {
   };
 
   const handleDeleteUser = (userId) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
+    if (window.confirm(t("userManagement.alerts.confirmDelete"))) {
       console.log("deleting user with ID: ", userId);
     }
   };
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">User Managment</h2>
+      <h2 className="text-2xl font-bold mb-4">{t("userManagement.title")}</h2>
       {/* Add New User Form */}
       <div className="p-6 rounded-lg mb-6">
-        <h3 className="text-lg font-bold"> Add New User</h3>
+        <h3 className="text-lg font-bold"> {t("userManagement.addTitle")}</h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700">Name</label>
+            <label className="block text-gray-700">
+              {t("userManagement.form.name")}
+            </label>
             <input
               type="text"
               name="name"
@@ -66,7 +71,9 @@ const UserManagement = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
+            <label className="block text-gray-700">
+              {t("userManagement.form.email")}
+            </label>
             <input
               type="email"
               name="email"
@@ -77,7 +84,9 @@ const UserManagement = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Password</label>
+            <label className="block text-gray-700">
+              {t("userManagement.form.password")}
+            </label>
             <input
               type="password"
               name="password"
@@ -88,22 +97,26 @@ const UserManagement = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Role</label>
+            <label className="block text-gray-700">
+              {t("userManagement.form.role")}
+            </label>
             <select
               name="role"
               value={formData.role}
               onChange={handleChange}
               className="w-full p-2 border rounded"
             >
-              <option value="customer">Customer</option>
-              <option value="admin">Admin</option>
+              <option value="customer">
+                {t("userManagement.roles.customer")}
+              </option>
+              <option value="admin">{t("userManagement.roles.admin")}</option>
             </select>
           </div>
           <button
             type="submit"
             className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 cursor-pointer"
           >
-            Add new User
+            {t("userManagement.form.addButton")}
           </button>
         </form>
       </div>
@@ -113,10 +126,10 @@ const UserManagement = () => {
         <table className="min-w-full text-left text-gray-500">
           <thead className="bg-gray-100 text-xs uppercase text-gray-700">
             <tr>
-              <th className="py-3 px-4">Name</th>
-              <th className="py-3 px-4">Email</th>
-              <th className="py-3 px-4">Role</th>
-              <th className="py-3 px-4">Actions</th>
+              <th className="py-3 px-4">{t("userManagement.table.name")}</th>
+              <th className="py-3 px-4">{t("userManagement.table.email")}</th>
+              <th className="py-3 px-4">{t("userManagement.table.role")}</th>
+              <th className="py-3 px-4">{t("userManagement.table.actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -132,8 +145,12 @@ const UserManagement = () => {
                     onChange={(e) => handleRoleChange(user._id, e.target.value)}
                     className="p-2 border rounded"
                   >
-                    <option value="customer">Customer</option>
-                    <option value="admin">Admin</option>
+                    <option value="customer">
+                      {t("userManagement.roles.customer")}
+                    </option>
+                    <option value="admin">
+                      {t("userManagement.roles.admin")}
+                    </option>
                   </select>
                 </td>
                 <td className="p-4">
@@ -141,7 +158,7 @@ const UserManagement = () => {
                     onClick={() => handleDeleteUser(user._id)}
                     className="bg-red-500 text-white py-2 px-4 hover:bg-red-600 rounded cursor-pointer"
                   >
-                    Delete
+                    {t("userManagement.table.deleteButton")}
                   </button>
                 </td>
               </tr>

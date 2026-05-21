@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { HiCheck } from "react-icons/hi";
 import { loginUser } from "../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -20,13 +22,15 @@ const Login = () => {
         {/* LEFT SIDE - LOGIN */}
         <section className="grow lg:mr-6 bg-white rounded-lg shadow-sm p-6 md:p-10 lg:px-16 lg:py-14">
           <h1 className="text-2xl md:text-3xl font-black text-center lg:text-left mb-8">
-            Sign in
+            {t("loginPage.title")}
           </h1>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {/* Email */}
             <div className="relative">
-              <label className="block text-sm font-semibold mb-2">Email</label>
+              <label className="block text-sm font-semibold mb-2">
+                {t("loginPage.form.emailLabel")}
+              </label>
               <input
                 type="email"
                 value={email}
@@ -40,7 +44,7 @@ const Login = () => {
             {/* Password */}
             <div>
               <label className="block text-sm font-semibold mb-2">
-                Password
+                {t("loginPage.form.passwordLabel")}
               </label>
               <input
                 type="password"
@@ -58,7 +62,7 @@ const Login = () => {
                 to="/forgot-password"
                 className="underline hover:text-main-blue"
               >
-                Forgot your password?
+                {t("loginPage.form.forgotPassword")}
               </Link>
             </div>
 
@@ -74,27 +78,27 @@ const Login = () => {
         {/* RIGHT SIDE - REGISTER INFO */}
         <section className="mt-10 lg:mt-0 grow bg-gray-50 rounded-lg p-6 md:p-10 lg:px-16 lg:py-14">
           <h2 className="text-2xl md:text-3xl font-black mb-4">
-            Don’t have an account?
+            {t("loginPage.registerPromo.title")}
           </h2>
 
           <h3 className="text-main-blue font-bold text-lg mb-8">
-            Quick and Easy!
+            {t("loginPage.registerPromo.subtitle")}
           </h3>
 
           <ul className="space-y-4 mb-10">
             <li className="flex items-center gap-3">
               <HiCheck className="text-main-blue" />
-              <span>Track your orders</span>
+              <span>{t("loginPage.registerPromo.benefits.trackOrders")}</span>
             </li>
 
             <li className="flex items-center gap-3">
               <HiCheck className="text-main-blue" />
-              <span>Save your shipping and billing details</span>
+              <span>{t("loginPage.registerPromo.benefits.saveDetails")}</span>
             </li>
 
             <li className="flex items-center gap-3">
               <HiCheck className="text-main-blue" />
-              <span>Manage returns online</span>
+              <span>{t("loginPage.registerPromo.benefits.manageReturns")}</span>
             </li>
           </ul>
 
@@ -102,7 +106,7 @@ const Login = () => {
             to="/register"
             className="inline-block border border-main-blue text-main-blue px-8 py-3 uppercase font-bold rounded-md hover:bg-main-blue hover:text-white transition"
           >
-            Create Account
+            {t("loginPage.registerPromo.createAccountButton")}
           </Link>
         </section>
       </div>

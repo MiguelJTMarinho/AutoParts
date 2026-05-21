@@ -1,12 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const ProductGrid = ({ products, loading, error }) => {
+  const { t } = useTranslation();
+
   if (loading) {
     return (
       <div className="flex justify-center items-center py-20">
         <p className="text-gray-500 animate-pulse text-lg">
-          Loading products...
+          {t("productGrid.loading")}
         </p>
       </div>
     );
@@ -15,7 +18,9 @@ const ProductGrid = ({ products, loading, error }) => {
   if (error) {
     return (
       <div className="flex justify-center items-center py-20">
-        <p className="text-red-500">Error: {error.message || error}</p>
+        <p className="text-red-500">
+          {t("productGrid.error", { message: error.message || error })}
+        </p>
       </div>
     );
   }
@@ -23,7 +28,7 @@ const ProductGrid = ({ products, loading, error }) => {
   if (!products || products.length === 0) {
     return (
       <div className="flex justify-center items-center py-20">
-        <p className="text-gray-500 text-lg">No products found.</p>
+        <p className="text-gray-500 text-lg">{t("productGrid.noProducts")}</p>
       </div>
     );
   }
@@ -53,7 +58,7 @@ const ProductGrid = ({ products, loading, error }) => {
               {/* Etiqueta de Esgotado (Opcional, mas muito útil) */}
               {product.stock === 0 && (
                 <div className="absolute top-2 left-2 bg-black/80 text-white text-xs font-bold px-2 py-1 rounded">
-                  Out of Stock
+                  {t("productGrid.outOfStock")}
                 </div>
               )}
             </div>

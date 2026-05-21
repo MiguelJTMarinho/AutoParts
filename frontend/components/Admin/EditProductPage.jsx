@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const EditProductPage = () => {
+  const { t } = useTranslation();
+
   // API
   const [carBrands, setCarBrands] = useState([]);
   const [carModels, setCarModels] = useState([]);
@@ -148,12 +151,14 @@ const EditProductPage = () => {
   // =========================
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
-      <h2 className="text-3xl font-bold mb-6">Edit Product</h2>
+      <h2 className="text-3xl font-bold mb-6">{t("editProductPage.title")}</h2>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* NAME */}
         <div>
-          <label className="block text-gray-700">Product Name</label>
+          <label className="block text-gray-700">
+            {t("editProductPage.form.productNameLabel")}
+          </label>
           <input
             name="name"
             value={productData.name}
@@ -165,7 +170,9 @@ const EditProductPage = () => {
 
         {/* DESCRIPTION */}
         <div>
-          <label className="block text-gray-700">Description</label>
+          <label className="block text-gray-700">
+            {t("editProductPage.form.descriptionLabel")}
+          </label>
           <textarea
             name="description"
             value={productData.description}
@@ -177,7 +184,9 @@ const EditProductPage = () => {
         {/* PRICE + STOCK */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-gray-700">Price (€)</label>
+            <label className="block text-gray-700">
+              {t("editProductPage.form.priceLabel")}
+            </label>
             <input
               type="number"
               name="price"
@@ -187,7 +196,9 @@ const EditProductPage = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Stock</label>
+            <label className="block text-gray-700">
+              {t("editProductPage.form.stockLabel")}
+            </label>
             <input
               type="number"
               name="stock"
@@ -201,14 +212,18 @@ const EditProductPage = () => {
         {/* CATEGORY + BRAND */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-gray-700">Category</label>
+            <label className="block text-gray-700">
+              {t("editProductPage.form.categoryLabel")}
+            </label>
             <select
               name="category_id"
               value={productData.category_id}
               onChange={handleChange}
               className="w-full px-2 py-3 border rounded"
             >
-              <option value="">Select Category</option>
+              <option value="">
+                {t("editProductPage.form.selectCategory")}
+              </option>
 
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -219,14 +234,16 @@ const EditProductPage = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700">Part Brand</label>
+            <label className="block text-gray-700">
+              {t("editProductPage.form.partBrandLabel")}
+            </label>
             <select
               name="brand_id"
               value={productData.brand_id}
               onChange={handleChange}
               className="w-full px-2 py-3 border rounded"
             >
-              <option value="">Select Brand</option>
+              <option value="">{t("editProductPage.form.selectBrand")}</option>
 
               {partBrands.map((b) => (
                 <option key={b.id} value={b.id}>
@@ -241,19 +258,25 @@ const EditProductPage = () => {
             COMPATIBILITY
         ========================= */}
         <div>
-          <h3 className="text-xl font-semibold mb-3">Compatibility</h3>
+          <h3 className="text-xl font-semibold mb-3">
+            {t("editProductPage.compatibility.title")}
+          </h3>
 
           {productData.compatibility.map((item, index) => (
             <div key={index} className="grid grid-cols-4 gap-2 mb-3">
               <div>
-                <label className="text-sm text-gray-600">Brand</label>
+                <label className="text-sm text-gray-600">
+                  {t("editProductPage.compatibility.brandLabel")}
+                </label>
                 <select
                   name="carbrand_id"
                   value={item.carbrand_id}
                   onChange={(e) => handleCompatibilityChange(index, e)}
                   className="w-full px-2 py-3 border rounded"
                 >
-                  <option value="">Brand</option>
+                  <option value="">
+                    {t("editProductPage.compatibility.brandLabel")}
+                  </option>
                   {carBrands.map((b) => (
                     <option key={b.id} value={b.id}>
                       {b.name}
@@ -263,7 +286,9 @@ const EditProductPage = () => {
               </div>
 
               <div>
-                <label className="text-sm text-gray-600">Model</label>
+                <label className="text-sm text-gray-600">
+                  {t("editProductPage.compatibility.modelLabel")}
+                </label>
                 <select
                   name="carmodel_id"
                   value={item.carmodel_id}
@@ -271,7 +296,9 @@ const EditProductPage = () => {
                   className="w-full px-2 py-3 border rounded"
                   disabled={!item.carbrand_id}
                 >
-                  <option value="">Model</option>
+                  <option value="">
+                    {t("editProductPage.compatibility.modelLabel")}
+                  </option>
 
                   {getModelsByBrand(item.carbrand_id).map((m) => (
                     <option key={m.id} value={m.id}>
@@ -282,7 +309,9 @@ const EditProductPage = () => {
               </div>
 
               <div>
-                <label className="text-sm text-gray-600">Year From</label>
+                <label className="text-sm text-gray-600">
+                  {t("editProductPage.compatibility.yearFromLabel")}
+                </label>
                 <input
                   type="number"
                   name="year_start"
@@ -293,7 +322,9 @@ const EditProductPage = () => {
               </div>
 
               <div>
-                <label className="text-sm text-gray-600">Year To</label>
+                <label className="text-sm text-gray-600">
+                  {t("editProductPage.compatibility.yearToLabel")}
+                </label>
                 <div className="flex gap-2">
                   <input
                     type="number"
@@ -320,7 +351,7 @@ const EditProductPage = () => {
             onClick={addCompatibility}
             className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer"
           >
-            Add Compatibility
+            {t("editProductPage.compatibility.addButton")}
           </button>
         </div>
 
@@ -328,13 +359,17 @@ const EditProductPage = () => {
             OEM REFERENCES
         ========================= */}
         <div>
-          <label className="block text-gray-700">OEM References</label>
+          <label className="block text-gray-700">
+            {t("editProductPage.oem.title")}
+          </label>
 
           {productData.oem_references.map((item, index) => (
             <div key={index} className="grid grid-cols-4 gap-2 mb-3">
               {/* OEM CODE */}
               <div>
-                <label className="text-sm text-gray-600">Code</label>
+                <label className="text-sm text-gray-600">
+                  {t("editProductPage.oem.codeLabel")}
+                </label>
                 <input
                   name="reference_code"
                   value={item.reference_code}
@@ -346,7 +381,9 @@ const EditProductPage = () => {
 
               {/* BRAND */}
               <div>
-                <label className="text-sm text-gray-600">Brand</label>
+                <label className="text-sm text-gray-600">
+                  {t("editProductPage.oem.brandLabel")}
+                </label>
                 <input
                   name="brand"
                   value={item.brand}
@@ -358,16 +395,24 @@ const EditProductPage = () => {
 
               {/* TYPE */}
               <div>
-                <label className="text-sm text-gray-600">Type</label>
+                <label className="text-sm text-gray-600">
+                  {t("editProductPage.oem.typeLabel")}
+                </label>
                 <select
                   name="type"
                   value={item.type}
                   onChange={(e) => handleOemChange(index, e)}
                   className="w-full px-2 py-3 border rounded"
                 >
-                  <option value="OEM">OEM</option>
-                  <option value="Compatible">Compatible</option>
-                  <option value="Aftermarket">Aftermarket</option>
+                  <option value="OEM">
+                    {t("editProductPage.oem.types.oem")}
+                  </option>
+                  <option value="Compatible">
+                    {t("editProductPage.oem.types.compatible")}
+                  </option>
+                  <option value="Aftermarket">
+                    {t("editProductPage.oem.types.aftermarket")}
+                  </option>
                 </select>
               </div>
 
@@ -390,7 +435,9 @@ const EditProductPage = () => {
         ========================= */}
 
         <div>
-          <h3 className="text-xl font-semibold mb-3">Images</h3>
+          <h3 className="text-xl font-semibold mb-3">
+            {t("editProductPage.images.title")}
+          </h3>
 
           {productData.images.map((img, index) => (
             <div key={index} className="flex items-center gap-2 mb-3">
@@ -403,7 +450,7 @@ const EditProductPage = () => {
                   updated[index].image_url = e.target.value;
                   setProductData({ ...productData, images: updated });
                 }}
-                placeholder="Image URL"
+                placeholder={t("editProductPage.images.urlPlaceholder")}
                 className="flex-1 border p-2 rounded-md"
               />
 
@@ -416,7 +463,7 @@ const EditProductPage = () => {
                   updated[index].sort_order = e.target.value;
                   setProductData({ ...productData, images: updated });
                 }}
-                placeholder="Order"
+                placeholder={t("editProductPage.images.orderPlaceholder")}
                 className="w-20 border p-2 rounded-md"
               />
 
@@ -459,7 +506,7 @@ const EditProductPage = () => {
             }}
             className="px-4 py-2 bg-blue-500 text-white rounded-md"
           >
-            Add Image
+            {t("editProductPage.images.addButton")}
           </button>
         </div>
 
@@ -471,7 +518,7 @@ const EditProductPage = () => {
             checked={productData.is_active}
             onChange={handleChange}
           />
-          <label>Active Product</label>
+          <label>{t("editProductPage.form.isActive")}</label>
         </div>
 
         {/* SUBMIT */}
@@ -479,7 +526,7 @@ const EditProductPage = () => {
           type="submit"
           className="w-full bg-green-500 text-white py-3 rounded-md hover:bg-green-600 cursor-pointer"
         >
-          Update Product
+          {t("editProductPage.form.submitButton")}
         </button>
       </form>
     </div>

@@ -9,8 +9,10 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const AdminSidebar = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const handleLogout = () => {
     navigate("/");
@@ -22,7 +24,9 @@ const AdminSidebar = () => {
           AutoParts
         </Link>
       </div>
-      <h2 className="text-xl font-medium mb-6 text-center">Admin Dashboard</h2>
+      <h2 className="text-xl font-medium mb-6 text-center">
+        {t("adminSidebar.title")}
+      </h2>
       <nav className="flex flex-col space-y-2">
         <NavLink
           to="/admin/users"
@@ -33,7 +37,7 @@ const AdminSidebar = () => {
           }
         >
           <FaUser />
-          <span>Users</span>
+          <span>{t("adminSidebar.users")}</span>
         </NavLink>
         <NavLink
           to="/admin/products"
@@ -44,7 +48,7 @@ const AdminSidebar = () => {
           }
         >
           <FaBoxOpen />
-          <span>Products</span>
+          <span>{t("adminSidebar.products")}</span>
         </NavLink>
         <NavLink
           to="/admin/categories"
@@ -55,7 +59,7 @@ const AdminSidebar = () => {
           }
         >
           <FaTags />
-          <span>Categories</span>
+          <span>{t("adminSidebar.categories")}</span>
         </NavLink>
         <NavLink
           to="/admin/part-brands"
@@ -66,7 +70,7 @@ const AdminSidebar = () => {
           }
         >
           <FaCubes />
-          <span>Part Brands</span>
+          <span>{t("adminSidebar.partBrands")}</span>
         </NavLink>
         <NavLink
           to="/admin/orders"
@@ -77,7 +81,7 @@ const AdminSidebar = () => {
           }
         >
           <FaClipboardList />
-          <span>Orders</span>
+          <span>{t("adminSidebar.orders")}</span>
         </NavLink>
         <NavLink
           to="/"
@@ -88,7 +92,7 @@ const AdminSidebar = () => {
           }
         >
           <FaStore />
-          <span>Shop</span>
+          <span>{t("adminSidebar.shop")}</span>
         </NavLink>
       </nav>
       <div className="mt-6">
@@ -97,7 +101,7 @@ const AdminSidebar = () => {
           className="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded flex items-center justify-center space-x-2"
         >
           <FaSignOutAlt />
-          <span>Logout</span>
+          <span>{t("adminSidebar.logout")}</span>
         </button>
       </div>
     </div>

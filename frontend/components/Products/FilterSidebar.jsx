@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { use, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const PRICE_MIN = 0;
 const PRICE_MAX = 5000;
 
 const FilterSidebar = () => {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Data from API
@@ -177,7 +179,6 @@ const FilterSidebar = () => {
   const selectedParentCategory = getParam("parentCategory");
   const selectedCategory = getParam("category");
 
-  // ALTERAÇÃO: partBrand agora lê via getParam (valor único) em vez de getAll (array)
   const selectedPartBrand = getParam("partBrand");
 
   const minPrice = Number(getParam("minPrice") || PRICE_MIN);
@@ -188,7 +189,7 @@ const FilterSidebar = () => {
   const hasFilters =
     selectedParentCategory ||
     selectedCategory ||
-    selectedPartBrand || // ALTERAÇÃO: Atualizado na validação de filtros ativos
+    selectedPartBrand ||
     minPrice > PRICE_MIN ||
     maxPrice < PRICE_MAX ||
     selectedBrand;
@@ -202,14 +203,16 @@ const FilterSidebar = () => {
     <div className="w-full p-4 space-y-6 bg-white">
       {/* HEADER */}
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-bold uppercase">Filters</h2>
+        <h2 className="text-lg font-bold uppercase">
+          {t("filterSidebar.title")}
+        </h2>
 
         {hasFilters && (
           <button
             onClick={clearAll}
             className="text-xs text-main-blue hover:underline"
           >
-            Clear All
+            {t("filterSidebar.clearAll")}
           </button>
         )}
       </div>
@@ -217,13 +220,13 @@ const FilterSidebar = () => {
       {/* OEM */}
       <div className="border rounded-lg p-4 space-y-3">
         <h3 className="text-xs text-gray-500 uppercase font-semibold">
-          OEM Part Number
+          {t("filterSidebar.oem.title")}
         </h3>
         <input
           type="text"
           value={getParam("oem") || ""}
           onChange={(e) => updateParam("oem", e.target.value)}
-          placeholder="Enter OEM number..."
+          placeholder={t("filterSidebar.oem.placeholder")}
           className="w-full border rounded px-2 py-1 text-sm"
         />
       </div>
@@ -231,7 +234,7 @@ const FilterSidebar = () => {
       {/* VEHICLE */}
       <div className="border rounded-lg p-4 space-y-3">
         <h3 className="text-xs text-gray-500 uppercase font-semibold">
-          Vehicle
+          {t("filterSidebar.vehicle.title")}
         </h3>
 
         {/* BRAND */}
@@ -247,7 +250,7 @@ const FilterSidebar = () => {
           }}
           className="w-full border rounded px-2 py-1 text-sm"
         >
-          <option value="">All brands</option>
+          <option value="">{t("filterSidebar.vehicle.allBrands")}</option>
           {carBrands.map((brand) => (
             <option key={brand.id} value={`${brand.id}_${brand.name}`}>
               {brand.name}
@@ -268,7 +271,7 @@ const FilterSidebar = () => {
           disabled={!selectedBrand}
           className="w-full border rounded px-2 py-1 text-sm"
         >
-          <option value="">All models</option>
+          <option value="">{t("filterSidebar.vehicle.allModels")}</option>
           {carModels.map((model) => (
             <option key={model.id} value={`${model.id}_${model.name}`}>
               {model.name}
@@ -283,7 +286,7 @@ const FilterSidebar = () => {
           disabled={!selectedModel}
           className="w-full border rounded px-2 py-1 text-sm"
         >
-          <option value="">All years</option>
+          <option value="">{t("filterSidebar.vehicle.allYears")}</option>
           {years.map((year) => (
             <option key={year} value={year}>
               {year}
@@ -295,7 +298,7 @@ const FilterSidebar = () => {
       {/* CATEGORY */}
       <div className="border rounded-lg p-4 space-y-3">
         <h3 className="text-xs text-gray-500 uppercase font-semibold">
-          Category
+          {t("filterSidebar.category.title")}
         </h3>
 
         {/* Select Pai */}
@@ -315,7 +318,7 @@ const FilterSidebar = () => {
           }}
           className="w-full border rounded px-2 py-1 text-sm mb-2"
         >
-          <option value="">All Categories</option>
+          <option value="">{t("filterSidebar.category.allCategories")}</option>
           {mainCategories.map((cat) => (
             <option key={cat.id} value={`${cat.id}_${cat.name}`}>
               {cat.name}
@@ -330,7 +333,9 @@ const FilterSidebar = () => {
           disabled={!selectedParentCategory}
           className="w-full border rounded px-2 py-1 text-sm"
         >
-          <option value="">All Subcategories</option>
+          <option value="">
+            {t("filterSidebar.category.allSubcategories")}
+          </option>
           {subCategories.map((sub) => (
             <option key={sub.id} value={`${sub.id}_${sub.name}`}>
               {sub.name}
@@ -343,7 +348,7 @@ const FilterSidebar = () => {
       {/* ALTERAÇÃO: Mapeamento por checkbox removido e substituído por um <select> limpo */}
       <div className="border rounded-lg p-4 space-y-3">
         <h3 className="text-xs text-gray-500 uppercase font-semibold">
-          Part Brand
+          {t("filterSidebar.partBrand.title")}
         </h3>
 
         <select
@@ -351,7 +356,7 @@ const FilterSidebar = () => {
           onChange={(e) => updateParam("partBrand", e.target.value)}
           className="w-full border rounded px-2 py-1 text-sm"
         >
-          <option value="">All part brands</option>
+          <option value="">{t("filterSidebar.partBrand.allPartBrands")}</option>
           {partBrands.map((brand) => (
             <option key={brand.id} value={`${brand.id}_${brand.name}`}>
               {brand.name}
@@ -362,7 +367,9 @@ const FilterSidebar = () => {
 
       {/* PRICE */}
       <div className="border rounded-lg p-4 space-y-3">
-        <h3 className="text-xs text-gray-500 uppercase font-semibold">Price</h3>
+        <h3 className="text-xs text-gray-500 uppercase font-semibold">
+          {t("filterSidebar.price.title")}
+        </h3>
         <input
           type="range"
           min={PRICE_MIN}
@@ -380,8 +387,12 @@ const FilterSidebar = () => {
           onChange={(e) => updatePrice(minPrice, Number(e.target.value))}
         />
         <div className="flex justify-between text-xs text-gray-500">
-          <span>Min. {minPrice}€</span>
-          <span>Max. {maxPrice}€</span>
+          <span>
+            {t("filterSidebar.price.min")} {minPrice}€
+          </span>
+          <span>
+            {t("filterSidebar.price.max")} {maxPrice}€
+          </span>
         </div>
       </div>
 
@@ -394,7 +405,7 @@ const FilterSidebar = () => {
             onChange={(e) => updateStock(e.target.checked)}
             className="accent-main-blue"
           />
-          In Stock Only
+          {t("filterSidebar.stock")}
         </label>
       </div>
     </div>

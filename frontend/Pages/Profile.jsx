@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { HiMiniArchiveBox } from "react-icons/hi2";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
 
   const [profileData, setProfileData] = useState({
@@ -62,14 +64,14 @@ const Profile = () => {
             to="/my-orders"
             className="mr-4 px-6 py-2.5 rounded-lg bg-main-blue text-white font-semibold hover:opacity-90 cursor-pointer"
           >
-            <h2>Orders</h2>
+            <h2>{t("profilePage.buttons.orders")}</h2>
           </Link>
 
           <button
             onClick={handleLogout}
             className="px-6 py-2.5 rounded-lg bg-red-500 text-white font-semibold shadow hover:bg-red-600 transition cursor-pointer"
           >
-            Log Out
+            {t("profilePage.buttons.logOut")}
           </button>
         </div>
         {/* Header Card */}
@@ -94,7 +96,7 @@ const Profile = () => {
 
               {isEditing && (
                 <label className="absolute -bottom-2 -right-2 bg-main-blue text-white text-xs px-2 py-1 rounded-full cursor-pointer shadow hover:scale-105 transition">
-                  Change
+                  {t("profilePage.buttons.changePhoto")}
                   <input
                     type="file"
                     accept="image/*"
@@ -118,7 +120,7 @@ const Profile = () => {
               onClick={() => setIsEditing(true)}
               className="px-6 py-2.5 rounded-lg bg-main-blue text-white font-semibold shadow hover:shadow-lg hover:scale-[1.02] transition"
             >
-              Edit Profile
+              {t("profilePage.buttons.editProfile")}
             </button>
           )}
         </div>
@@ -127,13 +129,13 @@ const Profile = () => {
           {/* Personal Info */}
           <div className="bg-white rounded-2xl shadow-sm p-8 space-y-6">
             <h2 className="text-lg font-semibold text-gray-800 border-b pb-3">
-              Personal Information
+              {t("profilePage.sections.personalInfo")}
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="text-sm font-medium text-gray-600">
-                  First Name
+                  {t("profilePage.fields.firstName")}
                 </label>
                 <input
                   type="text"
@@ -147,7 +149,7 @@ const Profile = () => {
 
               <div>
                 <label className="text-sm font-medium text-gray-600">
-                  Last Name
+                  {t("profilePage.fields.lastName")}
                 </label>
                 <input
                   type="text"
@@ -161,7 +163,7 @@ const Profile = () => {
 
               <div>
                 <label className="text-sm font-medium text-gray-600">
-                  Email
+                  {t("profilePage.fields.email")}
                 </label>
                 <input
                   type="email"
@@ -173,7 +175,7 @@ const Profile = () => {
 
               <div>
                 <label className="text-sm font-medium text-gray-600">
-                  Phone Number
+                  {t("profilePage.fields.phone")}
                 </label>
                 <input
                   type="text"
@@ -190,13 +192,13 @@ const Profile = () => {
           {/* Address */}
           <div className="bg-white rounded-2xl shadow-sm p-8 space-y-6">
             <h2 className="text-lg font-semibold text-gray-800 border-b pb-3">
-              Address
+              {t("profilePage.sections.address")}
             </h2>
 
             <div className="space-y-6">
               <div>
                 <label className="text-sm font-medium text-gray-600">
-                  Address Line 1
+                  {t("profilePage.fields.addressLine1")}
                 </label>
                 <input
                   type="text"
@@ -210,7 +212,7 @@ const Profile = () => {
 
               <div>
                 <label className="text-sm font-medium text-gray-600">
-                  Address Line 2
+                  {t("profilePage.fields.addressLine2")}
                 </label>
                 <input
                   type="text"
@@ -225,7 +227,7 @@ const Profile = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="text-sm font-medium text-gray-600">
-                    City
+                    {t("profilePage.fields.city")}
                   </label>
                   <input
                     type="text"
@@ -239,7 +241,7 @@ const Profile = () => {
 
                 <div>
                   <label className="text-sm font-medium text-gray-600">
-                    Postal Code
+                    {t("profilePage.fields.postalCode")}
                   </label>
                   <input
                     type="text"
@@ -253,7 +255,7 @@ const Profile = () => {
 
                 <div>
                   <label className="text-sm font-medium text-gray-600">
-                    Country
+                    {t("profilePage.fields.country")}
                   </label>
                   <input
                     type="text"
@@ -276,14 +278,14 @@ const Profile = () => {
                 onClick={() => setIsEditing(false)}
                 className="px-6 py-2.5 rounded-lg border border-gray-300 font-medium hover:bg-gray-50 transition"
               >
-                Cancel
+                {t("profilePage.buttons.cancel")}
               </button>
 
               <button
                 type="submit"
                 className="px-6 py-2.5 rounded-lg bg-main-blue text-white font-semibold shadow hover:shadow-lg hover:scale-[1.02] transition"
               >
-                Save Changes
+                {t("profilePage.buttons.saveChanges")}
               </button>
             </div>
           )}

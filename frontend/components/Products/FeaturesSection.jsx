@@ -1,8 +1,11 @@
 import React from "react";
 import { HiOutlineCreditCard, HiShoppingBag } from "react-icons/hi";
 import { HiMiniCheckCircle } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 
 const FeaturesSection = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="py-16 px-4 bg-white">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
@@ -12,10 +15,10 @@ const FeaturesSection = () => {
             <HiShoppingBag className="text-xl" />
           </div>
           <h4 className="tracking-tighter mb-2">
-            FAST SHIPPING IN PORTUGAL & SPAIN
+            {t("featuresSection.feature1.title")}
           </h4>
           <p className="text-gray-600 text-sm tracking-tighter">
-            Reliable delivery across mainland Portugal and Spain.
+            {t("featuresSection.feature1.description")}
           </p>
         </div>
 
@@ -24,9 +27,11 @@ const FeaturesSection = () => {
           <div className="p-4 rounded-full mb-4">
             <HiMiniCheckCircle className="text-xl" />
           </div>
-          <h4 className="tracking-tighter mb-2">QUALITY YOU CAN TRUST</h4>
+          <h4 className="tracking-tighter mb-2">
+            {t("featuresSection.feature2.title")}
+          </h4>
           <p className="text-gray-600 text-sm tracking-tighter">
-            Carefully inspected auto parts to ensure performance and durability.
+            {t("featuresSection.feature2.description")}
           </p>
         </div>
         {/* Feature 3 */}
@@ -34,9 +39,11 @@ const FeaturesSection = () => {
           <div className="p-4 rounded-full mb-4">
             <HiOutlineCreditCard className="text-xl" />
           </div>
-          <h4 className="tracking-tighter mb-2">SECURE CHECKOUT</h4>
+          <h4 className="tracking-tighter mb-2">
+            {t("featuresSection.feature3.title")}
+          </h4>
           <p className="text-gray-600 text-sm tracking-tighter">
-            100% secured checkout process
+            {t("featuresSection.feature3.description")}
           </p>
         </div>
       </div>

@@ -1,6 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const OrderManagement = () => {
+  const { t } = useTranslation();
+
   const orders = [
     {
       _id: "123",
@@ -18,16 +21,22 @@ const OrderManagement = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6">Order Management</h2>
+      <h2 className="text-2xl font-bold mb-6">{t("orderManagement.title")}</h2>
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
         <table className="min-w-full text-left text-gray-500">
           <thead className="bg-gray-100 text-xs uppercase text-gray-700">
             <tr>
-              <th className="py-3 px-4">Order ID</th>
-              <th className="py-3 px-4">Customer</th>
-              <th className="py-3 px-4">Total</th>
-              <th className="py-3 px-4">Status</th>
-              <th className="py-3 px-4">Actions</th>
+              <th className="py-3 px-4">
+                {t("orderManagement.table.orderId")}
+              </th>
+              <th className="py-3 px-4">
+                {t("orderManagement.table.customer")}
+              </th>
+              <th className="py-3 px-4">{t("orderManagement.table.total")}</th>
+              <th className="py-3 px-4">{t("orderManagement.table.status")}</th>
+              <th className="py-3 px-4">
+                {t("orderManagement.table.actions")}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -46,14 +55,22 @@ const OrderManagement = () => {
                     <select
                       value={order.status}
                       onChange={(e) =>
-                        handleStatusChange(order._id, order.status)
+                        handleStatusChange(order._id, e.target.value)
                       }
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
                     >
-                      <option value="Processing">Processing</option>
-                      <option value="Shipped">Shipped</option>
-                      <option value="Delivered">Delivered</option>
-                      <option value="Canceled">Canceled</option>
+                      <option value="Processing">
+                        {t("orderManagement.status.processing")}
+                      </option>
+                      <option value="Shipped">
+                        {t("orderManagement.status.shipped")}
+                      </option>
+                      <option value="Delivered">
+                        {t("orderManagement.status.delivered")}
+                      </option>
+                      <option value="Canceled">
+                        {t("orderManagement.status.canceled")}
+                      </option>
                     </select>
                   </td>
                   <td className="p-4">
@@ -61,7 +78,7 @@ const OrderManagement = () => {
                       onClick={() => handleStatusChange(order._id, "Delivered")}
                       className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
                     >
-                      Mark as Delivered
+                      {t("orderManagement.actions.markDelivered")}
                     </button>
                   </td>
                 </tr>
@@ -69,7 +86,7 @@ const OrderManagement = () => {
             ) : (
               <tr>
                 <td colSpan="5" className="p-4 text-center text-gray-500">
-                  No orders found.
+                  {t("orderManagement.noOrders")}
                 </td>
               </tr>
             )}
