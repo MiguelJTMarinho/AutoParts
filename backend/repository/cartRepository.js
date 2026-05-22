@@ -36,9 +36,43 @@ const getOrCreateCart = async ({ user_id, guest_id }) => {
 const getCartItems = async (cart_id) => {
   const result = await pool.query(
     `
-    SELECT ci.*, p.name, p.stock, p.price
+    SELECT 
+      ci.*, 
+      p.name, 
+      p.stock, 
+      p.price,
+      c.name AS category,
+      
+      -- Vai buscar a primeira imagem do produto (baseado no sort_order)
+      (
+        SELECT pi.image_url
+        FROM product_images pi
+        WHERE pi.product_id = p.id
+        ORDER BY pi.sort_order ASC
+        LIMIT 1
+      ) AS image,
+
+      -- Vai buscar a primeira marca de carro compatível (make)
+      (
+        SELECT cb.name
+        FROM product_compatibility pc
+        JOIN car_brands cb ON cb.id = pc.carbrand_id
+        WHERE pc.product_id = p.id
+        LIMIT 1
+      ) AS make,
+
+      -- Vai buscar o primeiro modelo de carro compatível
+      (
+        SELECT cm.name
+        FROM product_compatibility pc
+        JOIN car_models cm ON cm.id = pc.carmodel_id
+        WHERE pc.product_id = p.id
+        LIMIT 1
+      ) AS model
+
     FROM cart_items ci
     JOIN products p ON p.id = ci.product_id
+    LEFT JOIN categories c ON c.id = p.category_id
     WHERE ci.cart_id = $1 AND ci.deleted_at IS NULL
     `,
     [cart_id],

@@ -14,7 +14,7 @@ const createCategory = async ({ name, description, parent_id = null }) => {
 
 // GET ALL
 const getAllCategories = async () => {
-  const result = await pool.query(`SELECT * FROM categories ORDER BY id ASC`);
+  const result = await pool.query(`SELECT * FROM categories ORDER BY name ASC`);
 
   return result.rows;
 };

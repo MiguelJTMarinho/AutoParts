@@ -14,7 +14,7 @@ const createCarBrand = async ({ name }) => {
 
 // GET ALL
 const getAllCarBrands = async () => {
-  const result = await pool.query(`SELECT * FROM car_brands ORDER BY id ASC`);
+  const result = await pool.query(`SELECT * FROM car_brands ORDER BY name ASC`);
 
   return result.rows;
 };

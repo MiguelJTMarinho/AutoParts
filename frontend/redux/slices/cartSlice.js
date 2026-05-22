@@ -22,7 +22,7 @@ export const fetchCart = createAsyncThunk(
 // Add item to cart for a user or guest
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
-  async ({ guestId, productId, quantity }, { rejectWithValue }) => {
+  async ({ guestId, productId, quantity }, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/cart/items`,
@@ -34,7 +34,8 @@ export const addToCart = createAsyncThunk(
           headers: guestId ? { "x-guest-id": guestId } : {},
         },
       );
-      return response.data;
+      const updatedCart = await dispatch(fetchCart({ guestId })).unwrap();
+      return updatedCart;
     } catch (error) {
       console.error("Error adding to cart:", error);
       return rejectWithValue(
@@ -47,7 +48,7 @@ export const addToCart = createAsyncThunk(
 // Update item quantity in cart for a user or guest
 export const updateCartItemQuantity = createAsyncThunk(
   "cart/updateCartItemQuantity",
-  async ({ guestId, productId, quantity }, { rejectWithValue }) => {
+  async ({ guestId, productId, quantity }, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/cart/items`,
@@ -59,7 +60,8 @@ export const updateCartItemQuantity = createAsyncThunk(
           headers: guestId ? { "x-guest-id": guestId } : {},
         },
       );
-      return response.data;
+      const updatedCart = await dispatch(fetchCart({ guestId })).unwrap();
+      return updatedCart;
     } catch (error) {
       console.error("Error updating cart quantity:", error);
       return rejectWithValue(
@@ -72,7 +74,7 @@ export const updateCartItemQuantity = createAsyncThunk(
 // Remove an item from the cart
 export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
-  async ({ productId, guestId }, { rejectWithValue }) => {
+  async ({ productId, guestId }, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios({
         method: "delete",
@@ -80,7 +82,8 @@ export const removeFromCart = createAsyncThunk(
         headers: guestId ? { "x-guest-id": guestId } : {},
         data: { product_id: productId },
       });
-      return response.data;
+      const updatedCart = await dispatch(fetchCart({ guestId })).unwrap();
+      return updatedCart;
     } catch (error) {
       console.error("Error removing from cart:", error);
       return rejectWithValue(
@@ -144,7 +147,7 @@ const cartSlice = createSlice({
       })
       .addCase(addToCart.fulfilled, (state, action) => {
         state.loading = false;
-        state.cart = action.payload;
+        //state.cart = action.payload;
       })
       .addCase(addToCart.rejected, (state, action) => {
         state.loading = false;
@@ -158,7 +161,7 @@ const cartSlice = createSlice({
       })
       .addCase(updateCartItemQuantity.fulfilled, (state, action) => {
         state.loading = false;
-        state.cart = action.payload;
+        //state.cart = action.payload.cart;
       })
       .addCase(updateCartItemQuantity.rejected, (state, action) => {
         state.loading = false;

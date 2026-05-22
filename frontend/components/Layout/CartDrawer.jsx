@@ -9,7 +9,6 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
   const navigate = useNavigate();
   const { userInfo, guestId } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
-  const userId = userInfo ? userInfo.id : null;
 
   const handleCheckout = () => {
     toggleCartDrawer();
@@ -35,8 +34,8 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
       {/* cart contents with scrollabe area */}
       <div className="grow p-4 overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4">{t("cartDrawer.title")}</h2>
-        {cart && cart?.products?.length > 0 ? (
-          <CartContents cart={cart} userId={userId} guestId={guestId} />
+        {cart?.items?.length > 0 || cart?.products?.length > 0 ? (
+          <CartContents cart={cart} guestId={guestId} />
         ) : (
           <p>{t("cartDrawer.emptyCart")}</p>
         )}
@@ -45,7 +44,7 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
 
       {/* Checkout Button Fixed at the bottom */}
       <div className="p-4 bg-white sticky bottom-0">
-        {cart && cart?.products?.length > 0 && (
+        {(cart?.items?.length > 0 || cart?.products?.length > 0) && (
           <>
             <button
               onClick={handleCheckout}
