@@ -35,7 +35,7 @@ router.post("/register", async (req, res) => {
 // @acess Public
 router.post("/login", async (req, res) => {
   try {
-    const { user, token } = await service.loginUser(req.body);
+    const { user, token } = await userService.loginUser(req.body);
 
     res.cookie("token", token, {
       httpOnly: true,

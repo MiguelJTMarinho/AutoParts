@@ -498,7 +498,8 @@
     "loading": "A carregar produtos...",
     "error": "Erro: {{message}}",
     "noProducts": "Nenhum produto encontrado.",
-    "outOfStock": "Esgotado"
+    "outOfStock": "Esgotado",
+    "VAT": "IVA incl."
   },
 
   "sortOptions": {

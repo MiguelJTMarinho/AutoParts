@@ -163,6 +163,8 @@ const NewArrivals = () => {
                   €{product.price}
                 </p>
 
+                <p className="text-xs text-gray-500">{t("productGrid.VAT")}</p>
+
                 <div className="mt-3 text-sm text-gray-500">
                   {t("newArrivals.viewDetails")}
                 </div>

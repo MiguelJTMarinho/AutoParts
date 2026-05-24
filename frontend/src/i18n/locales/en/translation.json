@@ -498,7 +498,8 @@
     "loading": "Loading products...",
     "error": "Error: {{message}}",
     "noProducts": "No products found.",
-    "outOfStock": "Out of Stock"
+    "outOfStock": "Out of Stock",
+    "VAT": "VAT included"
   },
 
   "sortOptions": {

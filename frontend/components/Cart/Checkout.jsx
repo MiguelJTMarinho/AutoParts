@@ -268,6 +268,9 @@ const Checkout = () => {
           <p>{t("checkoutPage.summary.total")}</p>
           <p>€{cart.totalprice?.toLocaleString()}</p>
         </div>
+        <div className="flex justify-end">
+          <p className="text-xs text-gray-500">{t("productGrid.VAT")}</p>
+        </div>
       </div>
     </div>
   );

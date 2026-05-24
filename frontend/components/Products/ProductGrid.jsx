@@ -74,8 +74,9 @@ const ProductGrid = ({ products, loading, error }) => {
 
               <div className="mt-auto pt-3">
                 <p className="text-lg font-bold text-gray-900 tracking-tight">
-                  ${Number(product.price).toFixed(2)}
+                  {Number(product.price).toFixed(2)} €
                 </p>
+                <p className="text-xs text-gray-500">{t("productGrid.VAT")}</p>
               </div>
             </div>
           </div>

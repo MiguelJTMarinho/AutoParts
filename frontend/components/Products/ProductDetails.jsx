@@ -118,8 +118,12 @@ const ProductDetails = ({ productId }) => {
                 {selectedProduct.name}
               </h1>
 
-              <p className="text-2xl text-main-blue font-bold mb-4">
-                ${selectedProduct.price}
+              <p className="text-2xl text-main-blue font-bold mb-1">
+                {selectedProduct.price} €
+              </p>
+
+              <p className="text-xs text-gray-500 mb-3">
+                {t("productGrid.VAT")}
               </p>
 
               <p className="text-gray-600 mb-6">
@@ -216,7 +220,7 @@ const ProductDetails = ({ productId }) => {
             </div>
             <div className="mt-8">
               <h3 className="text-lg font-semibold mb-3">
-                {t("productDetails.similarProducts")}
+                {t("productDetails.compatibility.title")}
               </h3>
 
               <div className="space-y-2">

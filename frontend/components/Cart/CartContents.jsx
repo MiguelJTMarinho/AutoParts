@@ -75,7 +75,7 @@ const CartContents = ({ cart, guestId }) => {
             </div>
           </div>
           <div>
-            <p>
+            <p className="mb-3">
               {(
                 (product.price_at_time || product.price || 0) * product.quantity
               ).toLocaleString()}
@@ -91,7 +91,7 @@ const CartContents = ({ cart, guestId }) => {
                 )
               }
             >
-              <RiDeleteBin3Line className="h-6 w-6 text-red-600 cursor-pointer" />
+              <RiDeleteBin3Line className="h-6 w-6 text-red-600 cursor-pointer " />
             </button>
           </div>
         </div>
