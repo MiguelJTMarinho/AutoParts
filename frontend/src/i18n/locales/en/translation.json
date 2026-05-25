@@ -306,6 +306,7 @@
   "userManagement": {
     "title": "User Management",
     "addTitle": "Add New User",
+    "addSubtitle": "Fill the form below to add a new user.",
     "form": {
       "name": "Name",
       "email": "Email",

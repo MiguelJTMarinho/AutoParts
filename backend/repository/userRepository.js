@@ -7,12 +7,13 @@ const createUser = async ({
   last_name,
   email,
   password_hash,
+  role = "customer",
 }) => {
   const result = await pool.query(
     `INSERT INTO users (username, first_name, last_name, email, password_hash, role)
      VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING *`,
-    [username, first_name, last_name, email, password_hash, "customer"],
+    [username, first_name, last_name, email, password_hash, role],
   );
 
   return result.rows[0];
@@ -112,7 +113,9 @@ const updatePassword = async (id, password_hash) => {
 
 const getAllUsers = async () => {
   const result = await pool.query(
-    `SELECT id, username, first_name, last_name, email, phone_number, role, is_active FROM users`,
+    `SELECT id, username, first_name, last_name, email, phone_number, role, is_active
+     FROM users
+     WHERE is_active = true`,
   );
 
   return result.rows;
@@ -127,7 +130,7 @@ const updateUser = async (id, data) => {
           first_name = COALESCE($2, first_name),
           last_name = COALESCE($3, last_name),
           role = COALESCE($4, role),
-          phone_number = COALESCE($5, phone_number)
+          phone_number = COALESCE($5, phone_number),
           is_active = COALESCE($6, is_active)
       WHERE id = $7
       RETURNING id, username, first_name, last_name, email, phone_number, role, is_active`,

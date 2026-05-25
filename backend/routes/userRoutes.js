@@ -30,6 +30,20 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// @route POST /api/users
+// @desc Create a new user (Admin only)
+// @access Private/Admin
+router.post("/", protect, isAdmin, async (req, res) => {
+  try {
+    const user = await userService.createUserByAdmin(req.body);
+    res.status(201).json(user);
+  } catch (err) {
+    res
+      .status(err.statusCode || 500)
+      .json({ message: err.message || "Erro interno do servidor" });
+  }
+});
+
 // @route POST /api/users/login
 // @desc Authenticate user
 // @acess Public

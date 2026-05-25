@@ -47,6 +47,30 @@ const registerUser = async ({ first_name, last_name, email, password }) => {
   };
 };
 
+const createUserByAdmin = async ({
+  first_name,
+  last_name,
+  email,
+  password,
+  role,
+}) => {
+  const salt = await bcrypt.genSalt(10);
+  const password_hash = await bcrypt.hash(password, salt);
+  const username = await generateUsername(email);
+  const userRole = ["admin", "customer"].includes(role) ? role : "customer";
+
+  const user = await userRepository.createUser({
+    username,
+    first_name,
+    last_name,
+    email,
+    password_hash,
+    role: userRole,
+  });
+
+  return removePassword(user);
+};
+
 const loginUser = async ({ email, password }) => {
   const user = await userRepository.findUserByEmail(email);
 
@@ -199,6 +223,7 @@ const deleteUser = async (id) => {
 
 module.exports = {
   registerUser,
+  createUserByAdmin,
   loginUser,
   updateUserProfile,
   updateUser,

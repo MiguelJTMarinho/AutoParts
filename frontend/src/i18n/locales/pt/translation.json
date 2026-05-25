@@ -306,6 +306,7 @@
   "userManagement": {
     "title": "Gestão de Utilizadores",
     "addTitle": "Adicionar Novo Utilizador",
+    "addSubtitle": "Preencha os dados abaixo para adicionar um novo utilizador.",
     "form": {
       "name": "Nome",
       "email": "E-mail",
