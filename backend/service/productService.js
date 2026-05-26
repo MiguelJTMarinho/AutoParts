@@ -42,9 +42,21 @@ const getProduct = async (id) => {
   return product;
 };
 
+const getProductForAdmin = async (id) => {
+  const product = await productRepository.getProductByIdForAdmin(id);
+
+  if (!product) {
+    const error = new Error("Product not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  return product;
+};
+
 // UPDATE
 const updateProduct = async (id, data) => {
-  const product = await productRepository.getProductById(id);
+  const product = await productRepository.getProductByIdForAdmin(id);
 
   if (!product) {
     const error = new Error("Product not found");
@@ -57,15 +69,18 @@ const updateProduct = async (id, data) => {
 
 // DELETE
 const deleteProduct = async (id) => {
-  const product = await productRepository.getProductById(id);
+  const product = await productRepository.getProductByIdForAdmin(id);
 
   if (!product) {
     const error = new Error("Product not found");
     error.statusCode = 404;
     throw error;
   }
-
-  return await productRepository.deleteProduct(id);
+  if (product.is_active === true) {
+    return await productRepository.deleteProduct(id);
+  } else {
+    return await productRepository.hardDeleteProduct(id);
+  }
 };
 
 // GET SIMILAR PRODUCTS
@@ -89,6 +104,7 @@ module.exports = {
   createProduct,
   getProducts,
   getProduct,
+  getProductForAdmin,
   updateProduct,
   deleteProduct,
   getSimilarProducts,

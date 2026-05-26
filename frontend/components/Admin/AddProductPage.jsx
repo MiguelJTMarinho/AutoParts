@@ -1,24 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { updateProduct } from "../../redux/slices/admin/adminProductSlice";
+import { createProductWithImages } from "../../redux/slices/admin/adminProductSlice";
 
 const API_URL = `${import.meta.env.VITE_API_URL}`;
-
-const emptyCompatibility = {
-  carbrand_id: "",
-  carmodel_id: "",
-  year_start: "",
-  year_end: "",
-};
-
-const emptyOemReference = {
-  reference_code: "",
-  brand: "",
-  type: "OEM",
-};
 
 const initialProductData = {
   name: "",
@@ -32,12 +19,24 @@ const initialProductData = {
   brand_id: "",
   status: "active",
   is_active: true,
-  compatibility: [emptyCompatibility],
-  oem_references: [emptyOemReference],
+  compatibility: [
+    {
+      carbrand_id: "",
+      carmodel_id: "",
+      year_start: "",
+      year_end: "",
+    },
+  ],
+  oem_references: [
+    {
+      reference_code: "",
+      brand: "",
+      type: "OEM",
+    },
+  ],
 };
 
-const EditProductPage = () => {
-  const { id } = useParams();
+const AddProductPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,83 +47,31 @@ const EditProductPage = () => {
   const [categories, setCategories] = useState([]);
   const [partBrands, setPartBrands] = useState([]);
   const [productData, setProductData] = useState(initialProductData);
-  const [existingImages, setExistingImages] = useState([]);
-  const [removedImageIds, setRemovedImageIds] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
-  const [initialCompatibilityIds, setInitialCompatibilityIds] = useState([]);
-  const [initialOemIds, setInitialOemIds] = useState([]);
-  const [pageError, setPageError] = useState(null);
-  const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setPageLoading(true);
-      setPageError(null);
-
+    const fetchFormOptions = async () => {
       try {
-        const [
-          productRes,
-          compatibilityRes,
-          oemRes,
-          imagesRes,
-          carBrandsRes,
-          carModelsRes,
-          categoriesRes,
-          partBrandsRes,
-        ] = await Promise.all([
-          axios.get(`${API_URL}/products/admin/${id}`),
-          axios.get(`${API_URL}/product_compatibility/product/${id}`),
-          axios.get(`${API_URL}/oem_references/product/${id}`),
-          axios.get(`${API_URL}/product_images/${id}`),
-          axios.get(`${API_URL}/car_brands`),
-          axios.get(`${API_URL}/car_models`),
-          axios.get(`${API_URL}/categories`),
-          axios.get(`${API_URL}/part_brands`),
-        ]);
-
-        const product = productRes.data;
-        const compatibility = compatibilityRes.data || [];
-        const oemReferences = oemRes.data || [];
+        const [carBrandsRes, carModelsRes, categoriesRes, partBrandsRes] =
+          await Promise.all([
+            axios.get(`${API_URL}/car_brands`),
+            axios.get(`${API_URL}/car_models`),
+            axios.get(`${API_URL}/categories`),
+            axios.get(`${API_URL}/part_brands`),
+          ]);
 
         setCarBrands(carBrandsRes.data || []);
         setCarModels(carModelsRes.data || []);
         setCategories(categoriesRes.data || []);
         setPartBrands(partBrandsRes.data || []);
-        setExistingImages(imagesRes.data || []);
-        setInitialCompatibilityIds(compatibility.map((item) => item.id));
-        setInitialOemIds(oemReferences.map((item) => item.id));
-
-        setProductData({
-          name: product.name || "",
-          description: product.description || "",
-          summary: product.summary || "",
-          sku: product.sku || "",
-          price: product.price || "",
-          condition: product.condition || "used",
-          stock: product.stock ?? 0,
-          category_id: product.category_id || "",
-          brand_id: product.brand_id || "",
-          status: product.status || "active",
-          is_active: Boolean(product.is_active),
-          compatibility:
-            compatibility.length > 0 ? compatibility : [emptyCompatibility],
-          oem_references:
-            oemReferences.length > 0 ? oemReferences : [emptyOemReference],
-        });
       } catch (err) {
-        setPageError(
-          err.response?.data?.error ||
-            err.response?.data?.message ||
-            "Failed to load product",
-        );
-      } finally {
-        setPageLoading(false);
+        console.error("Failed to fetch product form options:", err);
       }
     };
 
-    fetchData();
-  }, [id]);
+    fetchFormOptions();
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -142,7 +89,9 @@ const EditProductPage = () => {
         ? { status: "active" }
         : {}),
       ...(name === "is_active" && !checked ? { status: "inactive" } : {}),
-      ...(name === "status" && value === "inactive" ? { is_active: false } : {}),
+      ...(name === "status" && value === "inactive"
+        ? { is_active: false }
+        : {}),
       ...(name === "status" && value !== "inactive" ? { is_active: true } : {}),
     }));
   };
@@ -150,10 +99,7 @@ const EditProductPage = () => {
   const handleCompatibilityChange = (index, e) => {
     const { name, value } = e.target;
     const updated = [...productData.compatibility];
-    updated[index] = {
-      ...updated[index],
-      [name]: value,
-    };
+    updated[index][name] = value;
 
     if (name === "carbrand_id") {
       updated[index].carmodel_id = "";
@@ -165,46 +111,47 @@ const EditProductPage = () => {
   const addCompatibility = () => {
     setProductData((prev) => ({
       ...prev,
-      compatibility: [...prev.compatibility, { ...emptyCompatibility }],
+      compatibility: [
+        ...prev.compatibility,
+        {
+          carbrand_id: "",
+          carmodel_id: "",
+          year_start: "",
+          year_end: "",
+        },
+      ],
     }));
   };
 
   const removeCompatibility = (index) => {
     const updated = productData.compatibility.filter((_, i) => i !== index);
-    setProductData({
-      ...productData,
-      compatibility: updated.length > 0 ? updated : [{ ...emptyCompatibility }],
-    });
+    setProductData({ ...productData, compatibility: updated });
   };
 
   const handleOemChange = (index, e) => {
     const { name, value } = e.target;
     const updated = [...productData.oem_references];
-    updated[index] = {
-      ...updated[index],
-      [name]: value,
-    };
+    updated[index][name] = value;
     setProductData({ ...productData, oem_references: updated });
   };
 
   const addOem = () => {
     setProductData((prev) => ({
       ...prev,
-      oem_references: [...prev.oem_references, { ...emptyOemReference }],
+      oem_references: [
+        ...prev.oem_references,
+        {
+          reference_code: "",
+          brand: "",
+          type: "OEM",
+        },
+      ],
     }));
   };
 
   const removeOem = (index) => {
     const updated = productData.oem_references.filter((_, i) => i !== index);
-    setProductData({
-      ...productData,
-      oem_references: updated.length > 0 ? updated : [{ ...emptyOemReference }],
-    });
-  };
-
-  const removeExistingImage = (imageId) => {
-    setExistingImages((prev) => prev.filter((image) => image.id !== imageId));
-    setRemovedImageIds((prev) => [...prev, imageId]);
+    setProductData({ ...productData, oem_references: updated });
   };
 
   const handleImageChange = (e) => {
@@ -221,85 +168,8 @@ const EditProductPage = () => {
     );
   };
 
-  const syncCompatibility = async () => {
-    const currentIds = productData.compatibility
-      .map((item) => item.id)
-      .filter(Boolean);
-    const deletedIds = initialCompatibilityIds.filter(
-      (initialId) => !currentIds.includes(initialId),
-    );
-
-    for (const deletedId of deletedIds) {
-      await axios.delete(`${API_URL}/product_compatibility/${deletedId}`);
-    }
-
-    for (const item of productData.compatibility) {
-      if (!item.carbrand_id || !item.carmodel_id) continue;
-
-      const payload = {
-        product_id: id,
-        carbrand_id: item.carbrand_id,
-        carmodel_id: item.carmodel_id,
-        year_start: item.year_start || null,
-        year_end: item.year_end || null,
-      };
-
-      if (item.id) {
-        await axios.put(`${API_URL}/product_compatibility/${item.id}`, payload);
-      } else {
-        await axios.post(`${API_URL}/product_compatibility`, payload);
-      }
-    }
-  };
-
-  const syncOemReferences = async () => {
-    const currentIds = productData.oem_references
-      .map((item) => item.id)
-      .filter(Boolean);
-    const deletedIds = initialOemIds.filter(
-      (initialId) => !currentIds.includes(initialId),
-    );
-
-    for (const deletedId of deletedIds) {
-      await axios.delete(`${API_URL}/oem_references/${deletedId}`);
-    }
-
-    for (const item of productData.oem_references) {
-      if (!item.reference_code?.trim()) continue;
-
-      const payload = {
-        product_id: id,
-        reference_code: item.reference_code,
-        brand: item.brand,
-        type: item.type,
-      };
-
-      if (item.id) {
-        await axios.put(`${API_URL}/oem_references/${item.id}`, payload);
-      } else {
-        await axios.post(`${API_URL}/oem_references`, payload);
-      }
-    }
-  };
-
-  const syncImages = async () => {
-    for (const imageId of removedImageIds) {
-      await axios.delete(`${API_URL}/product_images/${imageId}`);
-    }
-
-    for (const [index, file] of imageFiles.entries()) {
-      const formData = new FormData();
-      formData.append("image", file);
-      formData.append("product_id", id);
-      formData.append("sort_order", existingImages.length + index);
-
-      await axios.post(`${API_URL}/product_images/upload`, formData);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setPageError(null);
 
     const productPayload = {
       name: productData.name,
@@ -316,37 +186,48 @@ const EditProductPage = () => {
     };
 
     try {
-      await dispatch(updateProduct({ id, productData: productPayload })).unwrap();
-      await syncCompatibility();
-      await syncOemReferences();
-      await syncImages();
+      await dispatch(
+        createProductWithImages({
+          productData: productPayload,
+          imageFiles,
+          compatibility: productData.compatibility,
+          oemReferences: productData.oem_references,
+        }),
+      ).unwrap();
 
       navigate("/admin/products");
+
+      // Clear variables
+      productData.name = "";
+      productData.description = "";
+      productData.summary = "";
+      productData.sku = "";
+      productData.price = "";
+      productData.condition = "used";
+      productData.stock = 1;
+      productData.category_id = "";
+      productData.brand_id = "";
+      productData.status = "active";
+      productData.is_active = true;
+      productData.compatibility = [];
+      productData.oem_references = [];
+      setImageFiles([]);
+      setImagePreviews([]);
+      setProductData(initialProductData);
     } catch (err) {
-      setPageError(
-        err.response?.data?.error ||
-          err.response?.data?.message ||
-          err.message ||
-          "Failed to update product",
-      );
+      console.error("Failed to create product:", err);
     }
   };
 
-  if (pageLoading) {
-    return (
-      <div className="max-w-5xl mx-auto p-6">
-        {t("productManagement.loading")}
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
-      <h2 className="text-3xl font-bold mb-6">{t("editProductPage.title")}</h2>
+      <h2 className="text-3xl font-bold mb-6">
+        {t("productManagement.addTitle")}
+      </h2>
 
-      {(pageError || error) && (
+      {error && (
         <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {pageError || error}
+          {error}
         </div>
       )}
 
@@ -432,7 +313,9 @@ const EditProductPage = () => {
               onChange={handleChange}
               className="w-full px-2 py-3 border rounded"
             >
-              <option value="">{t("editProductPage.form.selectCategory")}</option>
+              <option value="">
+                {t("editProductPage.form.selectCategory")}
+              </option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -472,8 +355,12 @@ const EditProductPage = () => {
               onChange={handleChange}
               className="w-full px-2 py-3 border rounded"
             >
-              <option value="used">{t("productManagement.conditions.used")}</option>
-              <option value="new">{t("productManagement.conditions.new")}</option>
+              <option value="used">
+                {t("productManagement.conditions.used")}
+              </option>
+              <option value="new">
+                {t("productManagement.conditions.new")}
+              </option>
               <option value="refurbished">
                 {t("productManagement.conditions.refurbished")}
               </option>
@@ -490,7 +377,9 @@ const EditProductPage = () => {
               onChange={handleChange}
               className="w-full px-2 py-3 border rounded"
             >
-              <option value="active">{t("productManagement.status.active")}</option>
+              <option value="active">
+                {t("productManagement.status.active")}
+              </option>
               <option value="reserved">
                 {t("productManagement.status.reserved")}
               </option>
@@ -508,7 +397,10 @@ const EditProductPage = () => {
           </h3>
 
           {productData.compatibility.map((item, index) => (
-            <div key={item.id || index} className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3">
+            <div
+              key={index}
+              className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3"
+            >
               <div>
                 <label className="text-sm text-gray-600">
                   {t("editProductPage.compatibility.brandLabel")}
@@ -559,7 +451,7 @@ const EditProductPage = () => {
                 <input
                   type="number"
                   name="year_start"
-                  value={item.year_start || ""}
+                  value={item.year_start}
                   onChange={(e) => handleCompatibilityChange(index, e)}
                   className="w-full p-2 border rounded"
                 />
@@ -573,7 +465,7 @@ const EditProductPage = () => {
                   <input
                     type="number"
                     name="year_end"
-                    value={item.year_end || ""}
+                    value={item.year_end}
                     onChange={(e) => handleCompatibilityChange(index, e)}
                     className="w-full p-2 border rounded"
                   />
@@ -604,7 +496,10 @@ const EditProductPage = () => {
           </label>
 
           {productData.oem_references.map((item, index) => (
-            <div key={item.id || index} className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3">
+            <div
+              key={index}
+              className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3"
+            >
               <div>
                 <label className="text-sm text-gray-600">
                   {t("editProductPage.oem.codeLabel")}
@@ -624,7 +519,7 @@ const EditProductPage = () => {
                 </label>
                 <input
                   name="brand"
-                  value={item.brand || ""}
+                  value={item.brand}
                   onChange={(e) => handleOemChange(index, e)}
                   className="w-full p-2 border rounded"
                   placeholder={t("editProductPage.oem.brandPlaceholder")}
@@ -641,7 +536,9 @@ const EditProductPage = () => {
                   onChange={(e) => handleOemChange(index, e)}
                   className="w-full px-2 py-3 border rounded"
                 >
-                  <option value="OEM">{t("editProductPage.oem.types.oem")}</option>
+                  <option value="OEM">
+                    {t("editProductPage.oem.types.oem")}
+                  </option>
                   <option value="Compatible">
                     {t("editProductPage.oem.types.compatible")}
                   </option>
@@ -668,7 +565,7 @@ const EditProductPage = () => {
             onClick={addOem}
             className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer"
           >
-            {t("editProductPage.oem.addButton")}
+            {t("editProductPage.oem.addButton", "Adicionar Referência OEM")}
           </button>
         </div>
 
@@ -676,28 +573,6 @@ const EditProductPage = () => {
           <h3 className="text-xl font-semibold mb-3">
             {t("editProductPage.images.title")}
           </h3>
-
-          {existingImages.length > 0 && (
-            <div className="mb-3 flex flex-wrap gap-3">
-              {existingImages.map((image) => (
-                <div key={image.id} className="flex items-center gap-2">
-                  <img
-                    src={image.image_url}
-                    alt="preview"
-                    className="w-20 h-20 object-cover rounded-md border"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeExistingImage(image.id)}
-                    className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 cursor-pointer"
-                  >
-                    X
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
           <input
             type="file"
             accept="image/*"
@@ -737,11 +612,11 @@ const EditProductPage = () => {
         >
           {loading
             ? t("productManagement.form.saving")
-            : t("editProductPage.form.submitButton")}
+            : t("productManagement.form.addButton")}
         </button>
       </form>
     </div>
   );
 };
 
-export default EditProductPage;
+export default AddProductPage;

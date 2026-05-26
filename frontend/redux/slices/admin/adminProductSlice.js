@@ -1,21 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Helper function to get auth headers
-const authHeaders = () => ({
-  Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-});
-
 const API_URL = `${import.meta.env.VITE_API_URL}`;
+
+const errorMessage = (payload, fallback) =>
+  payload?.message || payload?.error || fallback;
 
 // Async thunk to fetch all products (admin)
 export const fetchAdminProducts = createAsyncThunk(
   "adminProducts/fetchAdminProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/products`, {
-        headers: authHeaders(),
-      });
+      const response = await axios.get(`${API_URL}/products`);
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -30,10 +26,81 @@ export const createProduct = createAsyncThunk(
   "adminProducts/createProduct",
   async (productData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/products`, productData, {
-        headers: authHeaders(),
-      });
+      const response = await axios.post(`${API_URL}/products`, productData);
       return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: "Failed to create product" },
+      );
+    }
+  },
+);
+
+// Async thunk to create a product and upload images to Cloudinary
+export const createProductWithImages = createAsyncThunk(
+  "adminProducts/createProductWithImages",
+  async (
+    { productData, imageFiles = [], compatibility = [], oemReferences = [] },
+    { rejectWithValue },
+  ) => {
+    try {
+      const productResponse = await axios.post(
+        `${API_URL}/products`,
+        productData,
+      );
+      const product = productResponse.data;
+
+      const uploadedImages = [];
+      const createdCompatibility = [];
+      const createdOemReferences = [];
+
+      for (const [index, file] of imageFiles.entries()) {
+        const formData = new FormData();
+        formData.append("image", file);
+        formData.append("product_id", product.id);
+        formData.append("sort_order", index);
+
+        const imageResponse = await axios.post(
+          `${API_URL}/product_images/upload`,
+          formData,
+        );
+
+        uploadedImages.push(imageResponse.data);
+      }
+
+      for (const item of compatibility) {
+        if (!item.carbrand_id || !item.carmodel_id) continue;
+
+        const compatibilityResponse = await axios.post(
+          `${API_URL}/product_compatibility`,
+          {
+            ...item,
+            product_id: product.id,
+            year_start: item.year_start || null,
+            year_end: item.year_end || null,
+          },
+        );
+
+        createdCompatibility.push(compatibilityResponse.data);
+      }
+
+      for (const item of oemReferences) {
+        if (!item.reference_code?.trim()) continue;
+
+        const oemResponse = await axios.post(`${API_URL}/oem_references`, {
+          ...item,
+          product_id: product.id,
+        });
+
+        createdOemReferences.push(oemResponse.data);
+      }
+
+      return {
+        ...product,
+        images: uploadedImages,
+        compatibility: createdCompatibility,
+        oem_references: createdOemReferences,
+      };
     } catch (error) {
       return rejectWithValue(
         error.response?.data || { message: "Failed to create product" },
@@ -50,9 +117,6 @@ export const updateProduct = createAsyncThunk(
       const response = await axios.put(
         `${API_URL}/products/${id}`,
         productData,
-        {
-          headers: authHeaders(),
-        },
       );
       return response.data;
     } catch (error) {
@@ -68,10 +132,14 @@ export const deleteProduct = createAsyncThunk(
   "adminProducts/deleteProduct",
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`${API_URL}/products/${id}`, {
-        headers: authHeaders(),
-      });
-      return id; // Return the deleted product ID for state update
+      const response = await axios.delete(`${API_URL}/products/${id}`);
+      return (
+        response.data.data || {
+          id,
+          is_active: false,
+          status: "inactive",
+        }
+      );
     } catch (error) {
       return rejectWithValue(
         error.response?.data || { message: "Failed to delete product" },
@@ -85,9 +153,7 @@ export const fetchAllProductsForAdmin = createAsyncThunk(
   "adminProducts/fetchAllProductsForAdmin",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/products/admin`, {
-        headers: authHeaders(),
-      });
+      const response = await axios.get(`${API_URL}/products/admin`);
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -118,7 +184,7 @@ const adminProductSlice = createSlice({
       })
       .addCase(fetchAdminProducts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message;
+        state.error = errorMessage(action.payload, "Failed to fetch products");
       })
       //Create Product
       .addCase(createProduct.pending, (state) => {
@@ -131,7 +197,20 @@ const adminProductSlice = createSlice({
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message;
+        state.error = errorMessage(action.payload, "Failed to create product");
+      })
+      //Create Product with Images
+      .addCase(createProductWithImages.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createProductWithImages.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products.unshift(action.payload);
+      })
+      .addCase(createProductWithImages.rejected, (state, action) => {
+        state.loading = false;
+        state.error = errorMessage(action.payload, "Failed to create product");
       })
       //Update Product
       .addCase(updateProduct.pending, (state) => {
@@ -149,7 +228,7 @@ const adminProductSlice = createSlice({
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message;
+        state.error = errorMessage(action.payload, "Failed to update product");
       })
       //Delete Product
       .addCase(deleteProduct.pending, (state) => {
@@ -158,13 +237,16 @@ const adminProductSlice = createSlice({
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = state.products.filter(
-          (product) => product.id !== action.payload,
+        const index = state.products.findIndex(
+          (product) => product.id === action.payload.id,
         );
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message;
+        state.error = errorMessage(action.payload, "Failed to delete product");
       })
       //Fetch All Products for Admin
       .addCase(fetchAllProductsForAdmin.pending, (state) => {
@@ -177,7 +259,7 @@ const adminProductSlice = createSlice({
       })
       .addCase(fetchAllProductsForAdmin.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message;
+        state.error = errorMessage(action.payload, "Failed to fetch products");
       });
   },
 });

@@ -40,6 +40,42 @@ router.get("/new_arrivals", async (req, res) => {
   }
 });
 
+// @route GET /api/products/admin
+// @desc Get all products for admin (including inactive/deleted)
+// @access private (Admin)
+router.get("/admin", protect, isAdmin, async (req, res) => {
+  try {
+    const data = await service.getAllProductsForAdmin();
+    res.json(data);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
+// @route GET /api/products/admin/:id
+// @desc Get product by id for admin, including inactive/deleted
+// @access Private (Admin)
+router.get("/admin/:id", protect, isAdmin, async (req, res) => {
+  try {
+    const data = await service.getProductForAdmin(req.params.id);
+    res.json(data);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
+// @route GET /api/products/similar/:id
+// @desc Get similar products
+// @access Public
+router.get("/similar/:id", async (req, res) => {
+  try {
+    const data = await service.getSimilarProducts(req.params.id);
+    res.json(data);
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
 // @route GET /api/products/:id
 // @desc Get product by id
 // @access Public
@@ -71,30 +107,6 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
   try {
     const data = await service.deleteProduct(req.params.id);
     res.json({ message: "Deleted successfully", data });
-  } catch (err) {
-    res.status(err.statusCode || 500).json({ error: err.message });
-  }
-});
-
-// @route GET /api/products/:id/similar
-// @desc Get similar products
-// @access Public
-router.get("/similar/:id", async (req, res) => {
-  try {
-    const data = await service.getSimilarProducts(req.params.id);
-    res.json(data);
-  } catch (err) {
-    res.status(err.statusCode || 500).json({ error: err.message });
-  }
-});
-
-// @route GET /api/products/admin
-// @desc Get all products for admin (including inactive/deleted)
-// @access private (Admin)
-router.get("/admin", protect, isAdmin, async (req, res) => {
-  try {
-    const data = await service.getAllProductsForAdmin();
-    res.json(data);
   } catch (err) {
     res.status(err.statusCode || 500).json({ error: err.message });
   }

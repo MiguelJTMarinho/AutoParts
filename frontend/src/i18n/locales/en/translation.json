@@ -233,6 +233,7 @@
       "brandLabel": "Brand",
       "brandPlaceholder": "Brand",
       "typeLabel": "Type",
+      "addButton": "Add OEM Reference",
       "types": {
         "oem": "OEM",
         "compatible": "Compatible",
@@ -287,18 +288,44 @@
 
   "productManagement": {
     "title": "Product Management",
+    "addTitle": "Add New Product",
+    "loading": "Loading products...",
+    "filters": {
+      "all": "All Statuses"
+    },
+    "form": {
+      "condition": "Condition",
+      "status": "Status",
+      "addButton": "Add Product",
+      "saving": "Saving..."
+    },
+    "conditions": {
+      "used": "Used",
+      "new": "New",
+      "refurbished": "Refurbished"
+    },
+    "status": {
+      "active": "Active",
+      "reserved": "Reserved",
+      "sold": "Sold",
+      "inactive": "Inactive"
+    },
     "table": {
       "name": "Name",
       "price": "Price",
       "sku": "SKU",
+      "status": "Status",
       "actions": "Actions"
     },
     "buttons": {
       "edit": "Edit",
-      "delete": "Delete"
+      "markSold": "Mark as Sold",
+      "delete": "Delete",
+      "disable": "Disable"
     },
     "alerts": {
-      "confirmDelete": "Are you sure you want to delete this product?"
+      "confirmDelete": "Are you sure you want to delete this product?",
+      "confirmDisable": "Are you sure you want to disable this product?"
     },
     "noProducts": "No Products found."
   },
@@ -312,7 +339,9 @@
       "email": "Email",
       "password": "Password",
       "role": "Role",
-      "addButton": "Add New User"
+      "addButton": "Add New User",
+      "cancelButton": "Cancel",
+      "loading": "Saving..."
     },
     "roles": {
       "customer": "Customer",

@@ -3,12 +3,13 @@ const pool = require("../config/db");
 // GET OR CREATE CART
 const getOrCreateCart = async ({ user_id, guest_id }) => {
   let cart;
-  console.log(
+  /*onsole.log(
     "Getting or creating cart for user_id:",
     user_id,
     "guest_id:",
     guest_id,
-  );
+    
+  );*/
 
   if (user_id) {
     cart = await pool.query(

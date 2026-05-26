@@ -296,9 +296,16 @@ const getProductById = async (id) => {
   return result.rows[0];
 };
 
+const getProductByIdForAdmin = async (id) => {
+  const result = await pool.query(`SELECT * FROM products WHERE id = $1`, [id]);
+
+  return result.rows[0];
+};
+
 // UPDATE
 const updateProduct = async (id, data) => {
   const {
+    sku,
     name,
     description,
     summary,
@@ -313,20 +320,31 @@ const updateProduct = async (id, data) => {
 
   const result = await pool.query(
     `UPDATE products
-     SET name = $1,
-         description = $2,
-         summary = $3,
-         price = $4,
-         condition = $5,
-         stock = $6,
-         category_id = $7,
-         brand_id = $8,
-         status = $9,
-         is_active = $10,
+     SET sku = COALESCE($1, sku),
+         name = COALESCE($2, name),
+         description = COALESCE($3, description),
+         summary = COALESCE($4, summary),
+         price = COALESCE($5, price),
+         condition = COALESCE($6, condition),
+         stock = COALESCE($7, stock),
+         category_id = COALESCE($8, category_id),
+         brand_id = COALESCE($9, brand_id),
+         status = CASE
+           WHEN $11 = true AND COALESCE($10, status) = 'inactive' THEN 'active'
+           WHEN $11 = false THEN 'inactive'
+           ELSE COALESCE($10, status)
+         END,
+         is_active = COALESCE($11, is_active),
+         deleted_at = CASE
+           WHEN $11 = true THEN NULL
+           WHEN $11 = false THEN COALESCE(deleted_at, NOW())
+           ELSE deleted_at
+         END,
          updated_at = NOW()
-     WHERE id = $11
+     WHERE id = $12
      RETURNING *`,
     [
+      sku,
       name,
       description,
       summary,
@@ -347,7 +365,25 @@ const updateProduct = async (id, data) => {
 // SOFT DELETE
 const deleteProduct = async (id) => {
   const result = await pool.query(
-    `UPDATE products SET deleted_at = NOW() WHERE id = $1 RETURNING *`,
+    `UPDATE products
+     SET is_active = false,
+         status = 'inactive',
+         deleted_at = NOW(),
+         updated_at = NOW()
+     WHERE id = $1
+     RETURNING *`,
+    [id],
+  );
+
+  return result.rows[0];
+};
+
+//Hard Delete
+const hardDeleteProduct = async (id) => {
+  const result = await pool.query(
+    `DELETE FROM products
+     WHERE id = $1
+     RETURNING *`,
     [id],
   );
 
@@ -485,8 +521,10 @@ module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
+  getProductByIdForAdmin,
   updateProduct,
   deleteProduct,
+  hardDeleteProduct,
   getProductStockAndPrice,
   updateProductStock,
   getSimilarProducts,

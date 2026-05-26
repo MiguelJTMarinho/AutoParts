@@ -16,7 +16,9 @@ const createCompatibility = async (data) => {
   }
 
   // validate product
-  const product = await productRepo.getProductById(product_id);
+  const product =
+    (await productRepo.getProductByIdForAdmin(product_id)) ||
+    (await productRepo.getProductById(product_id));
   if (!product) {
     const error = new Error("Product not found");
     error.statusCode = 404;

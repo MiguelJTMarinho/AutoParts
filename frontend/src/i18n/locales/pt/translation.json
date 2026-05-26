@@ -233,6 +233,7 @@
       "brandLabel": "Marca",
       "brandPlaceholder": "Marca",
       "typeLabel": "Tipo",
+      "addButton": "Adicionar Referência OEM",
       "types": {
         "oem": "OEM",
         "compatible": "Compatível",
@@ -287,18 +288,44 @@
 
   "productManagement": {
     "title": "Gestão de Produtos",
+    "addTitle": "Adicionar Novo Produto",
+    "loading": "A carregar produtos...",
+    "filters": {
+      "all": "Todos os Estados"
+    },
+    "form": {
+      "condition": "Condição",
+      "status": "Estado",
+      "addButton": "Adicionar Produto",
+      "saving": "A guardar..."
+    },
+    "conditions": {
+      "used": "Usado",
+      "new": "Novo",
+      "refurbished": "Recondicionado"
+    },
+    "status": {
+      "active": "Ativo",
+      "reserved": "Reservado",
+      "sold": "Vendido",
+      "inactive": "Inativo"
+    },
     "table": {
       "name": "Nome",
       "price": "Preço",
       "sku": "SKU",
+      "status": "Estado",
       "actions": "Ações"
     },
     "buttons": {
       "edit": "Editar",
-      "delete": "Eliminar"
+      "markSold": "Marcar como Vendido",
+      "delete": "Eliminar",
+      "disable": "Desativar"
     },
     "alerts": {
-      "confirmDelete": "Tem a certeza que deseja eliminar este produto?"
+      "confirmDelete": "Tem a certeza que deseja eliminar este produto?",
+      "confirmDisable": "Tem a certeza que deseja desativar este produto?"
     },
     "noProducts": "Nenhum produto encontrado."
   },
@@ -312,7 +339,9 @@
       "email": "E-mail",
       "password": "Palavra-passe",
       "role": "Cargo",
-      "addButton": "Adicionar Utilizador"
+      "addButton": "Adicionar Utilizador",
+      "cancelButton": "Cancelar",
+      "loading": "A guardar..."
     },
     "roles": {
       "customer": "Cliente",

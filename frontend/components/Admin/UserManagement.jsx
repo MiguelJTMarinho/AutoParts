@@ -72,37 +72,25 @@ const UserManagement = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">{t("userManagement.title")}</h2>
-      {error && (
-        <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {error}
-        </div>
-      )}
-
-      {/* Add New User Show form Button */}
-      {!showAddForm && (
-        <div className="mb-6 flex justify-end">
-          <button
-            onClick={() => setShowAddForm(true)}
-            className="bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg hover:bg-blue-700 transition-all flex items-center shadow-sm cursor-pointer"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-2xl font-bold mb-4">{t("userManagement.title")}</h2>
+        {/* Add New User Show form Button */}
+        {!showAddForm && (
+          <div className="mb-6 flex justify-end">
+            <button
+              onClick={() => setShowAddForm(true)}
+              className="inline-flex w-fit items-center rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 4v16m8-8H4"
-              ></path>
-            </svg>
-            {t("userManagement.addTitle")}
-          </button>
-        </div>
-      )}
+              {t("userManagement.addTitle")}
+            </button>
+          </div>
+        )}
+        {error && (
+          <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            {error}
+          </div>
+        )}
+      </div>
 
       {/* Add New User Form */}
       {showAddForm && (
@@ -203,7 +191,7 @@ const UserManagement = () => {
                 onClick={() => setShowAddForm(false)}
                 className="bg-red-600 text-white font-medium py-2.5 px-5 rounded-lg hover:bg-red-700 transition-all flex items-center shadow-sm cursor-pointer mr-2"
               >
-                Close
+                {t("userManagement.form.cancelButton")}
               </button>
               <button
                 type="submit"
@@ -232,7 +220,7 @@ const UserManagement = () => {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
-                    A guardar...
+                    {t("userManagement.form.loading")}
                   </>
                 ) : (
                   t("userManagement.form.addButton")

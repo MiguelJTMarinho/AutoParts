@@ -11,7 +11,9 @@ const createReference = async (data) => {
     throw error;
   }
 
-  const product = await productRepository.getProductById(data.product_id);
+  const product =
+    (await productRepository.getProductByIdForAdmin(data.product_id)) ||
+    (await productRepository.getProductById(data.product_id));
 
   if (!product) {
     const error = new Error("Product not found");

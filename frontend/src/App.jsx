@@ -6,7 +6,7 @@ import store from "../redux/store";
 import { checkAuthStatus } from "../redux/slices/authSlice";
 import { fetchCart } from "../redux/slices/cartSlice";
 
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 
 import UserLayout from "../components/Layout/UserLayout";
 import Home from "../Pages/Home";
@@ -23,6 +23,7 @@ import AdminLayout from "../components/Admin/AdminLayout";
 import AdminHomePage from "../Pages/AdminHomePage";
 import UserManagement from "../components/Admin/UserManagement";
 import ProductManagement from "../components/Admin/ProductManagement";
+import AddProductPage from "../components/Admin/AddProductPage";
 import EditProductPage from "../components/Admin/EditProductPage";
 import OrderManagement from "../components/Admin/OrderManagement";
 import CategoriesManagement from "../components/Admin/CategoriesManagement";
@@ -67,6 +68,7 @@ const AppContent = () => {
           <Route index element={<AdminHomePage />} />
           <Route path="users" element={<UserManagement />} />
           <Route path="products" element={<ProductManagement />} />
+          <Route path="products/new" element={<AddProductPage />} />
           <Route path="products/:id/edit" element={<EditProductPage />} />
           <Route path="orders" element={<OrderManagement />} />
           <Route path="categories" element={<CategoriesManagement />} />
