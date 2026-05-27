@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../Common/LanguageSwitcher";
 
 const AdminSidebar = () => {
   const { t } = useTranslation();
@@ -95,6 +96,9 @@ const AdminSidebar = () => {
           <span>{t("adminSidebar.shop")}</span>
         </NavLink>
       </nav>
+      <div className="w-full flex mt-3 justify-center">
+        <LanguageSwitcher />
+      </div>
       <div className="mt-6">
         <button
           onClick={handleLogout}

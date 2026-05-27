@@ -187,10 +187,12 @@
   "categoriesManagement": {
     "title": "Categories Management",
     "addTitle": "Add New Category",
+    "addSubtitle": "Fill the form below to add a new category.",
     "form": {
       "name": "Name",
       "description": "Description",
-      "addButton": "Add Category"
+      "addButton": "Add Category",
+      "cancelButton": "Cancel"
     },
     "table": {
       "name": "Name",
@@ -200,6 +202,10 @@
     },
     "alerts": {
       "confirmDelete": "Delete this category?"
+    },
+    "toast": {
+      "added": "Category added successfully!",
+      "deleted": "Category deleted successfully!"
     }
   },
 
@@ -272,9 +278,11 @@
   "partBrandsManagement": {
     "title": "Part Brands Management",
     "addTitle": "Add New Brand",
+    "addSubtitle": "Fill the form below to add a new part brand.",
     "form": {
       "name": "Name",
-      "addButton": "Add Brand"
+      "addButton": "Add Brand",
+      "cancelButton": "Cancel"
     },
     "table": {
       "name": "Name",
@@ -283,6 +291,10 @@
     },
     "alerts": {
       "confirmDelete": "Delete this brand?"
+    },
+    "toast": {
+      "added": "Brand added successfully!",
+      "deleted": "Brand deleted successfully!"
     }
   },
 

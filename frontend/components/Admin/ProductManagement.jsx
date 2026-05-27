@@ -16,6 +16,7 @@ const ProductManagement = () => {
   );
 
   const [filterStatus, setFilterStatus] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     dispatch(fetchAllProductsForAdmin());
@@ -44,15 +45,23 @@ const ProductManagement = () => {
   };
 
   const filteredProducts = products.filter(product => {
-    if (filterStatus === "all") return true;
-    return product.status?.toLowerCase() === filterStatus;
+    if (filterStatus !== "all" && product.status?.toLowerCase() !== filterStatus) return false;
+    if (searchQuery.trim() !== "" && !product.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    return true;
   });
 
   return (
     <div className="max-w-7xl mx-auto p-6">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-2xl font-bold">{t("productManagement.title")}</h2>
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-3 items-center flex-wrap">
+          <input
+            type="text"
+            placeholder={t("productManagement.filters.searchByName", "Search by name...")}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="border border-gray-300 rounded p-2 text-sm focus:outline-none focus:border-blue-500 bg-white min-w-[200px]"
+          />
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}

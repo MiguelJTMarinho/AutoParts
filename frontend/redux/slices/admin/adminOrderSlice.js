@@ -66,9 +66,8 @@ const adminOrderSlice = createSlice({
 
         // Calculate total Sales
         state.totalSales = action.payload.reduce((acc, order) => {
-          return acc + order.total_price;
+          return acc + parseFloat(order.total || 0);
         }, 0);
-        state.totalSales = state.totalSales;
       })
       .addCase(fetchAdminOrders.rejected, (state, action) => {
         state.loading = false;
@@ -80,12 +79,12 @@ const adminOrderSlice = createSlice({
       })
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
         state.loading = false;
-        const updatedOrder = action.payload;
+        const updatedOrderData = action.payload.data || action.payload;
         const index = state.orders.findIndex(
-          (order) => order.id === updatedOrder.id,
+          (order) => order.id === updatedOrderData.id,
         );
         if (index !== -1) {
-          state.orders[index] = updatedOrder;
+          state.orders[index] = { ...state.orders[index], ...updatedOrderData };
         }
       })
       .addCase(updateOrderStatus.rejected, (state, action) => {

@@ -51,7 +51,7 @@ const deletePartBrand = async (id) => {
     throw error;
   }
 
-  return result.rows[0];
+  return deleted;
 };
 module.exports = {
   createPartBrand,

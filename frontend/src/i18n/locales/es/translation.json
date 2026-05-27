@@ -186,10 +186,12 @@
   "categoriesManagement": {
     "title": "Gestión de Categorías",
     "addTitle": "Añadir Nueva Categoría",
+    "addSubtitle": "Rellena el formulario a continuación para añadir una nueva categoría.",
     "form": {
       "name": "Nombre",
       "description": "Descripción",
-      "addButton": "Añadir Categoría"
+      "addButton": "Añadir Categoría",
+      "cancelButton": "Cancelar"
     },
     "table": {
       "name": "Nombre",
@@ -199,6 +201,10 @@
     },
     "alerts": {
       "confirmDelete": "¿Estás seguro de que deseas eliminar esta categoría?"
+    },
+    "toast": {
+      "added": "¡Categoría añadida con éxito!",
+      "deleted": "¡Categoría eliminada con éxito!"
     }
   },
 
@@ -271,9 +277,11 @@
   "partBrandsManagement": {
     "title": "Gestión de Marcas de Piezas",
     "addTitle": "Añadir Nueva Marca",
+    "addSubtitle": "Rellena el formulario a continuación para añadir una nueva marca de piezas.",
     "form": {
       "name": "Nombre",
-      "addButton": "Añadir Marca"
+      "addButton": "Añadir Marca",
+      "cancelButton": "Cancelar"
     },
     "table": {
       "name": "Nombre",
@@ -282,6 +290,10 @@
     },
     "alerts": {
       "confirmDelete": "¿Estás seguro de que deseas eliminar esta marca?"
+    },
+    "toast": {
+      "added": "¡Marca añadida con éxito!",
+      "deleted": "¡Marca eliminada con éxito!"
     }
   },
 

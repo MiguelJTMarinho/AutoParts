@@ -7,7 +7,7 @@ export const fetchPartBrands = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/part-brands`,
+        `${import.meta.env.VITE_API_URL}/part_brands`,
       );
       return response.data;
     } catch (error) {
@@ -22,13 +22,8 @@ export const createPartBrand = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/part-brands`,
+        `${import.meta.env.VITE_API_URL}/part_brands`,
         data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-          },
-        },
       );
       return response.data;
     } catch (error) {
@@ -43,13 +38,8 @@ export const updatePartBrand = createAsyncThunk(
   async ({ id, data }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}/part-brands/${id}`,
+        `${import.meta.env.VITE_API_URL}/part_brands/${id}`,
         data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-          },
-        },
       );
       return response.data;
     } catch (error) {
@@ -63,11 +53,7 @@ export const deletePartBrand = createAsyncThunk(
   "adminPartBrands/delete",
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/part-brands/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-        },
-      });
+      await axios.delete(`${import.meta.env.VITE_API_URL}/part_brands/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response?.data);

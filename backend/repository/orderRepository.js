@@ -61,7 +61,8 @@ const getOrderItems = async (order_id) => {
 //update order status (e.g. after payment)
 const updateOrderStatus = async (order_id, status) => {
   const result = await pool.query(
-    `UPDATE orders SET status = $1, updated_at = NOW() WHERE id = $2`,
+    `UPDATE orders SET status = $1, updated_at = NOW() WHERE id = $2
+    RETURNING *`,
     [status, order_id],
   );
   return result.rows[0];
