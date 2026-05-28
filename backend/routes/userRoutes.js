@@ -2,10 +2,15 @@
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();
+const multer = require("multer");
 
 const userService = require("../service/userService");
 const { isAdmin } = require("../middleware/authMiddleware");
 const protect = require("../middleware/authMiddleware").protect;
+
+// Multer setup using memory storage
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // @route POST /api/users/register
 // @desc Register a new user
@@ -72,6 +77,26 @@ router.post("/login", async (req, res) => {
 router.get("/profile", protect, async (req, res) => {
   res.json(req.user);
 });
+
+// @route POST /api/users/profile/avatar
+// @desc Upload user avatar
+// @access Private
+router.post(
+  "/profile/avatar",
+  protect,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No image provided" });
+      }
+      const user = await userService.uploadAvatar(req.user.id, req.file.buffer);
+      res.json(user);
+    } catch (err) {
+      res.status(err.statusCode || 500).json({ error: err.message });
+    }
+  },
+);
 
 // @route PUT /api/users/profile
 // @desc Update logged-in user profile
@@ -219,6 +244,64 @@ router.get("/me", protect, async (req, res) => {
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         username:
+ *           type: string
+ *         email:
+ *           type: string
+ *         first_name:
+ *           type: string
+ *         last_name:
+ *           type: string
+ *         phone_number:
+ *           type: string
+ *         role:
+ *           type: string
+ *         nif:
+ *           type: string
+ *         is_active:
+ *           type: boolean
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *
+ *     UserRegisterInput:
+ *       type: object
+ *       required:
+ *         - first_name
+ *         - last_name
+ *         - email
+ *         - password
+ *       properties:
+ *         first_name:
+ *           type: string
+ *         last_name:
+ *           type: string
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
+ *
+ *     UserLoginInput:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
+ */
+
+/**
+ * @swagger
  * /api/users/register:
  *   post:
  *     summary: Register a new user
@@ -229,28 +312,17 @@ router.get("/me", protect, async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - first_name
- *               - last_name
- *               - email
- *               - password
- *             properties:
- *               first_name:
- *                 type: string
- *                 example: Miguel
- *               last_name:
- *                 type: string
- *                 example: Marinho
- *               email:
- *                 type: string
- *                 example: miguel@email.com
- *               password:
- *                 type: string
- *                 example: 123456
+ *             $ref: '#/components/schemas/UserRegisterInput'
  *     responses:
  *       200:
  *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
  *       400:
  *         description: Validation error
  *       500:
@@ -269,20 +341,17 @@ router.get("/me", protect, async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 example: miguel@email.com
- *               password:
- *                 type: string
- *                 example: 123456
+ *             $ref: '#/components/schemas/UserLoginInput'
  *     responses:
  *       200:
  *         description: Login successful (returns user + JWT token)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
  *       401:
  *         description: Invalid credentials
  */
@@ -299,8 +368,41 @@ router.get("/me", protect, async (req, res) => {
  *     responses:
  *       200:
  *         description: User profile retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       401:
  *         description: Unauthorized (missing or invalid token)
+ */
+
+/**
+ * @swagger
+ * /api/users/profile/avatar:
+ *   post:
+ *     summary: Upload user profile picture
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - image
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Avatar uploaded successfully
+ *       400:
+ *         description: No image provided
+ *       401:
+ *         description: Unauthorized
  */
 
 /**
@@ -337,6 +439,10 @@ router.get("/me", protect, async (req, res) => {
  *     responses:
  *       200:
  *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Validation error
  *       401:
@@ -450,16 +556,7 @@ router.get("/me", protect, async (req, res) => {
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *                   email:
- *                     type: string
- *                   role:
- *                     type: string
+ *                 $ref: '#/components/schemas/User'
  *       401:
  *         description: Unauthorized (Not logged in)
  *       403:
@@ -506,6 +603,10 @@ router.get("/me", protect, async (req, res) => {
  *     responses:
  *       200:
  *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       401:
  *         description: Unauthorized
  *       403:

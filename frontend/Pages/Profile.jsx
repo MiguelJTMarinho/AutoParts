@@ -1,25 +1,80 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HiMiniArchiveBox } from "react-icons/hi2";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../redux/slices/authSlice";
+import axios from "axios";
+import { toast } from "sonner";
 
 const Profile = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { userInfo } = useSelector((state) => state.auth);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const [profileData, setProfileData] = useState({
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@email.com",
-    phone: "+351 912 345 678",
-    nif: "123456789",
-    addressLine1: "Rua Exemplo 123",
-    addressLine2: "Apartment 4B",
-    city: "Lisbon",
-    postalCode: "1000-001",
-    country: "Portugal",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    nif: "",
+    addressId: null,
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    postalCode: "",
+    country: "",
     avatar: "https://picsum.photos/500/500?1",
   });
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/login");
+    } else {
+      setProfileData((prev) => ({
+        ...prev,
+        firstName: userInfo.first_name || "",
+        lastName: userInfo.last_name || "",
+        email: userInfo.email || "",
+        phone: userInfo.phone_number || "",
+        nif: userInfo.nif || "",
+        avatar: userInfo.avatar_url || "https://picsum.photos/500/500?1",
+      }));
+
+      // Carregar moradas do utilizador a partir da API
+      const fetchAddresses = async () => {
+        try {
+          const config = {
+            withCredentials: true,
+          };
+          const { data } = await axios.get(
+            `${import.meta.env.VITE_API_URL}/addresses`,
+            config,
+          );
+
+          if (data && data.length > 0) {
+            const primary = data[0]; // Carrega a primeira morada guardada
+            setProfileData((prev) => ({
+              ...prev,
+              addressId: primary.id,
+              addressLine1: primary.address_line_1 || "",
+              addressLine2: primary.address_line_2 || "",
+              city: primary.city || "",
+              postalCode: primary.postal_code || "",
+              country: primary.country || "",
+            }));
+          }
+        } catch (error) {
+          console.error("Failed to fetch addresses:", error);
+        }
+      };
+      fetchAddresses();
+    }
+  }, [userInfo, navigate]);
 
   const handleChange = (e) => {
     setProfileData((prev) => ({
@@ -28,10 +83,78 @@ const Profile = () => {
     }));
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    setIsEditing(false);
-    console.log("Updated profile:", profileData);
+
+    try {
+      const config = {
+        withCredentials: true,
+      };
+
+      // 0. Upload Avatar (Se houver novo ficheiro)
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("image", selectedFile);
+        const { data: updatedUser } = await axios.post(
+          `${import.meta.env.VITE_API_URL}/users/profile/avatar`,
+          formData,
+          {
+            ...config,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        );
+        // Atualiza para a imagem oficial vinda do Cloudinary
+        setProfileData((prev) => ({ ...prev, avatar: updatedUser.avatar_url }));
+        setSelectedFile(null);
+      }
+
+      // 1. Atualizar informações pessoais
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/users/profile`,
+        {
+          first_name: profileData.firstName,
+          last_name: profileData.lastName,
+          phone_number: profileData.phone,
+          nif: profileData.nif,
+        },
+        config,
+      );
+
+      // 2. Payload da Morada
+      const addressPayload = {
+        title: "Primary",
+        address_line_1: profileData.addressLine1,
+        address_line_2: profileData.addressLine2,
+        city: profileData.city,
+        postal_code: profileData.postalCode,
+        country: profileData.country,
+      };
+
+      // 3. Verifica se tem ID de morada para atualizar(PUT) ou se cria uma nova (POST)
+      if (profileData.addressId) {
+        await axios.put(
+          `${import.meta.env.VITE_API_URL}/addresses/${profileData.addressId}`,
+          addressPayload,
+          config,
+        );
+      } else if (profileData.addressLine1) {
+        // Só cria se houver pelo menos a linha 1 preenchida
+        const { data } = await axios.post(
+          `${import.meta.env.VITE_API_URL}/addresses`,
+          addressPayload,
+          config,
+        );
+        setProfileData((prev) => ({ ...prev, addressId: data.id }));
+      }
+
+      setIsEditing(false);
+      toast.success(t("profilePage.buttons.saveChanges"));
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      toast.error(error.response?.data?.message || "Error updating profile");
+    }
   };
 
   const handleImageChange = (e) => {
@@ -43,11 +166,14 @@ const Profile = () => {
         ...prev,
         avatar: imageUrl,
       }));
+      setSelectedFile(file);
     }
   };
 
   const handleLogout = () => {
-    console.log("User logged out");
+    dispatch(logoutUser()).then(() => {
+      navigate("/login");
+    });
   };
 
   const inputStyles = `
@@ -86,11 +212,12 @@ const Profile = () => {
                     src={profileData.avatar}
                     alt="Profile"
                     className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
                   />
                 ) : (
                   <>
-                    {profileData.firstName[0]}
-                    {profileData.lastName[0]}
+                    {profileData.firstName?.[0] || ""}
+                    {profileData.lastName?.[0] || ""}
                   </>
                 )}
               </div>
@@ -194,7 +321,7 @@ const Profile = () => {
                 </label>
                 <input
                   type="text"
-                  name="phone"
+                  name="nif"
                   value={profileData.nif}
                   onChange={handleChange}
                   disabled={!isEditing}

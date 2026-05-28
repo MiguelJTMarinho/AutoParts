@@ -225,6 +225,49 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *           type: string
  *           format: date-time
  *           nullable: true
+ *
+ *     ProductInput:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *       properties:
+ *         external_id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         summary:
+ *           type: string
+ *         sku:
+ *           type: string
+ *         price:
+ *           type: number
+ *         condition:
+ *           type: string
+ *         stock:
+ *           type: integer
+ *         category_id:
+ *           type: integer
+ *         brand_id:
+ *           type: integer
+ *         status:
+ *           type: string
+ *         is_active:
+ *           type: boolean
+ *         weight_kg:
+ *           type: number
+ *         width_cm:
+ *           type: number
+ *         height_cm:
+ *           type: number
+ *         length_cm:
+ *           type: number
+ *         fitments:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/ProductFitment'
  */
 
 /**
@@ -240,63 +283,14 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *               - price
- *             properties:
- *               external_id:
- *                 type: string
- *               name:
- *                 type: string
- *               description:
- *                 type: string
- *               summary:
- *                 type: string
- *               sku:
- *                 type: string
- *               price:
- *                 type: number
- *               condition:
- *                 type: string
- *               stock:
- *                 type: integer
- *               category_id:
- *                 type: integer
- *               brand_id:
- *                 type: integer
- *               status:
- *                 type: string
- *               is_active:
- *                 type: boolean
- *               weight_kg:
- *                 type: number
- *               width_cm:
- *                 type: number
- *               height_cm:
- *                 type: number
- *               length_cm:
- *                 type: number
- *               fitments:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     vehicle_generation_id:
- *                       type: integer
- *                     engine:
- *                       type: string
- *                     fuel:
- *                       type: string
- *                     horsepower:
- *                       type: integer
- *                     drivetrain:
- *                       type: string
- *                     transmission:
- *                       type: string
+ *             $ref: '#/components/schemas/ProductInput'
  *     responses:
  *       201:
  *         description: Product created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
  */
 
 /**
@@ -370,6 +364,12 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: List of products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
  */
 
 /**
@@ -387,6 +387,10 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Product found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
  *       404:
  *         description: Product not found
  */
@@ -414,6 +418,10 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Product updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
  */
 
 /**
@@ -450,6 +458,12 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Similar products list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
  */
 
 /**
@@ -461,6 +475,12 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Latest products list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
  */
 
 /**
@@ -474,6 +494,12 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Admin products list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
  */
 
 /**
@@ -493,6 +519,10 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Product found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
  *       404:
  *         description: Product not found
  */

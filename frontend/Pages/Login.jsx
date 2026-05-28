@@ -1,15 +1,36 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { HiCheck } from "react-icons/hi";
 import { loginUser } from "../redux/slices/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { mergeCart } from "../redux/slices/cartSlice";
 
 const Login = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { userInfo, guestId } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
+
+  const redirect = new URLSearchParams(location.search).get("redirect") || "/";
+  const isCheckoutRedirect = redirect.includes("/checkout");
+
+  useEffect(() => {
+    if (userInfo) {
+      const cartItems = cart?.items || cart?.products || [];
+      if (cartItems.length > 0 && guestId) {
+        dispatch(mergeCart({ guestId })).then(() => {
+          navigate(isCheckoutRedirect ? "/checkout" : "/");
+        });
+      } else {
+        navigate(isCheckoutRedirect ? "/checkout" : "/");
+      }
+    }
+  }, [userInfo, guestId, cart, navigate, isCheckoutRedirect, dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,6 +55,8 @@ const Login = () => {
               <input
                 type="email"
                 value={email}
+                name="email"
+                autoComplete="email"
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -49,6 +72,8 @@ const Login = () => {
               <input
                 type="password"
                 value={password}
+                name="password"
+                autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -103,7 +128,7 @@ const Login = () => {
           </ul>
 
           <Link
-            to="/register"
+            to={`/register?redirect=${encodeURIComponent(redirect)}`}
             className="inline-block border border-main-blue text-main-blue px-8 py-3 uppercase font-bold rounded-md hover:bg-main-blue hover:text-white transition"
           >
             {t("loginPage.registerPromo.createAccountButton")}

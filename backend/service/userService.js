@@ -1,7 +1,15 @@
 // userService.js
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
 require("dotenv").config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const userRepository = require("../repository/userRepository");
 const removePassword = require("../utils/removePassword");
@@ -93,9 +101,46 @@ const loginUser = async ({ email, password }) => {
   };
 };
 
+// UPLOAD AVATAR
+const uploadStream = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "avatars" },
+      (error, result) => {
+        if (result) resolve(result);
+        else reject(error);
+      },
+    );
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
+};
+
+const uploadAvatar = async (userId, fileBuffer) => {
+  const result = await uploadStream(fileBuffer);
+
+  const existingUser = await userRepository.findUserById(userId);
+  if (!existingUser) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const updatedUser = await userRepository.updateUserProfile(userId, {
+    username: existingUser.username,
+    first_name: existingUser.first_name,
+    last_name: existingUser.last_name,
+    phone_number: existingUser.phone_number,
+    nif: existingUser.nif,
+    avatar_url: result.secure_url,
+  });
+
+  return removePassword(updatedUser);
+};
+
 // UPDATE USER PROFILE
 const updateUserProfile = async (userId, data) => {
-  const { username, first_name, last_name, phone_number, nif } = data;
+  const { username, first_name, last_name, phone_number, nif, avatar_url } =
+    data;
 
   const existingUser = await userRepository.findUserById(userId);
 
@@ -117,6 +162,7 @@ const updateUserProfile = async (userId, data) => {
     last_name,
     phone_number,
     nif,
+    avatar_url: avatar_url !== undefined ? avatar_url : existingUser.avatar_url,
   });
 
   return updatedUser;
@@ -234,6 +280,7 @@ module.exports = {
   registerUser,
   createUserByAdmin,
   loginUser,
+  uploadAvatar,
   updateUserProfile,
   updateUser,
   forgotPassword,

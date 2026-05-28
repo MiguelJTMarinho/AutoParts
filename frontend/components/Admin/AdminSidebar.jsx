@@ -11,12 +11,18 @@ import {
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../Common/LanguageSwitcher";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../redux/slices/authSlice";
 
 const AdminSidebar = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleLogout = () => {
-    navigate("/");
+    dispatch(logoutUser()).then(() => {
+      navigate("/login");
+    });
   };
   return (
     <div className="p-6">

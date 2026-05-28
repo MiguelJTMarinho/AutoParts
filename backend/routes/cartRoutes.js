@@ -102,6 +102,38 @@ router.post("/merge", protect, async (req, res) => {
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     CartItem:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         product_id:
+ *           type: integer
+ *         name:
+ *           type: string
+ *         quantity:
+ *           type: integer
+ *         price_at_time:
+ *           type: number
+ *         subtotal:
+ *           type: number
+ *     Cart:
+ *       type: object
+ *       properties:
+ *         cart_id:
+ *           type: integer
+ *         items:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/CartItem'
+ *         total:
+ *           type: number
+ */
+
+/**
+ * @swagger
  * /api/cart/items:
  *   post:
  *     summary: Add product to cart (user or guest)
@@ -157,29 +189,7 @@ router.post("/merge", protect, async (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 cart_id:
- *                   type: integer
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       product_id:
- *                         type: integer
- *                       name:
- *                         type: string
- *                       quantity:
- *                         type: integer
- *                       price_at_time:
- *                         type: number
- *                       subtotal:
- *                         type: number
- *                 total:
- *                   type: number
+ *               $ref: '#/components/schemas/Cart'
  *       400:
  *         description: Missing user or guest session
  *       500:

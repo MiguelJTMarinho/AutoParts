@@ -76,30 +76,63 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         parent_id:
+ *           type: integer
+ *           nullable: true
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *
+ *     CategoryInput:
+ *       type: object
+ *       required:
+ *         - name
+ *       properties:
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         parent_id:
+ *           type: integer
+ *           nullable: true
+ */
+
+/**
+ * @swagger
  * /api/categories:
  *   post:
  *     summary: Create a new category
  *     tags: [Categories]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *             properties:
- *               name:
- *                 type: string
- *               description:
- *                 type: string
- *               parent_id:
- *                 type: integer
- *                 nullable: true
- *                 example: null
+ *             $ref: '#/components/schemas/CategoryInput'
  *     responses:
  *       201:
  *         description: Category created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Category'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden (not admin)
  *       500:
  *         description: Server error
  */
@@ -113,6 +146,12 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: List of categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Category'
  *       500:
  *         description: Server error
  */
@@ -133,6 +172,10 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Category data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Category'
  *       404:
  *         description: Category not found
  */
@@ -143,6 +186,8 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *   put:
  *     summary: Update category
  *     tags: [Categories]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -155,18 +200,18 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               description:
- *                 type: string
- *               parent_id:
- *                 type: integer
- *                 nullable: true
+ *             $ref: '#/components/schemas/CategoryInput'
  *     responses:
  *       200:
  *         description: Category updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Category'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden (not admin)
  *       404:
  *         description: Category not found
  */
@@ -177,6 +222,8 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *   delete:
  *     summary: Delete category
  *     tags: [Categories]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -187,6 +234,10 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Category deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden (not admin)
  *       404:
  *         description: Category not found
  */

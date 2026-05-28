@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { HiOutlineUser, HiOutlineShoppingCart } from "react-icons/hi2";
+import { useSelector } from "react-redux";
 import SearchBar from "./SearchBar";
 import CartDrawer from "../Layout/CartDrawer";
 import logo from "../../src/assets/LogoNoBg.png";
@@ -8,10 +9,18 @@ import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(true);
+  const { cart } = useSelector((state) => state.cart);
 
   const toggleCartDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
+
+  // Extrair os items e somar as suas quantidades
+  const cartItems = cart?.items || cart?.products || [];
+  const cartItemCount = cartItems.reduce(
+    (total, item) => total + (item.quantity || 1),
+    0,
+  );
 
   return (
     <>
@@ -43,9 +52,11 @@ const Navbar = () => {
             className="relative hover:text-black cursor-pointer"
           >
             <HiOutlineShoppingCart className="h-6 w-6 text-gray-700" />
-            <span className="absolute -top-1 bg-main-blue text-white text-xs rounded-full px-2 py-0.5">
-              4
-            </span>
+            {cartItemCount > 0 && (
+              <span className="absolute -top-1 -right-2 bg-main-blue text-white text-xs rounded-full px-2 py-0.5">
+                {cartItemCount}
+              </span>
+            )}
           </button>
         </div>
 

@@ -74,6 +74,30 @@ router.patch("/:id/status", protect, isAdmin, async (req, res) => {
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Order:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         user_id:
+ *           type: integer
+ *         total:
+ *           type: number
+ *         status:
+ *           type: string
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ */
+
+/**
+ * @swagger
  * /api/orders/checkout:
  *   post:
  *     summary: Create order from cart (checkout)
@@ -98,6 +122,12 @@ router.patch("/:id/status", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: List of orders
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Order'
  */
 
 /**
@@ -115,6 +145,10 @@ router.patch("/:id/status", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Order details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Order'
  */
 
 /**
@@ -174,29 +208,7 @@ router.patch("/:id/status", protect, isAdmin, async (req, res) => {
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     example: 101
- *                   user_id:
- *                     type: integer
- *                     example: 5
- *                   total:
- *                     type: string
- *                     example: "350.50"
- *                   status:
- *                     type: string
- *                     example: "processing"
- *                   created_at:
- *                     type: string
- *                     format: date-time
- *                     example: "2026-05-08T10:30:00.000Z"
- *                   updated_at:
- *                     type: string
- *                     format: date-time
- *                     nullable: true
- *                     example: null
+ *                 $ref: '#/components/schemas/Order'
  *       401:
  *         description: Unauthorized (missing or invalid token)
  *       403:

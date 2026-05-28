@@ -10,6 +10,7 @@ const NewArrivals = () => {
 
   const [isDragging, setIsDragging] = useState(false);
   const [hasDragged, setHasDragged] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
@@ -54,8 +55,13 @@ const NewArrivals = () => {
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
 
-  const handleMouseUpOrLeave = () => {
+  const handleMouseUp = () => {
     setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+    setIsHovered(false);
   };
 
   const scroll = (dir) => {
@@ -89,6 +95,27 @@ const NewArrivals = () => {
 
     return () => el.removeEventListener("scroll", updateScrollButtons);
   }, [newArrivals, updateScrollButtons]);
+
+  // Auto-scroll effect
+  useEffect(() => {
+    if (isHovered || isDragging) return;
+
+    const intervalId = setInterval(() => {
+      const el = scrollRef.current;
+      if (!el) return;
+
+      const isAtEnd =
+        Math.ceil(el.scrollLeft + el.clientWidth) >= el.scrollWidth;
+
+      if (isAtEnd) {
+        el.scrollTo({ left: 0, behavior: "smooth" }); // Volta ao início
+      } else {
+        el.scrollBy({ left: el.clientWidth * 0.4, behavior: "smooth" }); // Roda para a direita
+      }
+    }, 3500); // Roda a cada 3.5 segundos
+
+    return () => clearInterval(intervalId);
+  }, [isHovered, isDragging]);
 
   return (
     <section className="py-16 bg-gray-50">
@@ -126,8 +153,9 @@ const NewArrivals = () => {
           ref={scrollRef}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUpOrLeave}
-          onMouseLeave={handleMouseUpOrLeave}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+          onMouseEnter={() => setIsHovered(true)}
           className={`flex gap-6 overflow-x-auto pb-4 
             ${isDragging ? "cursor-grabbing" : "cursor-grab"}
             [&::-webkit-scrollbar]:hidden`}
@@ -141,15 +169,18 @@ const NewArrivals = () => {
               onClick={(e) => {
                 if (hasDragged) e.preventDefault();
               }}
-              className="min-w-65 bg-white rounded-xl shadow-sm hover:shadow-lg transition group shrink-0 select-none"
+              className="w-64 md:w-72 bg-white rounded-xl shadow-sm hover:shadow-lg transition group shrink-0 select-none flex flex-col"
             >
               {/* IMAGE */}
-              <div className="h-64 overflow-hidden rounded-t-xl">
+              <div className="relative w-full aspect-square overflow-hidden rounded-t-xl bg-gray-50">
                 <img
-                  src={product.images[0]?.image_url}
+                  src={
+                    product.images?.[0]?.image_url ||
+                    "https://placehold.co/600x400?text=No+Image"
+                  }
                   alt={product.name}
                   draggable="false"
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
 

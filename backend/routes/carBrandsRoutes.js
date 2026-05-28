@@ -85,6 +85,30 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     CarBrand:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         name:
+ *           type: string
+ *           example: BMW
+ *
+ *     CarBrandInput:
+ *       type: object
+ *       required:
+ *         - name
+ *       properties:
+ *         name:
+ *           type: string
+ *           example: Audi
+ */
+
+/**
+ * @swagger
  * /api/car_brands:
  *   post:
  *     summary: Create a new car brand
@@ -96,16 +120,18 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *             properties:
- *               name:
- *                 type: string
- *                 example: BMW
+ *             $ref: '#/components/schemas/CarBrandInput'
  *     responses:
  *       201:
  *         description: Car brand created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CarBrand'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden (not admin)
  *       400:
  *         description: Invalid input
  *       409:
@@ -121,6 +147,12 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: List of car brands
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/CarBrand'
  */
 
 /**
@@ -139,6 +171,10 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Car brand found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CarBrand'
  *       404:
  *         description: Car brand not found
  */
@@ -163,14 +199,18 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: Audi
+ *             $ref: '#/components/schemas/CarBrandInput'
  *     responses:
  *       200:
  *         description: Car brand updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CarBrand'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden (not admin)
  *       404:
  *         description: Car brand not found
  *       409:
@@ -195,6 +235,10 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Car brand deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden (not admin)
  *       404:
  *         description: Car brand not found
  */

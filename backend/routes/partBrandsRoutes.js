@@ -86,6 +86,30 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     PartBrand:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         name:
+ *           type: string
+ *           example: Bosch
+ *
+ *     PartBrandInput:
+ *       type: object
+ *       required:
+ *         - name
+ *       properties:
+ *         name:
+ *           type: string
+ *           example: Valeo
+ */
+
+/**
+ * @swagger
  * /api/part_brands:
  *   post:
  *     summary: Create a new Part Brand
@@ -97,16 +121,14 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *             properties:
- *               name:
- *                 type: string
- *                 example: bosch
+ *             $ref: '#/components/schemas/PartBrandInput'
  *     responses:
  *       201:
  *         description: Part brand created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PartBrand'
  *       400:
  *         description: Invalid input (missing name)
  *       401:
@@ -131,34 +153,7 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- */
-
-/**
- * @swagger
- * /api/part_brands:
- *   get:
- *     summary: Get all Part_Brands
- *     tags: [Part Brands]
- *     responses:
- *       200:
- *         description: List of part_brands
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
+ *                 $ref: '#/components/schemas/PartBrand'
  */
 
 /**
@@ -177,6 +172,10 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     responses:
  *       200:
  *         description: Part brand found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PartBrand'
  *       404:
  *         description: Part brand not found
  */
@@ -201,16 +200,14 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *             properties:
- *               name:
- *                 type: string
- *                 example: valeo
+ *             $ref: '#/components/schemas/PartBrandInput'
  *     responses:
  *       200:
  *         description: Part brand updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PartBrand'
  *       400:
  *         description: Invalid input
  *       401:
