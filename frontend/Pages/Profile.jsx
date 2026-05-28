@@ -12,6 +12,7 @@ const Profile = () => {
     lastName: "Doe",
     email: "john.doe@email.com",
     phone: "+351 912 345 678",
+    nif: "123456789",
     addressLine1: "Rua Exemplo 123",
     addressLine2: "Apartment 4B",
     city: "Lisbon",
@@ -181,6 +182,20 @@ const Profile = () => {
                   type="text"
                   name="phone"
                   value={profileData.phone}
+                  onChange={handleChange}
+                  disabled={!isEditing}
+                  className={inputStyles}
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-600">
+                  {t("profilePage.fields.nif")}
+                </label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={profileData.nif}
                   onChange={handleChange}
                   disabled={!isEditing}
                   className={inputStyles}

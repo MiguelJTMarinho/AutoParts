@@ -15,15 +15,20 @@ const createProduct = async (data) => {
     brand_id,
     status,
     is_active,
+    weight_kg,
+    width_cm,
+    height_cm,
+    length_cm,
   } = data;
 
   const result = await pool.query(
     `INSERT INTO products (
       external_id, name, description, summary, sku,
       price, condition, stock,
-      category_id, brand_id, status, is_active, created_at
+      category_id, brand_id, status, is_active, created_at,
+      weight_kg, width_cm, height_cm, length_cm
     )
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12, now())
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12, now(), $13, $14, $15, $16)
     RETURNING *`,
     [
       external_id,
@@ -38,6 +43,10 @@ const createProduct = async (data) => {
       brand_id,
       status,
       is_active,
+      weight_kg || 0,
+      width_cm || 0,
+      height_cm || 0,
+      length_cm || 0,
     ],
   );
 
@@ -71,24 +80,26 @@ const getAllProducts = async (filters) => {
         '[]'::jsonb
       ) AS images,
 
-      -- Compatibility
-      COALESCE(
-        (
-          SELECT jsonb_agg(
-            jsonb_build_object(
-              'brand', cb2.name,
-              'model', cm2.name,
-              'year_start', pc2.year_start,
-              'year_end', pc2.year_end
-            )
-          )
-          FROM product_compatibility pc2
-          JOIN car_brands cb2 ON cb2.id = pc2.carbrand_id
-          JOIN car_models cm2 ON cm2.id = pc2.carmodel_id
-          WHERE pc2.product_id = p.id
-        ),
-        '[]'::jsonb
-      ) AS compatibility,
+      -- Fitments / Compatibility 
+      COALESCE( 
+        ( 
+          SELECT jsonb_agg( 
+            jsonb_build_object( 
+              'generation_id', 
+              vg.id, 'brand', 
+              cb2.name, 'model', 
+              cm2.name, 'generation_name', 
+              vg.generation_name, 'year_start',
+              vg.year_start, 'year_end', 
+              vg.year_end 
+            ) 
+          ) 
+          FROM product_fitments pf 
+          JOIN vehicle_generations vg ON vg.id = pf.generation_id 
+          JOIN car_brands cb2 ON cb2.id = vg.carbrand_id 
+          JOIN car_models cm2 ON cm2.id = vg.carmodel_id 
+          WHERE pf.product_id = p.id ), '[]'::jsonb 
+        ) AS compatibility, 
 
       -- OEM References
       COALESCE(
@@ -110,9 +121,10 @@ const getAllProducts = async (filters) => {
     LEFT JOIN categories c ON c.id = p.category_id
     LEFT JOIN part_brands pb ON pb.id = p.brand_id
     LEFT JOIN oem_references oem ON oem.product_id = p.id
-    LEFT JOIN product_compatibility pc ON pc.product_id = p.id
-    LEFT JOIN car_brands cb ON cb.id = pc.carbrand_id
-    LEFT JOIN car_models cm ON cm.id = pc.carmodel_id
+    LEFT JOIN product_fitments pf ON pf.product_id = p.id
+    LEFT JOIN vehicle_generations vg ON vg.id = pf.generation_id
+    LEFT JOIN car_brands cb ON cb.id = vg.carbrand_id
+    LEFT JOIN car_models cm ON cm.id = vg.carmodel_id
 
     WHERE p.deleted_at IS NULL
   `;
@@ -150,17 +162,18 @@ const getAllProducts = async (filters) => {
     values.push(`%${filters.carModel}%`);
   }
 
-  // CAR YEAR
-  if (filters.carYear) {
+  // CAR Generation
+  if (filters.generationId) {
     query += `
-      AND (
-        (pc.year_start IS NULL OR pc.year_start <= $${index})
-        AND
-        (pc.year_end IS NULL OR pc.year_end >= $${index})
-      )
-    `;
-    values.push(filters.carYear);
-    index++;
+    AND EXISTS (
+      SELECT 1
+      FROM product_fitments pf
+      WHERE pf.product_id = p.id
+      AND pf.generation_id = $${index++}
+    )
+  `;
+
+    values.push(filters.generationId);
   }
 
   // PART BRAND
@@ -252,23 +265,25 @@ const getProductById = async (id) => {
        ) AS images,
 
        -- 2. Array de Compatibilidade
-       COALESCE(
-         (
-           SELECT json_agg(
-             json_build_object(
-               'brand', cb.name,
-               'model', cm.name,
-               'year_start', pc.year_start,
-               'year_end', pc.year_end
-             )
-           )
-           FROM product_compatibility pc
-           JOIN car_brands cb ON pc.carbrand_id = cb.id
-           JOIN car_models cm ON pc.carmodel_id = cm.id
-           WHERE pc.product_id = p.id
-         ), 
-         '[]'::json
-       ) AS compatibility,
+       COALESCE( 
+          ( 
+            SELECT json_agg( 
+              json_build_object( 
+                'generation_id', vg.id, 
+                'brand', cb.name, 
+                'model', cm.name, 
+                'generation_name', vg.generation_name, 
+                'year_start', vg.year_start, 
+                'year_end', vg.year_end 
+              ) 
+            ) 
+            FROM product_fitments pf 
+            JOIN vehicle_generations vg ON vg.id = pf.generation_id 
+            JOIN car_brands cb ON vg.carbrand_id = cb.id 
+            JOIN car_models cm ON vg.carmodel_id = cm.id 
+            WHERE pf.product_id = p.id 
+          ), '[]'::json 
+        ) AS compatibility,
 
        -- 3. Array de Referências OEM 
        COALESCE(
@@ -316,6 +331,10 @@ const updateProduct = async (id, data) => {
     brand_id,
     status,
     is_active,
+    weight_kg,
+    width_cm,
+    height_cm,
+    length_cm,
   } = data;
 
   const result = await pool.query(
@@ -340,6 +359,10 @@ const updateProduct = async (id, data) => {
            WHEN $11 = false THEN COALESCE(deleted_at, NOW())
            ELSE deleted_at
          END,
+         weight_kg = COALESCE($13, weight_kg),
+         width_cm = COALESCE($14, width_cm),
+         height_cm = COALESCE($15, height_cm),
+         length_cm = COALESCE($16, length_cm),
          updated_at = NOW()
      WHERE id = $12
      RETURNING *`,
@@ -356,6 +379,10 @@ const updateProduct = async (id, data) => {
       status,
       is_active,
       id,
+      weight_kg,
+      width_cm,
+      height_cm,
+      length_cm,
     ],
   );
 
@@ -392,7 +419,7 @@ const hardDeleteProduct = async (id) => {
 
 const getProductStockAndPrice = async (product_id) => {
   const result = await pool.query(
-    `SELECT stock, price FROM products WHERE id = $1`,
+    `SELECT stock, price, weight_kg FROM products WHERE id = $1`,
     [product_id],
   );
   return result.rows[0];

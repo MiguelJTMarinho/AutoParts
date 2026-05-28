@@ -40,18 +40,24 @@ export const createProduct = createAsyncThunk(
 export const createProductWithImages = createAsyncThunk(
   "adminProducts/createProductWithImages",
   async (
-    { productData, imageFiles = [], compatibility = [], oemReferences = [] },
+    { productData, imageFiles = [], fitments = [], oemReferences = [] },
     { rejectWithValue },
   ) => {
     try {
+      // O backend agora recebe os fitments diretamente no array "fitments" do productData
+      // Precisamos apenas passar os IDs das generations.
+      const payload = {
+        ...productData,
+        fitments: fitments.map((f) => f.generation_id).filter((id) => id)
+      };
+
       const productResponse = await axios.post(
         `${API_URL}/products`,
-        productData,
+        payload,
       );
       const product = productResponse.data;
 
       const uploadedImages = [];
-      const createdCompatibility = [];
       const createdOemReferences = [];
 
       for (const [index, file] of imageFiles.entries()) {
@@ -68,22 +74,6 @@ export const createProductWithImages = createAsyncThunk(
         uploadedImages.push(imageResponse.data);
       }
 
-      for (const item of compatibility) {
-        if (!item.carbrand_id || !item.carmodel_id) continue;
-
-        const compatibilityResponse = await axios.post(
-          `${API_URL}/product_compatibility`,
-          {
-            ...item,
-            product_id: product.id,
-            year_start: item.year_start || null,
-            year_end: item.year_end || null,
-          },
-        );
-
-        createdCompatibility.push(compatibilityResponse.data);
-      }
-
       for (const item of oemReferences) {
         if (!item.reference_code?.trim()) continue;
 
@@ -98,7 +88,6 @@ export const createProductWithImages = createAsyncThunk(
       return {
         ...product,
         images: uploadedImages,
-        compatibility: createdCompatibility,
         oem_references: createdOemReferences,
       };
     } catch (error) {

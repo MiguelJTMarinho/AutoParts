@@ -6,6 +6,11 @@ const cleanName = (val) => {
   return val.includes("_") ? val.split("_")[1] : val;
 };
 
+const cleanId = (val) => {
+  if (!val) return "";
+  return val.includes("_") ? val.split("_")[0] : val;
+};
+
 // Async thunk to fetch products by optional filters
 export const fetchProductsByFilters = createAsyncThunk(
   "products/fetchByFilters",
@@ -16,6 +21,7 @@ export const fetchProductsByFilters = createAsyncThunk(
     carYear,
     category,
     partBrand,
+    generation,
     minPrice,
     maxPrice,
     inStock,
@@ -29,6 +35,7 @@ export const fetchProductsByFilters = createAsyncThunk(
     if (carBrand) query.append("carBrand", cleanName(carBrand));
     if (carModel) query.append("carModel", cleanName(carModel));
     if (carYear) query.append("carYear", carYear);
+    if (generation) query.append("generationId", cleanId(generation));
     if (category) {
       if (Array.isArray(category)) {
         category.forEach((cat) => query.append("category", cleanName(cat)));

@@ -1,0 +1,25 @@
+{
+  "name": "autoparts",
+  "version": "1.0.0",
+  "description": "express\r pg\r dotenv\r jsonwebtoken\r bcryptjs\r cors\r nodemon",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MiguelJTMarinho/AutoParts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MiguelJTMarinho/AutoParts/issues"
+  },
+  "homepage": "https://github.com/MiguelJTMarinho/AutoParts#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+  
+}

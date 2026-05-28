@@ -16,6 +16,11 @@ const OrderDetailsPage = () => {
       paymentMethod: "Paypal",
       shippingMethod: "Standard",
       ShippingAddress: { city: "Porto", country: "Portugal" },
+      AccountInformation: {
+        name: "John Doe",
+        email: "john.doe@email.com",
+        nif: "123456789",
+      },
       orderItems: [
         {
           productId: "1",
@@ -109,6 +114,23 @@ const OrderDetailsPage = () => {
               <p>
                 {t("orderDetailsPage.shippingInfo.address")}:{" "}
                 {`${orderDetails.ShippingAddress.city}, ${orderDetails.ShippingAddress.country}`}
+              </p>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-2">
+                {t("orderDetailsPage.userInformation.title")}
+              </h4>
+              <p>
+                {t("orderDetailsPage.userInformation.name")}:{" "}
+                {orderDetails.AccountInformation.name}
+              </p>
+              <p>
+                {t("orderDetailsPage.userInformation.email")}:{" "}
+                {`${orderDetails.AccountInformation.email}`}
+              </p>
+              <p>
+                {t("orderDetailsPage.userInformation.nif")}:{" "}
+                {`${orderDetails.AccountInformation.nif}`}
               </p>
             </div>
           </div>

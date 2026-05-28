@@ -19,12 +19,11 @@ const initialProductData = {
   brand_id: "",
   status: "active",
   is_active: true,
-  compatibility: [
+  fitments: [
     {
       carbrand_id: "",
       carmodel_id: "",
-      year_start: "",
-      year_end: "",
+      generation_id: "",
     },
   ],
   oem_references: [
@@ -46,6 +45,7 @@ const AddProductPage = () => {
   const [carModels, setCarModels] = useState([]);
   const [categories, setCategories] = useState([]);
   const [partBrands, setPartBrands] = useState([]);
+  const [vehicleGenerations, setVehicleGenerations] = useState([]);
   const [productData, setProductData] = useState(initialProductData);
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -53,18 +53,25 @@ const AddProductPage = () => {
   useEffect(() => {
     const fetchFormOptions = async () => {
       try {
-        const [carBrandsRes, carModelsRes, categoriesRes, partBrandsRes] =
-          await Promise.all([
-            axios.get(`${API_URL}/car_brands`),
-            axios.get(`${API_URL}/car_models`),
-            axios.get(`${API_URL}/categories`),
-            axios.get(`${API_URL}/part_brands`),
-          ]);
+        const [
+          carBrandsRes,
+          carModelsRes,
+          categoriesRes,
+          partBrandsRes,
+          generationsRes,
+        ] = await Promise.all([
+          axios.get(`${API_URL}/car_brands`),
+          axios.get(`${API_URL}/car_models`),
+          axios.get(`${API_URL}/categories`),
+          axios.get(`${API_URL}/part_brands`),
+          axios.get(`${API_URL}/vehicle_generations`),
+        ]);
 
         setCarBrands(carBrandsRes.data || []);
         setCarModels(carModelsRes.data || []);
         setCategories(categoriesRes.data || []);
         setPartBrands(partBrandsRes.data || []);
+        setVehicleGenerations(generationsRes.data || []);
       } catch (err) {
         console.error("Failed to fetch product form options:", err);
       }
@@ -96,36 +103,40 @@ const AddProductPage = () => {
     }));
   };
 
-  const handleCompatibilityChange = (index, e) => {
+  const handleFitmentChange = (index, e) => {
     const { name, value } = e.target;
-    const updated = [...productData.compatibility];
+    const updated = [...productData.fitments];
     updated[index][name] = value;
 
     if (name === "carbrand_id") {
       updated[index].carmodel_id = "";
+      updated[index].generation_id = "";
     }
 
-    setProductData({ ...productData, compatibility: updated });
+    if (name === "carmodel_id") {
+      updated[index].generation_id = "";
+    }
+
+    setProductData({ ...productData, fitments: updated });
   };
 
-  const addCompatibility = () => {
+  const addFitment = () => {
     setProductData((prev) => ({
       ...prev,
-      compatibility: [
-        ...prev.compatibility,
+      fitments: [
+        ...prev.fitments,
         {
           carbrand_id: "",
           carmodel_id: "",
-          year_start: "",
-          year_end: "",
+          generation_id: "",
         },
       ],
     }));
   };
 
-  const removeCompatibility = (index) => {
-    const updated = productData.compatibility.filter((_, i) => i !== index);
-    setProductData({ ...productData, compatibility: updated });
+  const removeFitment = (index) => {
+    const updated = productData.fitments.filter((_, i) => i !== index);
+    setProductData({ ...productData, fitments: updated });
   };
 
   const handleOemChange = (index, e) => {
@@ -168,6 +179,14 @@ const AddProductPage = () => {
     );
   };
 
+  const getGenerationsByBrandAndModel = (brandId, modelId) => {
+    return vehicleGenerations.filter(
+      (gen) =>
+        String(gen.carbrand_id) === String(brandId) &&
+        String(gen.carmodel_id) === String(modelId),
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -190,7 +209,7 @@ const AddProductPage = () => {
         createProductWithImages({
           productData: productPayload,
           imageFiles,
-          compatibility: productData.compatibility,
+          fitments: productData.fitments,
           oemReferences: productData.oem_references,
         }),
       ).unwrap();
@@ -209,7 +228,7 @@ const AddProductPage = () => {
       productData.brand_id = "";
       productData.status = "active";
       productData.is_active = true;
-      productData.compatibility = [];
+      productData.fitments = [];
       productData.oem_references = [];
       setImageFiles([]);
       setImagePreviews([]);
@@ -393,13 +412,13 @@ const AddProductPage = () => {
 
         <div>
           <h3 className="text-xl font-semibold mb-3">
-            {t("editProductPage.compatibility.title")}
+            {t("editProductPage.compatibility.title", "Vehicle Fitments")}
           </h3>
 
-          {productData.compatibility.map((item, index) => (
+          {productData.fitments.map((item, index) => (
             <div
               key={index}
-              className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3"
+              className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3 items-end"
             >
               <div>
                 <label className="text-sm text-gray-600">
@@ -408,7 +427,7 @@ const AddProductPage = () => {
                 <select
                   name="carbrand_id"
                   value={item.carbrand_id}
-                  onChange={(e) => handleCompatibilityChange(index, e)}
+                  onChange={(e) => handleFitmentChange(index, e)}
                   className="w-full px-2 py-3 border rounded"
                 >
                   <option value="">
@@ -429,7 +448,7 @@ const AddProductPage = () => {
                 <select
                   name="carmodel_id"
                   value={item.carmodel_id}
-                  onChange={(e) => handleCompatibilityChange(index, e)}
+                  onChange={(e) => handleFitmentChange(index, e)}
                   className="w-full px-2 py-3 border rounded"
                   disabled={!item.carbrand_id}
                 >
@@ -446,44 +465,56 @@ const AddProductPage = () => {
 
               <div>
                 <label className="text-sm text-gray-600">
-                  {t("editProductPage.compatibility.yearFromLabel")}
+                  {t(
+                    "editProductPage.compatibility.generationLabel",
+                    "Generation",
+                  )}
                 </label>
-                <input
-                  type="number"
-                  name="year_start"
-                  value={item.year_start}
-                  onChange={(e) => handleCompatibilityChange(index, e)}
-                  className="w-full p-2 border rounded"
-                />
+                <select
+                  name="generation_id"
+                  value={item.generation_id}
+                  onChange={(e) => handleFitmentChange(index, e)}
+                  className="w-full px-2 py-3 border rounded"
+                  disabled={!item.carmodel_id}
+                >
+                  <option value="">
+                    {t(
+                      "editProductPage.compatibility.selectGeneration",
+                      "Select Generation",
+                    )}
+                  </option>
+                  {getGenerationsByBrandAndModel(
+                    item.carbrand_id,
+                    item.carmodel_id,
+                  ).map((gen) => (
+                    <option key={gen.id} value={gen.id}>
+                      {gen.generation_name}{" "}
+                      {gen.year_start ? `(${gen.year_start}` : ""}
+                      {gen.year_end
+                        ? `-${gen.year_end})`
+                        : gen.year_start
+                          ? "-Present)"
+                          : ""}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
-                <label className="text-sm text-gray-600">
-                  {t("editProductPage.compatibility.yearToLabel")}
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="number"
-                    name="year_end"
-                    value={item.year_end}
-                    onChange={(e) => handleCompatibilityChange(index, e)}
-                    className="w-full p-2 border rounded"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeCompatibility(index)}
-                    className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 cursor-pointer"
-                  >
-                    X
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => removeFitment(index)}
+                  className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 cursor-pointer w-full md:w-auto"
+                >
+                  X
+                </button>
               </div>
             </div>
           ))}
 
           <button
             type="button"
-            onClick={addCompatibility}
+            onClick={addFitment}
             className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer"
           >
             {t("editProductPage.compatibility.addButton")}
@@ -491,9 +522,9 @@ const AddProductPage = () => {
         </div>
 
         <div>
-          <label className="block text-gray-700">
+          <h3 className="text-xl font-semibold mb-3">
             {t("editProductPage.oem.title")}
-          </label>
+          </h3>
 
           {productData.oem_references.map((item, index) => (
             <div

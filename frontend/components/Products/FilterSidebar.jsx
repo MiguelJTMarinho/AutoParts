@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -15,7 +15,7 @@ const FilterSidebar = () => {
   const [partBrands, setPartBrands] = useState([]);
   const [carModels, setCarModels] = useState([]);
   const [carBrands, setCarBrands] = useState([]);
-  const [years, setYears] = useState([]);
+  const [generations, setGenerations] = useState([]);
 
   // Estado local para controlar as subcategorias filtradas dinamicamente
   const [subCategories, setSubCategories] = useState([]);
@@ -47,17 +47,18 @@ const FilterSidebar = () => {
     }
   }, [searchParams]);
 
-  // Load years when model changes
+  // Load Generations when model changes
   useEffect(() => {
     const brandParam = getParam("carBrand");
     const modelParam = getParam("carModel");
+
     const brandId = extractId(brandParam);
     const modelId = extractId(modelParam);
 
-    if (modelId && brandId) {
-      fetchYears(modelId, brandId);
+    if (brandId && modelId) {
+      fetchGenerations(brandId, modelId);
     } else {
-      setYears([]);
+      setGenerations([]);
     }
   }, [searchParams]);
 
@@ -127,30 +128,16 @@ const FilterSidebar = () => {
     setSearchParams(params);
   };
 
-  const fetchYears = async (modelId, brandId) => {
+  const fetchGenerations = async (brandId, modelId) => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/product_compatibility/${modelId}/${brandId}`,
+        `${import.meta.env.VITE_API_URL}/vehicle_generations/years/${brandId}/${modelId}`,
       );
 
-      setYears(res.data || []);
+      setGenerations(res.data || []);
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const updateArrayParam = (key, value) => {
-    const current = getAll(key);
-
-    const newValues = current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value];
-
-    const params = new URLSearchParams(searchParams);
-    params.delete(key);
-    newValues.forEach((v) => params.append(key, v));
-
-    setSearchParams(params);
   };
 
   const updatePrice = (min, max) => {
@@ -180,6 +167,7 @@ const FilterSidebar = () => {
   const selectedCategory = getParam("category");
 
   const selectedPartBrand = getParam("partBrand");
+  const selectedGeneration = getParam("generation");
 
   const minPrice = Number(getParam("minPrice") || PRICE_MIN);
   const maxPrice = Number(getParam("maxPrice") || PRICE_MAX);
@@ -192,7 +180,8 @@ const FilterSidebar = () => {
     selectedPartBrand ||
     minPrice > PRICE_MIN ||
     maxPrice < PRICE_MAX ||
-    selectedBrand;
+    selectedBrand ||
+    selectedGeneration;
 
   // Descobre as categorias Raiz/Pai (onde parent_id é nulo)
   const mainCategories = categories.filter(
@@ -245,7 +234,9 @@ const FilterSidebar = () => {
             const params = new URLSearchParams(searchParams);
             params.set("carBrand", value);
             params.delete("carModel");
-            params.delete("carYear");
+            params.delete("generation");
+            setGenerations([]);
+            setCarModels([]);
             setSearchParams(params);
           }}
           className="w-full border rounded px-2 py-1 text-sm"
@@ -265,7 +256,8 @@ const FilterSidebar = () => {
             const value = e.target.value;
             const params = new URLSearchParams(searchParams);
             params.set("carModel", value);
-            params.delete("carYear");
+            params.delete("generation");
+            setGenerations([]);
             setSearchParams(params);
           }}
           disabled={!selectedBrand}
@@ -279,17 +271,20 @@ const FilterSidebar = () => {
           ))}
         </select>
 
-        {/* YEAR */}
+        {/* GENERATION */}
         <select
-          value={getParam("carYear") || ""}
-          onChange={(e) => updateParam("carYear", e.target.value)}
+          value={selectedGeneration || ""}
+          onChange={(e) => updateParam("generation", e.target.value)}
           disabled={!selectedModel}
           className="w-full border rounded px-2 py-1 text-sm"
         >
-          <option value="">{t("filterSidebar.vehicle.allYears")}</option>
-          {years.map((year) => (
-            <option key={year} value={year}>
-              {year}
+          <option value="">{t("filterSidebar.vehicle.allGenerations")}</option>
+
+          {generations.map((gen) => (
+            <option key={gen.id} value={`${gen.id}_${gen.name}`}>
+              {gen.generation_name}
+              {gen.year_start ? ` (${gen.year_start}` : ""}
+              {gen.year_end ? `-${gen.year_end})` : "-Present)"}
             </option>
           ))}
         </select>

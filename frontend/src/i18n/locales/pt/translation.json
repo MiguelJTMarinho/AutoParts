@@ -108,6 +108,12 @@
       "quantity": "Quantidade",
       "total": "Total"
     },
+    "userInformation": {
+      "title": "Informações do Utilizador",
+      "name": "Nome",
+      "email": "E-mail",
+      "nif": "NIF"
+    },
     "backLink": "Voltar para as Minhas Encomendas"
   },
 
@@ -133,7 +139,8 @@
       "addressLine2": "Linha de Morada 2",
       "city": "Cidade",
       "postalCode": "Código Postal",
-      "country": "País"
+      "country": "País",
+      "nif": "NIF"
     }
   },
 
@@ -484,7 +491,8 @@
       "title": "Veículo",
       "allBrands": "Todas as marcas",
       "allModels": "Todos os modelos",
-      "allYears": "Todos os anos"
+      "allYears": "Todos os anos",
+      "allGenerations": "Todas as gerações"
     },
     "category": {
       "title": "Categoria",

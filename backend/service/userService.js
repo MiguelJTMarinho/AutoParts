@@ -95,7 +95,7 @@ const loginUser = async ({ email, password }) => {
 
 // UPDATE USER PROFILE
 const updateUserProfile = async (userId, data) => {
-  const { username, first_name, last_name, phone_number } = data;
+  const { username, first_name, last_name, phone_number, nif } = data;
 
   const existingUser = await userRepository.findUserById(userId);
 
@@ -116,6 +116,7 @@ const updateUserProfile = async (userId, data) => {
     first_name,
     last_name,
     phone_number,
+    nif,
   });
 
   return updatedUser;
@@ -203,14 +204,22 @@ const getAllUsers = async () => {
 };
 
 const updateUser = async (id, data) => {
-  const { username, first_name, last_name, role, phone_number, is_active } =
-    data;
+  const {
+    username,
+    first_name,
+    last_name,
+    role,
+    phone_number,
+    nif,
+    is_active,
+  } = data;
   const updatedUser = await userRepository.updateUser(id, {
     username,
     first_name,
     last_name,
     role,
     phone_number,
+    nif,
     is_active,
   });
   return updatedUser;

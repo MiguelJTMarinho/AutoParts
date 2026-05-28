@@ -56,18 +56,20 @@ const getCartItems = async (cart_id) => {
       -- Vai buscar a primeira marca de carro compatível (make)
       (
         SELECT cb.name
-        FROM product_compatibility pc
-        JOIN car_brands cb ON cb.id = pc.carbrand_id
-        WHERE pc.product_id = p.id
+        FROM product_fitments pf
+        JOIN vehicle_generations vg ON vg.id = pf.generation_id
+        JOIN car_brands cb ON cb.id = vg.carbrand_id
+        WHERE pf.product_id = p.id
         LIMIT 1
       ) AS make,
 
       -- Vai buscar o primeiro modelo de carro compatível
       (
         SELECT cm.name
-        FROM product_compatibility pc
-        JOIN car_models cm ON cm.id = pc.carmodel_id
-        WHERE pc.product_id = p.id
+        FROM product_fitments pf
+        JOIN vehicle_generations vg ON vg.id = pf.generation_id
+        JOIN car_models cm ON cm.id = vg.carmodel_id
+        WHERE pf.product_id = p.id
         LIMIT 1
       ) AS model
 

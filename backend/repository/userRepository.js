@@ -20,17 +20,18 @@ const createUser = async ({
 };
 
 const updateUserProfile = async (id, data) => {
-  const { username, first_name, last_name, phone_number } = data;
+  const { username, first_name, last_name, phone_number, nif } = data;
 
   const result = await pool.query(
     `UPDATE users
      SET username = COALESCE($1, username),
          first_name = COALESCE($2, first_name),
          last_name = COALESCE($3, last_name),
-         phone_number = COALESCE($4, phone_number)
+         phone_number = COALESCE($4, phone_number),
+         nif = COALESCE($6, nif)
      WHERE id = $5 and is_active = true
-     RETURNING id, username, first_name, last_name, phone_number, role`,
-    [username, first_name, last_name, phone_number, id],
+     RETURNING id, username, first_name, last_name, phone_number, role, nif`,
+    [username, first_name, last_name, phone_number, id, nif],
   );
 
   return result.rows[0];
@@ -56,7 +57,7 @@ const findByUsername = async (username) => {
 
 const findUserById = async (id) => {
   const result = await pool.query(
-    "SELECT id, username, first_name, last_name, email, phone_number, role, is_active FROM users WHERE id = $1 AND is_active = true",
+    "SELECT id, username, first_name, last_name, email, phone_number, role, nif, is_active FROM users WHERE id = $1 AND is_active = true",
     [id],
   );
 
@@ -113,7 +114,7 @@ const updatePassword = async (id, password_hash) => {
 
 const getAllUsers = async () => {
   const result = await pool.query(
-    `SELECT id, username, first_name, last_name, email, phone_number, role, is_active
+    `SELECT id, username, first_name, last_name, email, phone_number, role, nif, is_active
      FROM users
      WHERE is_active = true`,
   );
@@ -122,8 +123,15 @@ const getAllUsers = async () => {
 };
 
 const updateUser = async (id, data) => {
-  const { username, first_name, last_name, role, phone_number, is_active } =
-    data;
+  const {
+    username,
+    first_name,
+    last_name,
+    role,
+    phone_number,
+    is_active,
+    nif,
+  } = data;
   const result = await pool.query(
     `UPDATE users
      SET username = COALESCE($1, username),
@@ -131,10 +139,11 @@ const updateUser = async (id, data) => {
           last_name = COALESCE($3, last_name),
           role = COALESCE($4, role),
           phone_number = COALESCE($5, phone_number),
-          is_active = COALESCE($6, is_active)
+          is_active = COALESCE($6, is_active),
+          nif = COALESCE($8, nif)
       WHERE id = $7
-      RETURNING id, username, first_name, last_name, email, phone_number, role, is_active`,
-    [username, first_name, last_name, role, phone_number, is_active, id],
+      RETURNING id, username, first_name, last_name, email, phone_number, role, is_active, nif`,
+    [username, first_name, last_name, role, phone_number, is_active, id, nif],
   );
 
   return result.rows[0];

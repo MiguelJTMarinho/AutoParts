@@ -7,7 +7,7 @@ const { protect, isAdmin } = require("../middleware/authMiddleware");
 // CREATE ORDER FROM CART (CHECKOUT)
 router.post("/checkout", protect, async (req, res) => {
   try {
-    const data = await orderService.createOrderFromCart(req.user.id);
+    const data = await orderService.createOrderFromCart(req.user.id, req.body);
     res.status(201).json(data);
   } catch (err) {
     res.status(err.statusCode || 500).json({

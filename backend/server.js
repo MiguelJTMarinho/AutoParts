@@ -26,7 +26,7 @@ const carBrandsRoutes = require("./routes/carBrandsRoutes");
 const carModelsRoutes = require("./routes/carModelsRoutes");
 const partBrandsRoutes = require("./routes/partBrandsRoutes");
 const productImagesRoutes = require("./routes/productImagesRoutes");
-const productCompatibilityRoutes = require("./routes/productCompatibilityRoutes");
+const vehicleGenerationsRoutes = require("./routes/vehicleGenerationsRoutes");
 const productRoutes = require("./routes/productRoutes");
 const addressesRoutes = require("./routes/addressesRoutes");
 const oemReferencesRoutes = require("./routes/oemReferencesRoutes");
@@ -34,6 +34,8 @@ const wishlistRoutes = require("./routes/wishlistRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const newsletterSubscribersRoutes = require("./routes/newsletterSubscribersRoutes");
+const shippingRateRoutes = require("./routes/shippingRateRoutes");
+const productFitmentRoutes = require("./routes/productFitmentRoutes");
 
 const app = express();
 app.use(cookieParser());
@@ -78,7 +80,7 @@ app.use("/api/car_brands", carBrandsRoutes);
 app.use("/api/car_models", carModelsRoutes);
 app.use("/api/part_brands", partBrandsRoutes);
 app.use("/api/product_images", productImagesRoutes);
-app.use("/api/product_compatibility", productCompatibilityRoutes);
+app.use("/api/vehicle_generations", vehicleGenerationsRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/addresses", addressesRoutes);
 app.use("/api/oem_references", oemReferencesRoutes);
@@ -86,6 +88,8 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/newsletter", newsletterSubscribersRoutes);
+app.use("/api/shipping_rates", shippingRateRoutes);
+app.use("/api/product_fitments", productFitmentRoutes);
 
 Sentry.setupExpressErrorHandler(app);
 // Error fall-through

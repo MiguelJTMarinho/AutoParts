@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @route GET /api/products/new-arrivals
+// @route GET /api/products/new_arrivals
 // @desc Get latest 8 products
 // @access Public
 router.get("/new_arrivals", async (req, res) => {
@@ -41,8 +41,8 @@ router.get("/new_arrivals", async (req, res) => {
 });
 
 // @route GET /api/products/admin
-// @desc Get all products for admin (including inactive/deleted)
-// @access private (Admin)
+// @desc Get all products for admin
+// @access Private (Admin)
 router.get("/admin", protect, isAdmin, async (req, res) => {
   try {
     const data = await service.getAllProductsForAdmin();
@@ -53,7 +53,7 @@ router.get("/admin", protect, isAdmin, async (req, res) => {
 });
 
 // @route GET /api/products/admin/:id
-// @desc Get product by id for admin, including inactive/deleted
+// @desc Get product by id for admin
 // @access Private (Admin)
 router.get("/admin/:id", protect, isAdmin, async (req, res) => {
   try {
@@ -101,12 +101,15 @@ router.put("/:id", protect, isAdmin, async (req, res) => {
 });
 
 // @route DELETE /api/products/:id
-// @desc Delete product (soft delete)
+// @desc Delete product
 // @access Private (Admin)
 router.delete("/:id", protect, isAdmin, async (req, res) => {
   try {
     const data = await service.deleteProduct(req.params.id);
-    res.json({ message: "Deleted successfully", data });
+    res.json({
+      message: "Deleted successfully",
+      data,
+    });
   } catch (err) {
     res.status(err.statusCode || 500).json({ error: err.message });
   }
@@ -121,13 +124,117 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *
+ *     ProductFitment:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         vehicle_generation_id:
+ *           type: integer
+ *           example: 5
+ *         engine:
+ *           type: string
+ *           example: "2.0 TDI"
+ *         fuel:
+ *           type: string
+ *           example: "Diesel"
+ *         horsepower:
+ *           type: integer
+ *           example: 150
+ *         drivetrain:
+ *           type: string
+ *           example: "FWD"
+ *         transmission:
+ *           type: string
+ *           example: "Automatic"
+ *
+ *     Product:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 12
+ *         external_id:
+ *           type: string
+ *           example: "IN-1005"
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         summary:
+ *           type: string
+ *         sku:
+ *           type: string
+ *         price:
+ *           type: number
+ *           format: float
+ *         condition:
+ *           type: string
+ *           enum: [new, used, refurbished]
+ *         stock:
+ *           type: integer
+ *         category_id:
+ *           type: integer
+ *         brand_id:
+ *           type: integer
+ *         status:
+ *           type: string
+ *           enum: [active, inactive, sold, reserved]
+ *         is_active:
+ *           type: boolean
+ *         weight_kg:
+ *           type: number
+ *           example: 12.5
+ *         width_cm:
+ *           type: number
+ *           example: 40
+ *         height_cm:
+ *           type: number
+ *           example: 25
+ *         length_cm:
+ *           type: number
+ *           example: 60
+ *         images:
+ *           type: array
+ *           items:
+ *             type: object
+ *         oem_references:
+ *           type: array
+ *           items:
+ *             type: object
+ *         compatibility:
+ *           type: array
+ *           items:
+ *             type: object
+ *         fitments:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/ProductFitment'
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *         deleted_at:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ */
+
+/**
+ * @swagger
  * /api/products:
  *   post:
  *     summary: Create a new product
  *     tags: [Products]
  *     security:
  *       - bearerAuth: []
- *     description: Create a product (Admin only)
  *     requestBody:
  *       required: true
  *       content:
@@ -140,123 +247,129 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *             properties:
  *               external_id:
  *                 type: string
- *                 example: ""
  *               name:
  *                 type: string
- *                 example: "Farol BMW Série 3 F30"
  *               description:
  *                 type: string
  *               summary:
  *                 type: string
  *               sku:
  *                 type: string
- *                 example: "BMW-F30-FL-001"
  *               price:
  *                 type: number
- *                 format: float
- *                 example: 120.99
  *               condition:
  *                 type: string
- *                 enum: [new, used, refurbished]
  *               stock:
  *                 type: integer
- *                 example: 5
  *               category_id:
  *                 type: integer
- *                 example: 1
  *               brand_id:
  *                 type: integer
- *                 example: 2
  *               status:
  *                 type: string
- *                 enum: [active, sold, reserved]
  *               is_active:
  *                 type: boolean
- *                 example: true
+ *               weight_kg:
+ *                 type: number
+ *               width_cm:
+ *                 type: number
+ *               height_cm:
+ *                 type: number
+ *               length_cm:
+ *                 type: number
+ *               fitments:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     vehicle_generation_id:
+ *                       type: integer
+ *                     engine:
+ *                       type: string
+ *                     fuel:
+ *                       type: string
+ *                     horsepower:
+ *                       type: integer
+ *                     drivetrain:
+ *                       type: string
+ *                     transmission:
+ *                       type: string
  *     responses:
  *       201:
  *         description: Product created successfully
- *       400:
- *         description: Validation error
- *       401:
- *         description: Unauthorized
  */
 
 /**
  * @swagger
  * /api/products:
  *   get:
- *     summary: Get all products with filters
+ *     summary: Get all products
  *     tags: [Products]
- *     description: Returns products with optional filters (category, brand, price range, search, stock, sorting)
  *     parameters:
  *       - in: query
- *         name: category_id
+ *         name: category
+ *         schema:
+ *           type: string
+ *
+ *       - in: query
+ *         name: partBrand
+ *         schema:
+ *           type: string
+ *
+ *       - in: query
+ *         name: carBrand
+ *         schema:
+ *           type: string
+ *
+ *       - in: query
+ *         name: carModel
+ *         schema:
+ *           type: string
+ *
+ *       - in: query
+ *         name: carYear
  *         schema:
  *           type: integer
- *         description: Filter by category ID
  *
  *       - in: query
- *         name: brand_id
+ *         name: oem
  *         schema:
- *           type: integer
- *         description: Filter by brand ID
+ *           type: string
  *
  *       - in: query
- *         name: min_price
+ *         name: minPrice
  *         schema:
  *           type: number
- *         description: Minimum price filter
  *
  *       - in: query
- *         name: max_price
+ *         name: maxPrice
  *         schema:
  *           type: number
- *         description: Maximum price filter
+ *
+ *       - in: query
+ *         name: inStock
+ *         schema:
+ *           type: boolean
  *
  *       - in: query
  *         name: search
  *         schema:
  *           type: string
- *         description: Search by product name or SKU
- *
- *       - in: query
- *         name: in_stock
- *         schema:
- *           type: boolean
- *         description: Filter only products with stock > 0
  *
  *       - in: query
  *         name: sort_by
  *         schema:
  *           type: string
  *           enum: [price_asc, price_desc, newest]
- *         description: Sorting option
+ *
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
  *
  *     responses:
  *       200:
- *         description: List of filtered products
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *                   price:
- *                     type: number
- *                   stock:
- *                     type: integer
- *                   category_id:
- *                     type: integer
- *                   brand_id:
- *                     type: integer
- *       500:
- *         description: Server error
+ *         description: List of products
  */
 
 /**
@@ -271,7 +384,6 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *         required: true
  *         schema:
  *           type: integer
- *         description: Product ID
  *     responses:
  *       200:
  *         description: Product found
@@ -287,98 +399,57 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *     tags: [Products]
  *     security:
  *       - bearerAuth: []
- *     description: Update product (Admin only)
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: Product ID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               description:
- *                 type: string
- *               summary:
- *                 type: string
- *               price:
- *                 type: number
- *               condition:
- *                 type: string
- *               stock:
- *                 type: integer
- *               category_id:
- *                 type: integer
- *               brand_id:
- *                 type: integer
- *               status:
- *                 type: string
- *               is_active:
- *                 type: boolean
+ *             $ref: '#/components/schemas/Product'
  *     responses:
  *       200:
  *         description: Product updated successfully
- *       404:
- *         description: Product not found
  */
 
 /**
  * @swagger
  * /api/products/{id}:
  *   delete:
- *     summary: Delete product (soft delete)
+ *     summary: Delete product
  *     tags: [Products]
  *     security:
  *       - bearerAuth: []
- *     description: Marks a product as deleted (Admin only)
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: Product ID
  *     responses:
  *       200:
  *         description: Product deleted successfully
- *       404:
- *         description: Product not found
  */
 
 /**
  * @swagger
- * /api/products/similar/{prodID}:
+ * /api/products/similar/{id}:
  *   get:
  *     summary: Get similar products
  *     tags: [Products]
- *     description: Returns 4 products similar to the given product (same category, fallback to brand)
  *     parameters:
  *       - in: path
- *         name: prodID
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: Product ID
  *     responses:
  *       200:
- *         description: List of similar products (max 4)
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *       404:
- *         description: Product not found
- *       500:
- *         description: Server error
+ *         description: Similar products list
  */
 
 /**
@@ -387,103 +458,43 @@ router.delete("/:id", protect, isAdmin, async (req, res) => {
  *   get:
  *     summary: Get latest products
  *     tags: [Products]
- *     description: Returns the 8 most recently added products
  *     responses:
  *       200:
- *         description: List of latest products
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *       500:
- *         description: Server error
+ *         description: Latest products list
  */
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Product:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 12
- *         external_id:
- *           type: string
- *           example: "IN-1005"
- *         name:
- *           type: string
- *           example: "Shock Absorbers Volvo XC60"
- *         description:
- *           type: string
- *           example: "Front shock absorbers"
- *         summary:
- *           type: string
- *           example: "Suspension Volvo"
- *         sku:
- *           type: string
- *           example: "SH-XC60-001"
- *         price:
- *           type: string
- *           example: "180.00"
- *         condition:
- *           type: string
- *           example: "used"
- *         stock:
- *           type: integer
- *           example: 6
- *         category_id:
- *           type: integer
- *           example: 3
- *         brand_id:
- *           type: integer
- *           example: 31
- *         status:
- *           type: string
- *           example: "active"
- *         is_active:
- *           type: boolean
- *           example: true
- *         created_at:
- *           type: string
- *           format: date-time
- *           example: "2026-04-30T17:54:51.037Z"
- *         updated_at:
- *           type: string
- *           format: date-time
- *           nullable: true
- *           example: null
- *         deleted_at:
- *           type: string
- *           format: date-time
- *           nullable: true
- *           example: null
- *
  * /api/products/admin:
  *   get:
  *     summary: Get all products for admin
  *     tags: [Products]
  *     security:
  *       - bearerAuth: []
- *     description: Returns all products including inactive and deleted (Admin only)
  *     responses:
  *       200:
- *         description: List of all products for admin
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Product'
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden (Not an admin)
- *       500:
- *         description: Server error
+ *         description: Admin products list
+ */
+
+/**
+ * @swagger
+ * /api/products/admin/{id}:
+ *   get:
+ *     summary: Get product by ID for admin
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Product found
+ *       404:
+ *         description: Product not found
  */
 
 module.exports = router;

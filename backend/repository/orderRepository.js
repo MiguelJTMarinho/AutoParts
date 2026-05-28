@@ -1,14 +1,34 @@
 const pool = require("../config/db");
 
 // CREATE ORDER
-const createOrder = async (user_id, total, status) => {
+const createOrder = async ({
+  user_id,
+  total,
+  status,
+  nif,
+  shipping_price,
+  shipping_weight,
+  shipping_method,
+  email,
+  name,
+}) => {
   const result = await pool.query(
     `
-    INSERT INTO orders (user_id, total, status)
-    VALUES ($1, $2, $3)
+    INSERT INTO orders (user_id, total, status, nif, shipping_price, shipping_weight, shipping_method, email, name)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING *
     `,
-    [user_id, total, status],
+    [
+      user_id,
+      total,
+      status,
+      nif,
+      shipping_price,
+      shipping_weight,
+      shipping_method,
+      email,
+      name,
+    ],
   );
 
   return result.rows[0];
@@ -90,6 +110,16 @@ const getAllOrders = async () => {
   );
 
   return result.rows;
+};
+
+const getShippingRateByWeight = async (weight) => {
+  const result = await pool.query(
+    `SELECT price FROM shipping_rates 
+     WHERE min_weight <= $1 AND max_weight > $1 
+     LIMIT 1`,
+    [weight],
+  );
+  return result.rows[0];
 };
 
 module.exports = {

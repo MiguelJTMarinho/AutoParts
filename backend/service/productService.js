@@ -1,9 +1,10 @@
 const productRepository = require("../repository/productRepository");
+const productFitmentRepository = require("../repository/productFitmentRepository");
 const { randomUUID } = require("crypto");
 
 // CREATE
 const createProduct = async (data) => {
-  const { name, price, external_id } = data;
+  const { name, price, external_id, fitments } = data;
 
   if (!name || name.trim() === "") {
     const error = new Error("Product name is required");
@@ -21,7 +22,18 @@ const createProduct = async (data) => {
     throw error;
   }
 
-  return await productRepository.createProduct(data);
+  const product = await productRepository.createProduct(data);
+
+  if (Array.isArray(fitments) && fitments.length > 0) {
+    for (const generation_id of fitments) {
+      await productFitmentRepository.createProductFitment(
+        product.id,
+        generation_id,
+      );
+    }
+  }
+
+  return await productRepository.getProductById(product.id);
 };
 
 // GET ALL
@@ -64,7 +76,20 @@ const updateProduct = async (id, data) => {
     throw error;
   }
 
-  return await productRepository.updateProduct(id, data);
+  const { fitments } = data;
+
+  await productRepository.updateProduct(id, data);
+
+  if (Array.isArray(fitments)) {
+    // apagar antigos
+    await productFitmentRepository.deleteFitmentsByProduct(id);
+
+    // recriar novos
+    if (fitments.length > 0) {
+      await productFitmentRepository.bulkCreateFitments(id, fitments);
+    }
+  }
+  return await productRepository.getProductById(id);
 };
 
 // DELETE

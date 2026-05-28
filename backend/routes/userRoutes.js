@@ -149,8 +149,15 @@ router.get("/", protect, isAdmin, async (req, res) => {
 // @access Private/Admin
 router.put("/:id", protect, isAdmin, async (req, res) => {
   try {
-    const { username, first_name, last_name, role, phone_number, is_active } =
-      req.body;
+    const {
+      username,
+      first_name,
+      last_name,
+      role,
+      phone_number,
+      nif,
+      is_active,
+    } = req.body;
 
     const updatedUser = await userService.updateUser(req.params.id, {
       username,
@@ -158,6 +165,7 @@ router.put("/:id", protect, isAdmin, async (req, res) => {
       last_name,
       role,
       phone_number,
+      nif,
       is_active,
     });
 
@@ -323,6 +331,9 @@ router.get("/me", protect, async (req, res) => {
  *               phone_number:
  *                 type: string
  *                 example: "+1234567890"
+ *               nif:
+ *                 type: string
+ *                 example: "123456789"
  *     responses:
  *       200:
  *         description: User updated successfully
