@@ -84,7 +84,9 @@
     "estimatedDelivery": "Estimated Delivery",
     "quantity": "Quantity",
     "paymentTitle": "Payment",
-    "deliveryTitle": "Delivery"
+    "deliveryTitle": "Delivery",
+    "addressTitle": "Shipping Address",
+    "total": "Total"
   },
 
   "orderDetailsPage": {

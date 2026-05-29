@@ -35,7 +35,11 @@ const CartContents = ({ cart, guestId }) => {
         >
           <div className="flex items-start">
             <img
-              src={product.image}
+              src={
+                product.image_url ||
+                product.image ||
+                "https://placehold.co/200x240?text=No+Image"
+              }
               alt={product.name}
               className="w-20 h-24 object-cover mr-4 rounded"
             />

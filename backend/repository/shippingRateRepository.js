@@ -57,6 +57,14 @@ const getMaxPrice = async () => {
   return result.rows[0];
 };
 
+const getShippingRateByWeight = async (weight) => {
+  const result = await pool.query(
+    `SELECT price FROM shipping_rates WHERE $1 BETWEEN min_weight AND max_weight`,
+    [weight],
+  );
+  return result.rows[0];
+};
+
 module.exports = {
   createShippingRate,
   getAllShippingRates,
@@ -64,4 +72,5 @@ module.exports = {
   updateShippingRate,
   deleteShippingRate,
   getMaxPrice,
+  getShippingRateByWeight,
 };

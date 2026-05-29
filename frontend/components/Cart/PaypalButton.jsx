@@ -1,11 +1,14 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const PaypalButton = ({ amount, onSuccess, onError }) => {
-  console.log("Amount:", amount);
+  //console.log("Amount:", amount);
+  const parsedAmount = Number(amount || 0).toFixed(2);
+
   return (
     <PayPalScriptProvider
       options={{
         "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID,
+        currency: "EUR",
       }}
     >
       <PayPalButtons
@@ -13,7 +16,7 @@ const PaypalButton = ({ amount, onSuccess, onError }) => {
         createOrder={(data, actions) => {
           return actions.order.create({
             purchase_units: [
-              { currency_mode: "EUR", amount: { value: amount.toString() } },
+              { currency_code: "EUR", amount: { value: parsedAmount } },
             ],
           });
         }}

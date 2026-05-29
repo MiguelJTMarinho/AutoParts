@@ -42,6 +42,7 @@ const getCartItems = async (cart_id) => {
       p.name, 
       p.stock, 
       p.price,
+      p.weight_kg,
       c.name AS category,
       
       -- Vai buscar a primeira imagem do produto (baseado no sort_order)
@@ -98,14 +99,14 @@ const findItem = async (cart_id, product_id) => {
 };
 
 // ADD ITEM
-const addItem = async (cart_id, product_id, quantity, price) => {
+const addItem = async (cart_id, product_id, quantity, price, image_url) => {
   const result = await pool.query(
     `
-    INSERT INTO cart_items (cart_id, product_id, quantity, price_at_time)
-    VALUES ($1, $2, $3, $4)
+    INSERT INTO cart_items (cart_id, product_id, quantity, price_at_time, image_url)
+    VALUES ($1, $2, $3, $4, $5)
     RETURNING *
     `,
-    [cart_id, product_id, quantity, price],
+    [cart_id, product_id, quantity, price, image_url],
   );
 
   return result.rows[0];
@@ -207,11 +208,13 @@ const mergeGuestIntoUserCart = async (guest_id, user_id) => {
 
     -- 1. If both exist, merge items
     INSERT INTO cart_items (cart_id, product_id, quantity, price_at_time)
+    INSERT INTO cart_items (cart_id, product_id, quantity, price_at_time, image_url)
     SELECT
       uc.id,
       gi.product_id,
       gi.quantity,
       gi.price_at_time
+      gi.image_url
     FROM cart_items gi
     JOIN guest_cart gc ON gc.id = gi.cart_id
     JOIN user_cart uc ON true

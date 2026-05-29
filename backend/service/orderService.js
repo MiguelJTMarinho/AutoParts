@@ -2,11 +2,24 @@ const orderRepository = require("../repository/orderRepository");
 const cartRepository = require("../repository/cartRepository");
 const productRepository = require("../repository/productRepository");
 const shippingRateRepository = require("../repository/shippingRateRepository");
+const userRepository = require("../repository/userRepository");
 const pool = require("../config/db");
 
 // CHECKOUT CART → ORDER
 const createOrderFromCart = async (userId, checkoutData) => {
-  const { nif, email, name, shipping_method = "Standard" } = checkoutData;
+  const {
+    nif,
+    email,
+    name,
+    phone_number,
+    shipping_method,
+    address_line_1,
+    address_line_2,
+    city,
+    country,
+    postal_code = "Standard",
+    paypal_order_id,
+  } = checkoutData;
 
   const cart = await cartRepository.getOrCreateCart({
     user_id: userId,
@@ -44,14 +57,15 @@ const createOrderFromCart = async (userId, checkoutData) => {
   // CALCULATE SHIPPING FEES
   let shipping_price = 0;
   if (total_weight >= 0) {
-    const rate = await orderRepository.getShippingRateByWeight(total_weight);
+    const rate =
+      await shippingRateRepository.getShippingRateByWeight(total_weight);
 
     if (rate) {
       shipping_price = Number(rate.price);
     } else {
       // WHEIGHT > 50kg
-      shippingRate = await shippingRateRepository.getMaxPrice();
-      shipping_price = Number(shippingRate.maxprice);
+      const shippingRate = await shippingRateRepository.getMaxPrice();
+      shipping_price = Number(shippingRate.max || 0);
     }
   }
 
@@ -66,17 +80,30 @@ const createOrderFromCart = async (userId, checkoutData) => {
     finalName = user?.first_name + " " + user?.last_name || name;
   }
 
+  // 🚨 VALIDAÇÃO DE PAGAMENTO (SERVER-SIDE)
+  // NOTA: Num ambiente real de produção, deves usar o SDK do PayPal aqui (no backend)
+  // para validar se o `paypal_order_id` existe, se o status na API deles é "COMPLETED"
+  // e se o valor cobrado corresponde exatamente à variável `grand_total` acima!
+  // Por agora, evitamos que o cliente decida o status e baseamo-nos na receção do ID.
+  const orderStatus = paypal_order_id ? "paid" : "pending";
+
   // CREATE ORDER
   const order = await orderRepository.createOrder({
     user_id: userId,
     total: grand_total,
-    status: "pending",
+    status: orderStatus,
     nif: finalNif,
     shipping_price: shipping_price,
     shipping_weight: total_weight,
     shipping_method: shipping_method,
     email: finalEmail,
     name: finalName,
+    phone_number: phone_number,
+    address_line_1: address_line_1,
+    address_line_2: address_line_2,
+    city: city,
+    country: country,
+    postal_code: postal_code,
   });
 
   // ADD ITEMS TO ORDER
@@ -86,6 +113,16 @@ const createOrderFromCart = async (userId, checkoutData) => {
       item.product_id,
       item.quantity,
       item.price_at_time,
+      item.image_url || item.image,
+    );
+
+    // DESCER STOCK DE CADA PRODUTO NA BASE DE DADOS
+    const product = await productRepository.getProductStockAndPrice(
+      item.product_id,
+    );
+    await productRepository.updateProductStock(
+      item.product_id,
+      product.stock - item.quantity,
     );
   }
 
@@ -97,7 +134,17 @@ const createOrderFromCart = async (userId, checkoutData) => {
 
 // GET ORDERS
 const getUserOrders = async (user_id) => {
-  return await orderRepository.getOrdersByUser(user_id);
+  const orders = await orderRepository.getOrdersByUser(user_id);
+
+  // Enriquecer cada encomenda com os seus respetivos itens
+  const enrichedOrders = await Promise.all(
+    orders.map(async (order) => {
+      const items = await orderRepository.getOrderItems(order.id);
+      return { ...order, items };
+    }),
+  );
+
+  return enrichedOrders;
 };
 
 // GET ORDER DETAILS
@@ -105,18 +152,9 @@ const getOrderDetails = async (order_id) => {
   const items = await orderRepository.getOrderItems(order_id);
   const order = await orderRepository.getOrderById(order_id);
 
-  let total = order.total;
-
-  const enriched = items.map((i) => {
-    return {
-      ...i,
-    };
-  });
-
   return {
-    order_id,
-    items: enriched,
-    total,
+    ...order,
+    items,
   };
 };
 
@@ -159,7 +197,16 @@ const updateOrderStatus = async (order_id, status) => {
 
 // Get all orders (admin only)
 const getAllOrders = async () => {
-  return await orderRepository.getAllOrders();
+  const orders = await orderRepository.getAllOrders();
+
+  const enrichedOrders = await Promise.all(
+    orders.map(async (order) => {
+      const items = await orderRepository.getOrderItems(order.id);
+      return { ...order, items };
+    }),
+  );
+
+  return enrichedOrders;
 };
 
 module.exports = {

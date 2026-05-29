@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../redux/slices/authSlice";
 import axios from "axios";
 import { toast } from "sonner";
+import { clearCart } from "../redux/slices/cartSlice";
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -171,9 +172,9 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    dispatch(logoutUser()).then(() => {
-      navigate("/login");
-    });
+    dispatch(logoutUser());
+    navigate("/login");
+    dispatch(clearCart());
   };
 
   const inputStyles = `

@@ -11,11 +11,21 @@ const createOrder = async ({
   shipping_method,
   email,
   name,
+  phone_number,
+  address_line_1,
+  address_line_2,
+  city,
+  country,
+  postal_code,
 }) => {
   const result = await pool.query(
     `
-    INSERT INTO orders (user_id, total, status, nif, shipping_price, shipping_weight, shipping_method, email, name)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    INSERT INTO orders (
+      user_id, total, status, nif, shipping_price, shipping_weight, 
+      shipping_method, email, name, phone_number,
+      address_line_1, address_line_2, city, country, postal_code
+    )
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
     RETURNING *
     `,
     [
@@ -28,6 +38,12 @@ const createOrder = async ({
       shipping_method,
       email,
       name,
+      phone_number,
+      address_line_1,
+      address_line_2,
+      city,
+      country,
+      postal_code,
     ],
   );
 
@@ -35,15 +51,21 @@ const createOrder = async ({
 };
 
 // ADD ORDER ITEMS
-const addOrderItem = async (order_id, product_id, quantity, price) => {
+const addOrderItem = async (
+  order_id,
+  product_id,
+  quantity,
+  price,
+  image_url,
+) => {
   const result = await pool.query(
     `
     INSERT INTO order_items
-    (order_id, product_id, quantity, price_at_purchase)
-    VALUES ($1, $2, $3, $4)
+    (order_id, product_id, quantity, price_at_purchase, image_url)
+    VALUES ($1, $2, $3, $4, $5)
     RETURNING *
     `,
-    [order_id, product_id, quantity, price],
+    [order_id, product_id, quantity, price, image_url],
   );
 
   return result.rows[0];

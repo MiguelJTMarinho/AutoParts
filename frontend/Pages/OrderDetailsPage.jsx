@@ -1,51 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 const OrderDetailsPage = () => {
   const { t, i18n } = useTranslation();
   const { id } = useParams();
   const [orderDetails, setOrderDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const mockOrderDetails = {
-      _id: id,
-      createdAt: new Date(),
-      isPaid: true,
-      isDelivered: false,
-      paymentMethod: "Paypal",
-      shippingMethod: "Standard",
-      ShippingAddress: { city: "Porto", country: "Portugal" },
-      AccountInformation: {
-        name: "John Doe",
-        email: "john.doe@email.com",
-        nif: "123456789",
-      },
-      orderItems: [
-        {
-          productId: "1",
-          name: "RIDEX 854S0720 Amortecedor para FORD FOCUS, C-MAX",
-          category: "Suspension",
-          make: "Ford",
-          model: "Focus",
-          quantity: "1",
-          price: "50",
-          image: "https://picsum.photos/200?random=1",
-        },
-        {
-          productId: "2",
-          name: "Amortecedor para FORD Fiesta, C-MAX",
-          category: "Suspension",
-          make: "Ford",
-          model: "Fiesta",
-          quantity: "1",
-          price: "45",
-          image: "https://picsum.photos/200?random=2",
-        },
-      ],
+    const fetchOrderDetails = async () => {
+      try {
+        const config = { withCredentials: true };
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/orders/${id}`,
+          config,
+        );
+        setOrderDetails(data);
+      } catch (err) {
+        console.error("Failed to fetch order details:", err);
+      } finally {
+        setLoading(false);
+      }
     };
-    setOrderDetails(mockOrderDetails);
+    fetchOrderDetails();
   }, [id]);
+
+  if (loading) {
+    return <div className="max-w-7xl mx-auto p-4 sm:p-6">A carregar...</div>;
+  }
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6">
@@ -60,29 +44,23 @@ const OrderDetailsPage = () => {
           <div className="flex flex-col sm:flex-row justify-between mb-8">
             <div>
               <h3 className="text-lg md:text-xl font-semibold">
-                {" "}
-                {t("orderDetailsPage.orderId")}: #{orderDetails._id}
+                {t("orderDetailsPage.orderId")}: #{orderDetails.id}
               </h3>
               <p className="text-gray-600">
-                {new Date(orderDetails.createdAt).toLocaleDateString(
+                {new Date(orderDetails.created_at).toLocaleDateString(
                   i18n.language,
                 )}
               </p>
             </div>
             <div className="flex flex-col items-start sm:items-end mt-4 sm:mt-0">
               <span
-                className={`${orderDetails.isPaid ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"} px-3 py-1 rounded-full text-sm font-medium mb-2`}
+                className={`${
+                  ["paid", "shipped", "delivered"].includes(orderDetails.status)
+                    ? "bg-green-100 text-green-700"
+                    : "bg-yellow-100 text-yellow-700"
+                } px-3 py-1 rounded-full text-sm font-medium mb-2`}
               >
-                {orderDetails.isPaid
-                  ? t("orderStatus.approved")
-                  : t("orderStatus.pending")}
-              </span>
-              <span
-                className={`${orderDetails.isDelivered ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"} px-3 py-1 rounded-full text-sm font-medium mb-2`}
-              >
-                {orderDetails.isDelivered
-                  ? t("orderStatus.delivered")
-                  : t("orderStatus.pending")}
+                {t(`orderStatus.${orderDetails.status}`, orderDetails.status)}
               </span>
             </div>
           </div>
@@ -98,9 +76,7 @@ const OrderDetailsPage = () => {
               </p>
               <p>
                 {t("orderDetailsPage.paymentInfo.status")}:{" "}
-                {orderDetails.isPaid
-                  ? t("orderStatus.paid")
-                  : t("orderStatus.unpaid")}
+                {t(`orderStatus.${orderDetails.status}`, orderDetails.status)}
               </p>
             </div>
             <div>
@@ -109,11 +85,7 @@ const OrderDetailsPage = () => {
               </h4>
               <p>
                 {t("orderDetailsPage.shippingInfo.method")}:{" "}
-                {orderDetails.shippingMethod}
-              </p>
-              <p>
-                {t("orderDetailsPage.shippingInfo.address")}:{" "}
-                {`${orderDetails.ShippingAddress.city}, ${orderDetails.ShippingAddress.country}`}
+                {orderDetails.shipping_method || "N/A"}
               </p>
             </div>
             <div>
@@ -122,15 +94,15 @@ const OrderDetailsPage = () => {
               </h4>
               <p>
                 {t("orderDetailsPage.userInformation.name")}:{" "}
-                {orderDetails.AccountInformation.name}
+                {orderDetails.name || "N/A"}
               </p>
               <p>
                 {t("orderDetailsPage.userInformation.email")}:{" "}
-                {`${orderDetails.AccountInformation.email}`}
+                {orderDetails.email || "N/A"}
               </p>
               <p>
                 {t("orderDetailsPage.userInformation.nif")}:{" "}
-                {`${orderDetails.AccountInformation.nif}`}
+                {orderDetails.nif || "N/A"}
               </p>
             </div>
           </div>
@@ -157,26 +129,47 @@ const OrderDetailsPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {orderDetails.orderItems.map((item) => (
-                  <tr key={item.productId} className="border-b">
-                    <td className="py-2 px-4 flex items-center">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-12 h-12 object-cover rounded-lg mr-4"
-                      />
-                      <Link
-                        to={`/product/${item.productId}`}
-                        className="text-blue-500 hover:underline"
-                      >
-                        {item.name}
-                      </Link>
-                    </td>
-                    <td className="py-2 px-4">€{item.price}</td>
-                    <td className="py-2 px-4">{item.quantity}</td>
-                    <td className="py-2 px-4">€{item.price * item.quantity}</td>
-                  </tr>
-                ))}
+                {(orderDetails.items || orderDetails.order_items || []).map(
+                  (item) => (
+                    <tr key={item.product_id || item.id} className="border-b">
+                      <td className="py-2 px-4 flex items-center">
+                        {item.image_url ||
+                        item.product?.images?.[0]?.image_url ? (
+                          <img
+                            src={
+                              item.image_url ||
+                              item.product?.images?.[0]?.image_url
+                            }
+                            alt={item.product?.name || "Product"}
+                            className="w-12 h-12 object-cover rounded-lg mr-4"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 bg-gray-200 rounded-lg mr-4"></div>
+                        )}
+                        <Link
+                          to={`/product/${item.product_id}`}
+                          className="text-blue-500 hover:underline"
+                        >
+                          {item.product?.name || `Product #${item.product_id}`}
+                        </Link>
+                      </td>
+                      <td className="py-2 px-4">
+                        €
+                        {Number(
+                          item.price_at_purchase || item.price || 0,
+                        ).toFixed(2)}
+                      </td>
+                      <td className="py-2 px-4">{item.quantity}</td>
+                      <td className="py-2 px-4">
+                        €
+                        {(
+                          Number(item.price_at_purchase || item.price || 0) *
+                          item.quantity
+                        ).toFixed(2)}
+                      </td>
+                    </tr>
+                  ),
+                )}
               </tbody>
             </table>
           </div>

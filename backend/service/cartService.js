@@ -1,5 +1,7 @@
 const cartRepository = require("../repository/cartRepository");
 const productRepository = require("../repository/productRepository");
+const orderRepository = require("../repository/orderRepository");
+const shippingRateRepository = require("../repository/shippingRateRepository");
 const pool = require("../config/db");
 
 // ADD TO CART (merge + stock check)
@@ -37,6 +39,7 @@ const addToCart = async ({ user_id, guest_id, product_id, quantity }) => {
     product_id,
     quantity,
     product.price,
+    product.images?.[0]?.image_url || product.image_url || null,
   );
 };
 
@@ -52,11 +55,29 @@ const getCart = async ({ user_id, guest_id }) => {
   }));
 
   const total = itemsWithSubtotal.reduce((acc, item) => acc + item.subtotal, 0);
+  const totalWeight = itemsWithSubtotal.reduce(
+    (acc, item) => acc + item.quantity * (Number(item.weight_kg) || 0),
+    0,
+  );
+
+  let shipping_price = 0;
+  if (items.length > 0) {
+    const rate =
+      await shippingRateRepository.getShippingRateByWeight(totalWeight);
+    if (rate) {
+      shipping_price = Number(rate.price);
+    } else {
+      const maxRate = await shippingRateRepository.getMaxPrice();
+      // O Postgres devolve a função MAX() com a chave 'max' e não 'maxprice'
+      shipping_price = Number(maxRate.max || 0);
+    }
+  }
 
   return {
     cart_id: cart.id,
     items: itemsWithSubtotal,
     total,
+    shipping_price,
   };
 };
 
@@ -111,12 +132,13 @@ const updateItemQuantity = async ({
 
   // create or update
   if (!item) {
-    return await cartRepository.addItem({
-      cart_id: cart.id,
+    return await cartRepository.addItem(
+      cart.id,
       product_id,
       quantity,
-      price_at_time: product.price,
-    });
+      product.price,
+      product.images?.[0]?.image_url || product.image_url || null,
+    );
   }
 
   return await cartRepository.setQuantity(item.id, quantity);
@@ -195,6 +217,7 @@ const mergeCart = async ({ guest_id, user_id }) => {
         item.product_id,
         item.quantity,
         item.price_at_time,
+        item.image_url || item.image,
       );
     }
   }

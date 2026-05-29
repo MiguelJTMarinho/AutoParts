@@ -83,7 +83,9 @@
     "estimatedDelivery": "Entrega Estimada",
     "quantity": "Cantidad",
     "paymentTitle": "Pago",
-    "deliveryTitle": "Entrega"
+    "deliveryTitle": "Entrega",
+    "addressTitle": "Dirección de Envío",
+    "total": "Total"
   },
 
   "orderDetailsPage": {

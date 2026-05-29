@@ -426,8 +426,12 @@ const getProductStockAndPrice = async (product_id) => {
 };
 
 const updateProductStock = async (product_id, newStock) => {
+  const statusQuery =
+    newStock <= 0
+      ? ", status = 'sold', is_active = false, deleted_at = NOW()"
+      : "";
   const result = await pool.query(
-    `UPDATE products SET stock = $1 WHERE id = $2 RETURNING *`,
+    `UPDATE products SET stock = $1${statusQuery} WHERE id = $2 RETURNING *`,
     [newStock, product_id],
   );
   return result.rows[0];

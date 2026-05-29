@@ -115,13 +115,13 @@ export const mergeCart = createAsyncThunk(
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    cart: { products: [] },
+    cart: { items: [], total: 0, shipping_price: 0 },
     loading: false,
     error: null,
   },
   reducers: {
     clearCart: (state) => {
-      state.cart = { products: [] };
+      state.cart = { items: [], total: 0, shipping_price: 0 };
     },
   },
   extraReducers: (builder) => {
