@@ -19,6 +19,7 @@ import ProductDetails from "../components/Products/ProductDetails";
 import Checkout from "../components/Cart/Checkout";
 import OrderConfirmation from "../Pages/OrderConfirmation";
 import OrderDetailsPage from "../Pages/OrderDetailsPage";
+import WishlistPage from "../Pages/WishlistPage";
 import AdminLayout from "../components/Admin/AdminLayout";
 import AdminHomePage from "../Pages/AdminHomePage";
 import UserManagement from "../components/Admin/UserManagement";
@@ -63,6 +64,7 @@ const AppContent = () => {
           <Route path="checkout" element={<Checkout />} />
           <Route path="order-confirmation" element={<OrderConfirmation />} />
           <Route path="order/:id" element={<OrderDetailsPage />} />
+          <Route path="wishlist" element={<WishlistPage />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminHomePage />} />

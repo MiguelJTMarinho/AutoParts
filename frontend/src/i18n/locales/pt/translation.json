@@ -557,6 +557,15 @@
       "available": "{{count}} disponíveis",
       "outOfStock": "Esgotado"
     },
+    "notifications": {
+      "addedToCart": "Produto adicionado ao carrinho!",
+      "addToCartError": "Erro ao adicionar o produto ao carrinho. Verifique o stock disponível.",
+      "wishlistAddError": "Erro ao adicionar aos favoritos.",
+      "wishlistRemoveError": "Erro ao remover dos favoritos.",
+      "wishlistAddSuccess": "Produto adicionado aos favoritos!",
+      "wishlistRemoveSuccess": "Produto removido dos favoritos!",
+      "loginRequired": "Por favor, inicie sessão para usar a lista de desejos."
+    },
     "compatibility": {
       "title": "Compatibilidade"
     },
@@ -578,5 +587,18 @@
     "default": "Predefinido",
     "priceAsc": "Preço: Menor para Maior",
     "priceDesc": "Preço: Maior para Menor"
+  },
+
+  "wishlist": {
+    "title": "Lista de Favoritos",
+    "loginRequired": "Por favor, inicie sessão para ver a sua lista de favoritos.",
+    "loading": "A carregar favoritos...",
+    "empty": "A sua lista de favoritos está vazia.",
+    "continueShopping": "Continuar a Comprar",
+    "remove": "Remover",
+    "viewProduct": "Ver Produto",
+    "sku": "SKU",
+    "added": "Adcionado á lista de favoritos!",
+    "removed": "Removido da lista de favoritos!"
   }
 }

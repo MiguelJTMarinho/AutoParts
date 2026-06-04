@@ -9,6 +9,12 @@ import {
   fetchSimilarProducts,
 } from "../../redux/slices/productsSlice";
 import { addToCart } from "../../redux/slices/cartSlice";
+import {
+  addToWishlist,
+  removeFromWishlist,
+  fetchWishlist,
+} from "../../redux/slices/wishlistSlice";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const ProductDetails = ({ productId }) => {
   const { t } = useTranslation();
@@ -17,11 +23,18 @@ const ProductDetails = ({ productId }) => {
   const { selectedProduct, similarProducts, loading, error } = useSelector(
     (state) => state.products,
   );
-  const { user, guestId } = useSelector((state) => state.auth);
+  const { userInfo, guestId } = useSelector((state) => state.auth);
+  const { items: wishlistItems } = useSelector((state) => state.wishlist);
   const [mainImage, setMainImage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const productGetfetchId = productId || id;
+
+  const isInWishlist = wishlistItems.some(
+    (item) =>
+      item.product_id === productGetfetchId ||
+      item.product_id === Number(productGetfetchId),
+  );
 
   useEffect(() => {
     if (productGetfetchId) {
@@ -29,6 +42,12 @@ const ProductDetails = ({ productId }) => {
       dispatch(fetchSimilarProducts({ productId: productGetfetchId }));
     }
   }, [dispatch, productGetfetchId]);
+
+  useEffect(() => {
+    if (userInfo) {
+      dispatch(fetchWishlist());
+    }
+  }, [dispatch, userInfo]);
 
   const handleQuantityChange = (action) => {
     if (action === "plus") setQuantity((prev) => prev + 1);
@@ -41,22 +60,48 @@ const ProductDetails = ({ productId }) => {
       addToCart({
         productId: productGetfetchId,
         quantity,
-        userId: user?.id,
+        userId: userInfo?.id,
         guestId,
       }),
     )
       .unwrap()
       .then(() => {
-        toast.success("Product added to cart!", {
+        toast.success(t("productDetails.notifications.addedToCart"), {
           duration: 1000,
         });
       })
       .catch((err) => {
-        toast.error(err?.error || "Error adding to cart. Please check stock.");
+        toast.error(t("productDetails.notifications.addToCartError"));
       })
       .finally(() => {
         setIsButtonDisabled(false);
       });
+  };
+
+  const handleWishlist = () => {
+    if (!userInfo) {
+      toast.error(t("productDetails.notifications.wishlistRemoveError"));
+      return;
+    }
+    if (isInWishlist) {
+      dispatch(removeFromWishlist(productGetfetchId))
+        .unwrap()
+        .then(() => toast.success(t("wishlist.removed")))
+        .catch(() =>
+          toast.error(t("productDetails.notifications.wishlistRemoveError")),
+        );
+    } else {
+      dispatch(addToWishlist(productGetfetchId))
+        .unwrap()
+        .then(() => {
+          toast.success(t("wishlist.added"));
+          dispatch(fetchWishlist());
+        })
+        .catch((error) => {
+          console.error("Failed to add to wishlist:", error);
+          toast.error(t("productDetails.notifications.wishlistAddError"));
+        });
+    }
   };
 
   useEffect(() => {
@@ -155,16 +200,32 @@ const ProductDetails = ({ productId }) => {
                 </div>
               </div>
 
-              {/* add to cart */}
-              <button
-                onClick={handleAddToCart}
-                disabled={isButtonDisabled}
-                className={`w-full bg-main-blue text-white py-3 rounded font-semibold hover:opacity-90 cursor-pointer ${isButtonDisabled ? "cursor-not-allowed opacity-50" : ""}`}
-              >
-                {isButtonDisabled
-                  ? t("productDetails.addToCart.loading")
-                  : t("productDetails.addToCart.default")}
-              </button>
+              {/* add to cart + wishlist */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={isButtonDisabled}
+                  className={`flex-1 bg-main-blue text-white py-3 rounded font-semibold hover:opacity-90 cursor-pointer ${isButtonDisabled ? "cursor-not-allowed opacity-50" : ""}`}
+                >
+                  {isButtonDisabled
+                    ? t("productDetails.addToCart.loading")
+                    : t("productDetails.addToCart.default")}
+                </button>
+
+                <button
+                  onClick={handleWishlist}
+                  className="px-4 py-3 rounded border border-gray-300 hover:border-red-400 transition-colors"
+                  title={
+                    isInWishlist ? t("wishlist.remove") : t("wishlist.add")
+                  }
+                >
+                  {isInWishlist ? (
+                    <FaHeart className="text-red-500 text-xl" />
+                  ) : (
+                    <FaRegHeart className="text-gray-400 text-xl hover:text-red-400" />
+                  )}
+                </button>
+              </div>
 
               {/* characteristics */}
               <div className="mt-8">
@@ -263,7 +324,6 @@ const ProductDetails = ({ productId }) => {
           </div>
           <div className="mt-20">
             <h2 className="text-2xl text-center font-medium mb-4">
-              {" "}
               {t("productDetails.similarProducts")}
             </h2>
             <ProductGrid

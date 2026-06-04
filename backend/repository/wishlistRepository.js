@@ -1,16 +1,16 @@
 const pool = require("../config/db");
 
 // ADD (ou reativar se já existir)
-const addToWishlist = async (user_id, product_id) => {
+const addToWishlist = async (user_id, product_id, image_url) => {
   const result = await pool.query(
     `
-    INSERT INTO wishlist (user_id, product_id)
-    VALUES ($1, $2)
+    INSERT INTO wishlist (user_id, product_id, image_url)
+    VALUES ($1, $2, $3)
     ON CONFLICT (user_id, product_id)
-    DO UPDATE SET deleted_at = NULL
+    DO UPDATE SET deleted_at = NULL, image_url = $3
     RETURNING *
     `,
-    [user_id, product_id],
+    [user_id, product_id, image_url],
   );
 
   return result.rows[0];

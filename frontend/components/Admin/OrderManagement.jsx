@@ -51,7 +51,7 @@ const OrderManagement = () => {
             )}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="border border-gray-300 rounded p-2 text-sm focus:outline-none focus:border-blue-500 bg-white min-w-[200px]"
+            className="border border-gray-300 rounded p-2 text-sm focus:outline-none focus:border-blue-500 bg-white min-w-50"
           />
         </div>
       </div>

@@ -475,14 +475,14 @@
   },
 
   "topbar": {
-    "shippingMessage": "Enviamos para todo o país - Envio rápido e fiável!"
+    "shippingMessage": "Enviamos a toda la Península Ibérica. Rápido, seguro y confiable."
   },
 
   "featuredCollection": {
-    "subtitle": "Qualidade e Desempenho",
-    "title": "Peças Automóveis Premium para Todos os Veículos",
-    "description": "Explore a nossa seleção rigorosa de componentes automóveis de alta qualidade que combinam fiabilidade e desempenho. Concebidas para manter o seu veículo a funcionar de forma suave e segura, todos os dias.",
-    "shopNow": "Comprar Agora"
+    "subtitle": "Piezas Automóviles Premium para Todos los Vehículos",
+    "title": "Piezas Automóviles Premium para Todos los Vehículos",
+    "description": "Explore nuestra selección rigorosa de componentes automóviles de alta calidad que combinan fiabilidad y desempeño. Diseñadas para mantener tu vehículo funcionando de forma suave y segura, todos los días.",
+    "shopNow": "Comprar Ahora"
   },
 
   "featuresSection": {
@@ -555,6 +555,15 @@
       "available": "{{count}} disponibles",
       "outOfStock": "Agotado"
     },
+    "notifications": {
+      "addedToCart": "¡Producto añadido al carrito!",
+      "addToCartError": "Error al añadir el producto al carrito. Verifica el stock disponible.",
+      "wishlistAddError": "Error al añadir a favoritos.",
+      "wishlistRemoveError": "Error al eliminar de favoritos.",
+      "addedToWishlist": "¡Añadido a favoritos!",
+      "removedFromWishlist": "¡Eliminado de favoritos!",
+      "loginRequired": "Por favor, inicia sesión para usar la lista de deseos."
+    },
     "compatibility": {
       "title": "Compatibilidad"
     },
@@ -576,5 +585,18 @@
     "default": "Predeterminado",
     "priceAsc": "Precio: De menor a mayor",
     "priceDesc": "Precio: De mayor a menor"
+  },
+
+  "wishlist": {
+    "title": "Mi Lista de Deseos",
+    "loginRequired": "Por favor, inicia sesión para ver tu lista de deseos.",
+    "loading": "Cargando lista de deseos...",
+    "empty": "Tu lista de deseos está vacía.",
+    "continueShopping": "Seguir Comprando",
+    "remove": "Eliminar",
+    "viewProduct": "Ver Producto",
+    "sku": "SKU",
+    "added": "¡Añadido a la lista de deseos!",
+    "removed": "¡Eliminado de la lista de deseos!"
   }
 }

@@ -1,9 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
+const ITEMS_PER_PAGE = 20;
 
 const ProductGrid = ({ products, loading, error }) => {
   const { t } = useTranslation();
+  const [currentPage, setCurrentPage] = useState(1);
+  const location = useLocation();
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [location.search]);
 
   if (loading) {
     return (
@@ -33,55 +41,91 @@ const ProductGrid = ({ products, loading, error }) => {
     );
   }
 
+  const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
+  const paginatedProducts = products.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
+
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-      {/* Alterado de key={index} para key={product.id} (Boa prática React) */}
-      {products.map((product) => (
-        <Link
-          key={product.id}
-          to={`/product/${product.id}`}
-          className="group block h-full"
-        >
-          <div className="bg-white rounded-xl border border-gray-100 p-3 hover:border-transparent hover:shadow-xl transition-all duration-300 flex flex-col h-full">
-            {/* Image Container com efeito de Zoom */}
-            <div className="relative w-full aspect-square overflow-hidden rounded-lg bg-gray-50 mb-4">
-              <img
-                // Optional Chaining para não dar crash se o produto não tiver imagens!
-                src={
-                  product.images?.[0]?.image_url ||
-                  "https://placehold.co/600x400?text=No+Image"
-                }
-                alt={product.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-
-              {/* Etiqueta de Esgotado (Opcional, mas muito útil) */}
-              {product.stock === 0 && (
-                <div className="absolute top-2 left-2 bg-black/80 text-white text-xs font-bold px-2 py-1 rounded">
-                  {t("productGrid.outOfStock")}
+    <div>
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+        {paginatedProducts.map((product) => (
+          <Link
+            key={product.id}
+            to={`/product/${product.id}`}
+            className="group block h-full"
+          >
+            <div className="bg-white rounded-xl border border-gray-100 p-3 hover:border-transparent hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+              <div className="relative w-full aspect-square overflow-hidden rounded-lg bg-gray-50 mb-4">
+                <img
+                  src={
+                    product.images?.[0]?.image_url ||
+                    "https://placehold.co/600x400?text=No+Image"
+                  }
+                  alt={product.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                {product.stock === 0 && (
+                  <div className="absolute top-2 left-2 bg-black/80 text-white text-xs font-bold px-2 py-1 rounded">
+                    {t("productGrid.outOfStock")}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col grow">
+                <h3
+                  className="text-gray-800 font-medium mb-1 line-clamp-2"
+                  title={product.name}
+                >
+                  {product.name}
+                </h3>
+                <div className="mt-auto pt-3">
+                  <p className="text-lg font-bold text-gray-900 tracking-tight">
+                    {Number(product.price).toFixed(2)} €
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {t("productGrid.VAT")}
+                  </p>
                 </div>
-              )}
-            </div>
-
-            {/* Product Details (cresce para preencher espaço vazio) */}
-            <div className="flex flex-col grow">
-              <h3
-                className="text-gray-800 font-medium mb-1 line-clamp-2"
-                title={product.name}
-              >
-                {product.name}
-              </h3>
-
-              <div className="mt-auto pt-3">
-                <p className="text-lg font-bold text-gray-900 tracking-tight">
-                  {Number(product.price).toFixed(2)} €
-                </p>
-                <p className="text-xs text-gray-500">{t("productGrid.VAT")}</p>
               </div>
             </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        ))}
+      </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-8">
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 rounded border border-gray-300 text-sm text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            &lsaquo;
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`px-3 py-1 rounded border text-sm ${
+                page === currentPage
+                  ? "bg-gray-900 text-white border-gray-900"
+                  : "border-gray-300 text-gray-600 hover:bg-gray-100"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 rounded border border-gray-300 text-sm text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            &rsaquo;
+          </button>
+        </div>
+      )}
     </div>
   );
 };

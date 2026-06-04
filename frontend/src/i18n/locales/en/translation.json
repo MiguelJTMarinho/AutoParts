@@ -481,10 +481,10 @@
   },
 
   "featuredCollection": {
-    "subtitle": "Qualidade e Desempenho",
-    "title": "Peças Automóveis Premium para Todos os Veículos",
-    "description": "Explore a nossa seleção rigorosa de componentes automóveis de alta qualidade que combinam fiabilidade e desempenho. Concebidas para manter o seu veículo a funcionar de forma suave e segura, todos os dias.",
-    "shopNow": "Comprar Agora"
+    "subtitle": "Premium Auto Parts for Every Vehicle",
+    "title": "Premium Auto Parts for Every Vehicle",
+    "description": "Explore our carefully curated selection of high-quality auto parts that combine reliability and performance. Designed to keep your vehicle running smoothly and safely, every day.",
+    "shopNow": "Shop Now"
   },
 
   "featuresSection": {
@@ -557,6 +557,15 @@
       "available": "{{count}} available",
       "outOfStock": "Out of stock"
     },
+    "notifications": {
+      "addedToCart": "Product added to cart!",
+      "addToCartError": "Error adding product to cart. Please check available stock.",
+      "wishlistAddError": "Error adding to wishlist.",
+      "wishlistRemoveError": "Error removing from wishlist.",
+      "addedToWishlist": "Added to wishlist!",
+      "removedFromWishlist": "Removed from wishlist!",
+      "loginRequired": "Please login to use wishlist."
+    },
     "compatibility": {
       "title": "Compatibility"
     },
@@ -578,6 +587,19 @@
     "default": "Default",
     "priceAsc": "Price: Low to High",
     "priceDesc": "Price: High to Low"
+  },
+
+  "wishlist": {
+    "title": "My Wishlist",
+    "loginRequired": "Please login to view your wishlist.",
+    "loading": "Loading wishlist...",
+    "empty": "Your wishlist is empty.",
+    "continueShopping": "Continue Shopping",
+    "remove": "Remove",
+    "viewProduct": "View Product",
+    "sku": "SKU",
+    "added": "Added to wishlist!",
+    "removed": "Removed from wishlist!"
   }
   
 }

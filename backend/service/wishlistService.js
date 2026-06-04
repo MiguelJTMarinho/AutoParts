@@ -10,7 +10,9 @@ const add = async (userId, product_id) => {
     throw error;
   }
 
-  return await repository.addToWishlist(userId, product_id);
+  const imageUrl = existingProduct.images?.[0]?.image_url || null;
+
+  return await repository.addToWishlist(userId, product_id, imageUrl);
 };
 
 // GET

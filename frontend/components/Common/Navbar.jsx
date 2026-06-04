@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { HiOutlineUser, HiOutlineShoppingCart } from "react-icons/hi2";
-import { useSelector } from "react-redux";
+import { HiOutlineUser, HiOutlineShoppingCart, HiOutlineHeart } from "react-icons/hi2";
+import { useSelector, useDispatch } from "react-redux";
 import SearchBar from "./SearchBar";
 import CartDrawer from "../Layout/CartDrawer";
 import logo from "../../src/assets/LogoNoBg.png";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { fetchWishlist } from "../../redux/slices/wishlistSlice";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(true);
+  const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
+  const { items: wishlistItems } = useSelector((state) => state.wishlist);
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchWishlist());
+    }
+  }, [dispatch, user]);
 
   const toggleCartDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -21,6 +31,8 @@ const Navbar = () => {
     (total, item) => total + (item.quantity || 1),
     0,
   );
+
+  const wishlistItemCount = wishlistItems?.length || 0;
 
   return (
     <>
@@ -44,7 +56,16 @@ const Navbar = () => {
 
           <LanguageSwitcher />
 
-          <Link to="/profile" className="hove:text-black">
+          <Link to="/wishlist" className="relative hover:text-black">
+            <HiOutlineHeart className="h-6 w-6 text-gray-700" />
+            {wishlistItemCount > 0 && (
+              <span className="absolute -top-1 -right-2 bg-main-blue text-white text-xs rounded-full px-2 py-0.5">
+                {wishlistItemCount}
+              </span>
+            )}
+          </Link>
+
+          <Link to="/profile" className="hover:text-black">
             <HiOutlineUser className="h-6 w-6 text-gray-700" />
           </Link>
           <button

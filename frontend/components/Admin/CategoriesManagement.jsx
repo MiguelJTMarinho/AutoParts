@@ -69,7 +69,10 @@ const CategoriesManagement = () => {
   };
 
   const filteredCategories = categories?.filter((cat) => {
-    if (searchQuery.trim() !== "" && !cat.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+    if (
+      searchQuery.trim() !== "" &&
+      !cat.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
       return false;
     }
     return true;
@@ -81,14 +84,17 @@ const CategoriesManagement = () => {
         <h2 className="text-2xl font-bold mb-4">
           {t("categoriesManagement.title")}
         </h2>
-        
+
         <div className="flex flex-1 justify-end items-center gap-4 mb-6 sm:mb-0">
           <input
             type="text"
-            placeholder={t("categoriesManagement.searchPlaceholder", "Search by name...")}
+            placeholder={t(
+              "categoriesManagement.searchPlaceholder",
+              "Search by name...",
+            )}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="border border-gray-300 rounded p-2 text-sm focus:outline-none focus:border-blue-500 bg-white min-w-[200px]"
+            className="border border-gray-300 rounded p-2 text-sm focus:outline-none focus:border-blue-500 bg-white min-w-50"
           />
           {!showAddForm && (
             <button
@@ -115,7 +121,10 @@ const CategoriesManagement = () => {
               {t("categoriesManagement.addTitle")}
             </h3>
             <p className="text-sm text-gray-500 mt-1">
-              {t("categoriesManagement.addSubtitle", "Fill the form below to add a new category.")}
+              {t(
+                "categoriesManagement.addSubtitle",
+                "Fill the form below to add a new category.",
+              )}
             </p>
           </div>
 
@@ -157,12 +166,15 @@ const CategoriesManagement = () => {
                 onChange={handleChange}
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
               >
-                <option value="">{t("categoriesManagement.form.noParent", "None")}</option>
-                {categories && categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
+                <option value="">
+                  {t("categoriesManagement.form.noParent", "None")}
+                </option>
+                {categories &&
+                  categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
               </select>
             </div>
 
@@ -213,7 +225,10 @@ const CategoriesManagement = () => {
                   <td className="p-4 font-medium text-gray-900">{cat.name}</td>
                   <td className="p-4">{cat.description}</td>
                   <td className="p-4 text-gray-500">
-                    {cat.parent_id ? categories.find(c => c.id === cat.parent_id)?.name || cat.parent_id : "-"}
+                    {cat.parent_id
+                      ? categories.find((c) => c.id === cat.parent_id)?.name ||
+                        cat.parent_id
+                      : "-"}
                   </td>
                   <td className="p-4">
                     <button
