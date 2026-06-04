@@ -6,9 +6,12 @@
     "manageOrders": "Gerir Encomendas",
     "totalProducts": "Total de Produtos",
     "manageProducts": "Gerir Produtos",
+    "totalUsers": "Total de Utilizadores",
+    "manageUsers": "Gerir Utilizadores",
     "recentOrders": "Encomendas Recentes",
     "table": {
       "orderId": "ID da Encomenda",
+      "orderDate": "Data da Encomenda",
       "user": "Utilizador",
       "totalPrice": "Preço Total",
       "status": "Estado",
@@ -20,6 +23,9 @@
     "Delivered": "Entregue",
     "Shipped": "Enviado",
     "Cancelled": "Cancelado",
+    "processing": "Em Processamento",
+    "shipped": "Enviado",
+    "cancelled": "Cancelado",
     "approved": "Aprovado",
     "pending": "Pendente",
     "delivered": "Entregue",
@@ -101,11 +107,13 @@
     "shippingInfo": {
       "title": "Informação de Envio",
       "method": "Método de Envio",
-      "address": "Morada"
+      "address": "Morada",
+      "address2": "Morada 2",
+      "info": "Informação Adicional"
     },
     "productsList": {
       "title": "Produtos",
-      "name": "Nome",
+      "name": "Produto",
       "unitPrice": "Preço Unitário",
       "quantity": "Quantidade",
       "total": "Total"
@@ -114,7 +122,8 @@
       "title": "Informações do Utilizador",
       "name": "Nome",
       "email": "E-mail",
-      "nif": "NIF"
+      "nif": "NIF",
+      "phoneNumber": "Número de Telemóvel"
     },
     "backLink": "Voltar para as Minhas Encomendas"
   },
@@ -207,7 +216,8 @@
       "name": "Nome",
       "description": "Descrição",
       "actions": "Ações",
-      "deleteButton": "Eliminar"
+      "deleteButton": "Eliminar",
+      "parentId": "Categoria Pai"
     },
     "alerts": {
       "confirmDelete": "Tem a certeza que deseja eliminar esta categoria?"
@@ -273,15 +283,25 @@
       "actions": "Ações"
     },
     "status": {
-      "processing": "Em Processamento",
+      "pending": "Pendente",
+      "paid": "Pago",
       "shipped": "Enviado",
       "delivered": "Entregue",
-      "canceled": "Cancelado"
+      "canceled": "Cancelado",
+      "failed": "Falhou"
     },
     "actions": {
       "markDelivered": "Marcar como Entregue"
     },
-    "noOrders": "Nenhuma encomenda encontrada."
+    "noOrders": "Nenhuma encomenda encontrada.",
+    "itemsTitle": "Itens da Encomenda",
+    "items": {
+      "image": "Imagem",
+      "productName": "Produto",
+      "quantity": "Quantidade",
+      "unitPrice": "Preço Unitário",
+      "total": "Total"
+    }
   },
 
   "partBrandsManagement": {

@@ -33,6 +33,16 @@ const OrderDetailsPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6">
+      <div className="max-w-5xl mx-auto space-y-8">
+        <div className="flex w-full justify-end">
+          <Link
+            to="/my-orders"
+            className="mr-4 px-6 py-2.5 rounded-lg bg-main-blue text-white font-semibold hover:opacity-90 cursor-pointer"
+          >
+            <h2>{t("myOrdersPage.backButton")}</h2>
+          </Link>
+        </div>
+      </div>
       <h2 className="text-2xl md:text-3xl font-bold mb-6">
         {t("orderDetailsPage.title")}
       </h2>
@@ -87,6 +97,19 @@ const OrderDetailsPage = () => {
                 {t("orderDetailsPage.shippingInfo.method")}:{" "}
                 {orderDetails.shipping_method || "N/A"}
               </p>
+              <p>
+                {t("orderDetailsPage.shippingInfo.address")}:{" "}
+                {orderDetails.address_line_1 || "N/A"}
+              </p>
+              <p>
+                {t("orderDetailsPage.shippingInfo.address2")}:{" "}
+                {orderDetails.address_line_2 || "N/A"}
+              </p>
+              <p>
+                {t("orderDetailsPage.shippingInfo.info")}:{" "}
+                {orderDetails.postal_code || "N/A"} {orderDetails.city || "N/A"}{" "}
+                {orderDetails.country || "N/A"}
+              </p>
             </div>
             <div>
               <h4 className="text-lg font-semibold mb-2">
@@ -104,6 +127,10 @@ const OrderDetailsPage = () => {
                 {t("orderDetailsPage.userInformation.nif")}:{" "}
                 {orderDetails.nif || "N/A"}
               </p>
+              <p>
+                {t("orderDetailsPage.userInformation.phoneNumber")}:{" "}
+                {orderDetails.phone_number || "N/A"}
+              </p>
             </div>
           </div>
           {/* Product List */}
@@ -114,16 +141,16 @@ const OrderDetailsPage = () => {
             <table className="min-w-full text-gray-600 mb-4">
               <thead className="bg-gray-100">
                 <tr>
-                  <th className="py-2 px-4">
+                  <th className="py-2 px-4 text-left">
                     {t("orderDetailsPage.productsList.name")}
                   </th>
-                  <th className="py-2 px-4">
+                  <th className="py-2 px-4 text-left">
                     {t("orderDetailsPage.productsList.unitPrice")}
                   </th>
-                  <th className="py-2 px-4">
+                  <th className="py-2 px-4 text-left">
                     {t("orderDetailsPage.productsList.quantity")}
                   </th>
-                  <th className="py-2 px-4">
+                  <th className="py-2 px-4 text-left">
                     {t("orderDetailsPage.productsList.total")}
                   </th>
                 </tr>
@@ -131,16 +158,12 @@ const OrderDetailsPage = () => {
               <tbody>
                 {(orderDetails.items || orderDetails.order_items || []).map(
                   (item) => (
-                    <tr key={item.product_id || item.id} className="border-b">
+                    <tr key={item.id} className="border-b">
                       <td className="py-2 px-4 flex items-center">
-                        {item.image_url ||
-                        item.product?.images?.[0]?.image_url ? (
+                        {item.image_url ? (
                           <img
-                            src={
-                              item.image_url ||
-                              item.product?.images?.[0]?.image_url
-                            }
-                            alt={item.product?.name || "Product"}
+                            src={item.image_url}
+                            alt={item.name || "Product"}
                             className="w-12 h-12 object-cover rounded-lg mr-4"
                           />
                         ) : (
@@ -150,21 +173,17 @@ const OrderDetailsPage = () => {
                           to={`/product/${item.product_id}`}
                           className="text-blue-500 hover:underline"
                         >
-                          {item.product?.name || `Product #${item.product_id}`}
+                          {item.name || `Product #${item.product_id}`}
                         </Link>
                       </td>
                       <td className="py-2 px-4">
-                        €
-                        {Number(
-                          item.price_at_purchase || item.price || 0,
-                        ).toFixed(2)}
+                        €{Number(item.price_at_purchase || 0).toFixed(2)}
                       </td>
                       <td className="py-2 px-4">{item.quantity}</td>
                       <td className="py-2 px-4">
                         €
                         {(
-                          Number(item.price_at_purchase || item.price || 0) *
-                          item.quantity
+                          Number(item.price_at_purchase || 0) * item.quantity
                         ).toFixed(2)}
                       </td>
                     </tr>
@@ -174,9 +193,9 @@ const OrderDetailsPage = () => {
             </table>
           </div>
           {/* Back to orders Link */}
-          <Link to="/my-orders" className="text-blue-500 hover:underline">
+          {/* <Link to="/my-orders" className="text-blue-500 hover:underline">
             {t("orderDetailsPage.backLink")}
-          </Link>
+          </Link> */}
         </div>
       )}
     </div>

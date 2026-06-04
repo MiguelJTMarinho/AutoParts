@@ -7,8 +7,11 @@
     "totalProducts": "Total Products",
     "manageProducts": "Manage Products",
     "recentOrders": "Recent Orders",
+    "totalUsers": "Total Users",
+    "manageUsers": "Manage Users",
     "table": {
       "orderId": "Order ID",
+      "orderDate": "Order Date",
       "user": "User",
       "totalPrice": "Total Price",
       "status": "Status",
@@ -20,6 +23,9 @@
     "Delivered": "Delivered",
     "Shipped": "Shipped",
     "Cancelled": "Cancelled",
+    "processing": "Processing",
+    "shipped": "Shipped",
+    "cancelled": "Cancelled",
     "approved": "Approved",
     "pending": "Pending",
     "delivered": "Delivered",
@@ -101,11 +107,13 @@
     "shippingInfo": {
       "title": "Shipping info",
       "method": "Shipping Method",
-      "address": "Address"
+      "address": "Address",
+      "address2": "Address 2",
+      "info": "Additional Info"
     },
     "productsList": {
       "title": "Products",
-      "name": "Name",
+      "name": "Product",
       "unitPrice": "Unit Price",
       "quantity": "Quantity",
       "total": "Total"
@@ -114,7 +122,8 @@
       "title": "User Information",
       "name": "Name",
       "email": "Email",
-      "nif": "NIF"
+      "nif": "NIF",
+      "phoneNumber": "Phone Number"
     },
     "backLink": "Back to My Orders"
   },
@@ -207,7 +216,8 @@
       "name": "Name",
       "description": "Description",
       "actions": "Actions",
-      "deleteButton": "Delete"
+      "deleteButton": "Delete",
+      "parentId": "Parent Category"
     },
     "alerts": {
       "confirmDelete": "Delete this category?"
@@ -263,25 +273,35 @@
     }
   },
 
-  "orderManagement": {
-    "title": "Order Management",
-    "table": {
-      "orderId": "Order ID",
-      "customer": "Customer",
-      "total": "Total",
-      "status": "Status",
-      "actions": "Actions"
-    },
-    "status": {
-      "processing": "Processing",
-      "shipped": "Shipped",
-      "delivered": "Delivered",
-      "canceled": "Canceled"
-    },
-    "actions": {
-      "markDelivered": "Mark as Delivered"
-    },
-    "noOrders": "No orders found."
+  "orderManagement": { 
+    "title": "Order Management", 
+    "table": { 
+      "orderId": "Order ID", 
+      "customer": "Customer", 
+      "total": "Total", 
+      "status": "Status", 
+      "actions": "Actions" 
+    }, 
+    "status": { 
+      "pending": "Pending", 
+      "paid": "Paid", 
+      "shipped": "Shipped", 
+      "delivered": "Delivered", 
+      "canceled": "Canceled", 
+      "failed": "Failed" 
+    }, 
+    "actions": { 
+      "markDelivered": "Mark as Delivered" 
+    }, 
+    "noOrders": "No orders found.", 
+    "itemsTitle": "Order Items", 
+    "items": { 
+      "image": "Image", 
+      "productName": "Product", 
+      "quantity": "Quantity", 
+      "unitPrice": "Unit Price", 
+      "total": "Total" 
+    } 
   },
 
   "partBrandsManagement": {

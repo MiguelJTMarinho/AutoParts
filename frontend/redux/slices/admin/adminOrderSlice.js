@@ -1,10 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Helper function to get auth headers
-const authHeaders = () => ({
-  Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-});
 const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 // Async thunk to fetch all orders (admin)
@@ -12,9 +8,7 @@ export const fetchAdminOrders = createAsyncThunk(
   "adminOrders/fetchAdminOrders",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/orders/admin`, {
-        headers: authHeaders(),
-      });
+      const response = await axios.get(`${API_URL}/orders/admin`);
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -32,9 +26,6 @@ export const updateOrderStatus = createAsyncThunk(
       const response = await axios.patch(
         `${API_URL}/orders/${orderId}/status`,
         { status },
-        {
-          headers: authHeaders(),
-        },
       );
       return response.data;
     } catch (error) {

@@ -6,9 +6,12 @@
     "manageOrders": "Gestionar Pedidos",
     "totalProducts": "Total de Productos",
     "manageProducts": "Gestionar Productos",
+    "totalUsers": "Total de Usuarios",
+    "manageUsers": "Gestionar Usuarios",
     "recentOrders": "Pedidos Recientes",
     "table": {
       "orderId": "ID del Pedido",
+      "orderDate": "Fecha del Pedido",
       "user": "Usuario",
       "totalPrice": "Precio Total",
       "status": "Estado",
@@ -20,6 +23,9 @@
     "Delivered": "Entregado",
     "Shipped": "Enviado",
     "Cancelled": "Cancelado",
+    "processing": "En Proceso",
+    "shipped": "Enviado",
+    "cancelled": "Cancelado",
     "approved": "Aprobado",
     "pending": "Pendiente",
     "delivered": "Entregado",
@@ -100,11 +106,13 @@
     "shippingInfo": {
       "title": "Información de Envío",
       "method": "Método de Envío",
-      "address": "Dirección"
+      "address": "Dirección",
+      "address2": "Dirección 2",
+      "info": "Información Adicional"
     },
     "productsList": {
       "title": "Productos",
-      "name": "Nombre",
+      "name": "Producto",
       "unitPrice": "Precio Unitario",
       "quantity": "Cantidad",
       "total": "Total"
@@ -113,7 +121,8 @@
       "title": "Información del Usuario",
       "name": "Nombre",
       "email": "Correo Electrónico",
-      "nif": "NIF"
+      "nif": "NIF",
+      "phoneNumber": "Número de Teléfono"
     },
     "backLink": "Volver a Mis Pedidos"
   },
@@ -206,7 +215,8 @@
       "name": "Nombre",
       "description": "Descripción",
       "actions": "Acciones",
-      "deleteButton": "Eliminar"
+      "deleteButton": "Eliminar",
+      "parentId": "Categoría Padre"
     },
     "alerts": {
       "confirmDelete": "¿Estás seguro de que deseas eliminar esta categoría?"
@@ -262,25 +272,34 @@
     }
   },
 
-  "orderManagement": {
-    "title": "Gestión de Pedidos",
-    "table": {
-      "orderId": "ID del Pedido",
-      "customer": "Cliente",
-      "total": "Total",
-      "status": "Estado",
-      "actions": "Acciones"
-    },
-    "status": {
-      "processing": "En Proceso",
-      "shipped": "Enviado",
-      "delivered": "Entregado",
-      "canceled": "Cancelado"
-    },
-    "actions": {
-      "markDelivered": "Marcar como Entregado"
-    },
-    "noOrders": "No se encontraron pedidos."
+  "orderManagement": { 
+    "title": "Gestión de Pedidos", 
+    "table": { 
+      "orderId": "ID del Pedido", 
+      "customer": "Cliente", 
+      "total": "Total", 
+      "status": "Estado", 
+      "actions": "Acciones" 
+    }, 
+    "status": { 
+      "pending": "Pendiente", 
+      "paid": "Pagado", 
+      "shipped": "Enviado", 
+      "delivered": "Entregado", 
+      "canceled": "Cancelado", 
+      "failed": "Fallido" 
+    }, "actions": { 
+      "markDelivered": "Marcar como Entregado" 
+    }, 
+    "noOrders": "No se encontraron pedidos.", 
+    "itemsTitle": "Artículos del Pedido", 
+    "items": { 
+      "image": "Imagen", 
+      "productName": "Producto", 
+      "quantity": "Cantidad", 
+      "unitPrice": "Precio Unitario", 
+      "total": "Total" 
+    } 
   },
 
   "partBrandsManagement": {

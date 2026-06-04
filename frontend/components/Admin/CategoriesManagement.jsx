@@ -21,6 +21,7 @@ const CategoriesManagement = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    parent_id: "",
   });
 
   useEffect(() => {
@@ -37,11 +38,16 @@ const CategoriesManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(createCategory(formData)).unwrap();
+      const payload = {
+        ...formData,
+        parent_id: formData.parent_id === "" ? null : formData.parent_id,
+      };
+      await dispatch(createCategory(payload)).unwrap();
       toast.success(t("categoriesManagement.toast.added"));
       setFormData({
         name: "",
         description: "",
+        parent_id: "",
       });
       setShowAddForm(false);
     } catch (err) {
@@ -141,6 +147,25 @@ const CategoriesManagement = () => {
               />
             </div>
 
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                {t("categoriesManagement.form.parentId", "Parent Category")}
+              </label>
+              <select
+                name="parent_id"
+                value={formData.parent_id}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+              >
+                <option value="">{t("categoriesManagement.form.noParent", "None")}</option>
+                {categories && categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className="pt-4 flex justify-end">
               <button
                 type="button"
@@ -173,6 +198,9 @@ const CategoriesManagement = () => {
                 {t("categoriesManagement.table.description")}
               </th>
               <th className="py-3 px-4">
+                {t("categoriesManagement.table.parentId", "Parent ID")}
+              </th>
+              <th className="py-3 px-4">
                 {t("categoriesManagement.table.actions")}
               </th>
             </tr>
@@ -184,6 +212,9 @@ const CategoriesManagement = () => {
                 <tr key={cat.id} className="border-b hover:bg-gray-50">
                   <td className="p-4 font-medium text-gray-900">{cat.name}</td>
                   <td className="p-4">{cat.description}</td>
+                  <td className="p-4 text-gray-500">
+                    {cat.parent_id ? categories.find(c => c.id === cat.parent_id)?.name || cat.parent_id : "-"}
+                  </td>
                   <td className="p-4">
                     <button
                       onClick={() => handleDelete(cat.id)}
