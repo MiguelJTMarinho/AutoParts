@@ -31,6 +31,7 @@ export const updateOrderStatus = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         error.response?.data || { message: "Failed to update order status" },
+        console.error("Error updating order status:", error.response || error),
       );
     }
   },

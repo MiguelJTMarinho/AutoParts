@@ -134,28 +134,30 @@ const AdminHomePage = () => {
               ) : recentOrders.length > 0 ? (
                 recentOrders.map((order) => (
                   <React.Fragment key={order.id || order._id}>
-                  <tr
-                    className="hover:bg-gray-50 transition-colors cursor-pointer"
-                    onClick={() => toggleExpand(order.id)}
-                  >
-                    <td className="p-4 font-medium text-gray-900">
-                      {order.id}
-                    </td>
-                    <td className="p-4 font-medium text-gray-900">
-                      {order.created_at
-                        ? new Date(order.created_at).toLocaleDateString()
-                        : new Date(order.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="p-4">{order?.username || "Unknown User"}</td>
-                    <td className="p-4 font-semibold text-gray-700">
-                      €{" "}
-                      {parseFloat(order.total || order.totalprice || 0).toFixed(
-                        2,
-                      )}
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold
+                    <tr
+                      className="hover:bg-gray-50 transition-colors cursor-pointer"
+                      onClick={() => toggleExpand(order.id)}
+                    >
+                      <td className="p-4 font-medium text-gray-900">
+                        {order.id}
+                      </td>
+                      <td className="p-4 font-medium text-gray-900">
+                        {order.created_at
+                          ? new Date(order.created_at).toLocaleDateString()
+                          : new Date(order.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="p-4">
+                        {order?.username || "Unknown User"}
+                      </td>
+                      <td className="p-4 font-semibold text-gray-700">
+                        €{" "}
+                        {parseFloat(
+                          order.total || order.totalprice || 0,
+                        ).toFixed(2)}
+                      </td>
+                      <td className="p-4">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold
                         ${
                           order.status === "delivered"
                             ? "bg-green-100 text-green-800"
@@ -167,54 +169,155 @@ const AdminHomePage = () => {
                                   ? "bg-red-100 text-red-800"
                                   : "bg-gray-100 text-gray-800"
                         }`}
-                      >
-                        {t(`orderStatus.${order.status}`, order.status)}
-                      </span>
-                    </td>
-                  </tr>
-                  {expandedOrderId === order.id && (
-                    <tr className="bg-gray-50 border-b">
-                      <td colSpan="5" className="p-4">
-                        <div className="font-semibold mb-2 text-gray-800">{t("orderManagement.itemsTitle", "Order Items")}:</div>
-                        <div className="overflow-x-auto rounded-lg border border-gray-200">
-                          <table className="min-w-full text-sm text-left text-gray-500">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-200">
-                              <tr>
-                                <th className="px-4 py-2">{t("orderManagement.items.image", "Image")}</th>
-                                <th className="px-4 py-2">{t("orderManagement.items.productName", "Product")}</th>
-                                <th className="px-4 py-2">{t("orderManagement.items.quantity", "Quantity")}</th>
-                                <th className="px-4 py-2">{t("orderManagement.items.unitPrice", "Unit Price")}</th>
-                                <th className="px-4 py-2">{t("orderManagement.items.total", "Total")}</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {order.items && order.items.length > 0 ? (
-                                order.items.map((item) => (
-                                  <tr key={item.id} className="border-b bg-white">
-                                    <td className="px-4 py-2">
-                                      {item.image_url ? (
-                                        <img src={item.image_url} alt="Product" className="w-10 h-10 object-cover rounded" />
-                                      ) : (
-                                        <div className="w-10 h-10 bg-gray-200 rounded"></div>
-                                      )}
-                                    </td>
-                                    <td className="px-4 py-2 font-medium text-gray-900">{item.name || `Product #${item.product_id}`}</td>
-                                    <td className="px-4 py-2">{item.quantity}</td>
-                                    <td className="px-4 py-2">€{Number(item.price_at_purchase || 0).toFixed(2)}</td>
-                                    <td className="px-4 py-2 font-medium">€{(Number(item.price_at_purchase || 0) * item.quantity).toFixed(2)}</td>
-                                  </tr>
-                                ))
-                              ) : (
-                                <tr>
-                                  <td colSpan="5" className="px-4 py-4 text-center text-gray-500">{t("orderManagement.items.noItems", "No items found")}</td>
-                                </tr>
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
+                        >
+                          {t(`orderStatus.${order.status}`, order.status)}
+                        </span>
                       </td>
                     </tr>
-                  )}
+                    {expandedOrderId === order.id && (
+                      <tr className="bg-gray-50 border-b">
+                        <td colSpan="5" className="p-4">
+                          <div className="font-semibold mb-2 text-gray-800">
+                            {t("orderManagement.itemsTitle", "Order Items")}:
+                          </div>
+                          <div className="overflow-x-auto rounded-lg border border-gray-200">
+                            <table className="min-w-full text-sm text-left text-gray-500">
+                              <thead className="text-xs text-gray-700 uppercase bg-gray-200">
+                                <tr>
+                                  <th className="px-4 py-2">
+                                    {t("orderManagement.items.image", "Image")}
+                                  </th>
+                                  <th className="px-4 py-2">
+                                    {t(
+                                      "orderManagement.items.productName",
+                                      "Product",
+                                    )}
+                                  </th>
+                                  <th className="px-4 py-2">
+                                    {t(
+                                      "orderManagement.items.quantity",
+                                      "Quantity",
+                                    )}
+                                  </th>
+                                  <th className="px-4 py-2">
+                                    {t(
+                                      "orderManagement.items.unitPrice",
+                                      "Unit Price",
+                                    )}
+                                  </th>
+                                  <th className="px-4 py-2">
+                                    {t("orderManagement.items.total", "Total")}
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {order.items && order.items.length > 0 ? (
+                                  order.items.map((item) => (
+                                    <tr
+                                      key={item.id}
+                                      className="border-b bg-white"
+                                    >
+                                      <td className="px-4 py-2">
+                                        {item.image_url ? (
+                                          <img
+                                            src={item.image_url}
+                                            alt="Product"
+                                            className="w-10 h-10 object-cover rounded"
+                                          />
+                                        ) : (
+                                          <div className="w-10 h-10 bg-gray-200 rounded"></div>
+                                        )}
+                                      </td>
+                                      <td className="px-4 py-2 font-medium text-gray-900">
+                                        {item.name ||
+                                          `Product #${item.product_id}`}
+                                      </td>
+                                      <td className="px-4 py-2">
+                                        {item.quantity}
+                                      </td>
+                                      <td className="px-4 py-2">
+                                        €
+                                        {Number(
+                                          item.price_at_purchase || 0,
+                                        ).toFixed(2)}
+                                      </td>
+                                      <td className="px-4 py-2 font-medium">
+                                        €
+                                        {(
+                                          Number(item.price_at_purchase || 0) *
+                                          item.quantity
+                                        ).toFixed(2)}
+                                      </td>
+                                    </tr>
+                                  ))
+                                ) : (
+                                  <tr>
+                                    <td
+                                      colSpan="5"
+                                      className="px-4 py-4 text-center text-gray-500"
+                                    >
+                                      {t(
+                                        "orderManagement.items.noItems",
+                                        "No items found",
+                                      )}
+                                    </td>
+                                  </tr>
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+
+                          {/* Shipping info */}
+                          {(order.address_line_1 || order.email) && (
+                            <div className="mt-6 pt-4 border-t border-gray-200 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              {order.email && (
+                                <div>
+                                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
+                                    {t(
+                                      "orderManagement.shipping.contact",
+                                      "Contact",
+                                    )}
+                                  </p>
+                                  <p className="text-sm text-gray-700">
+                                    {order.name}
+                                  </p>
+                                  <p className="text-sm text-gray-500">
+                                    {order.email}
+                                  </p>
+                                  {order.phone_number && (
+                                    <p className="text-sm text-gray-500">
+                                      {order.phone_number}
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+                              {order.address_line_1 && (
+                                <div>
+                                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
+                                    {t(
+                                      "orderManagement.shipping.address",
+                                      "Shipping address",
+                                    )}
+                                  </p>
+                                  <p className="text-sm text-gray-700">
+                                    {order.address_line_1}
+                                  </p>
+                                  {order.address_line_2 && (
+                                    <p className="text-sm text-gray-500">
+                                      {order.address_line_2}
+                                    </p>
+                                  )}
+                                  <p className="text-sm text-gray-500">
+                                    {order.postal_code} {order.city},{" "}
+                                    {order.country}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    )}
                   </React.Fragment>
                 ))
               ) : (
