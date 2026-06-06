@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
+const { Resend } = require("resend");
 require("dotenv").config();
 
 cloudinary.config({
@@ -171,6 +172,7 @@ const updateUserProfile = async (userId, data) => {
 // FORGOT PASSWORD
 const forgotPassword = async (email) => {
   const user = await userRepository.findUserByEmail(email);
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   if (!user) {
     return { message: "If the email exists, a reset link was sent" };
@@ -181,6 +183,37 @@ const forgotPassword = async (email) => {
   const expires = new Date(Date.now() + 1000 * 60 * 30); // 30 min
 
   await userRepository.setResetPasswordToken(email, token, expires);
+  console.log(`URL: ${process.env.FRONTEND_URL}`);
+  await resend.emails.send({
+    from: "AutoParts <onboarding@resend.dev>",
+    to: email,
+    subject: "Reset da tua password",
+    html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2>Recuperação de Password</h2>
+
+      <p>Recebemos um pedido para redefinir a tua password.</p>
+
+      <p>Clica no botão abaixo para continuar:</p>
+
+      <a href="${process.env.FRONTEND_URL}/reset-password?token=${token}"
+         style="
+           display:inline-block;
+           padding:12px 20px;
+           background:#2563eb;
+           color:#fff;
+           text-decoration:none;
+           border-radius:6px;
+         ">
+        Reset Password
+      </a>
+
+      <p style="margin-top:20px; font-size:12px; color:#666;">
+        Este link expira em 30 minutos.
+      </p>
+    </div>
+  `,
+  });
 
   // Send email (Nodemailer)
   return {
@@ -190,7 +223,7 @@ const forgotPassword = async (email) => {
 };
 
 // RESET PASSWORD
-const resetPassword = async ({ token, new_password }) => {
+const resetPassword = async ({ token, password }) => {
   const user = await userRepository.findByResetToken(token);
 
   if (!user) {
@@ -200,7 +233,7 @@ const resetPassword = async ({ token, new_password }) => {
   }
 
   const salt = await bcrypt.genSalt(10);
-  const password_hash = await bcrypt.hash(new_password, salt);
+  const password_hash = await bcrypt.hash(password, salt);
 
   await userRepository.updatePassword(user.id, password_hash);
 

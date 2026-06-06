@@ -135,6 +135,7 @@ router.post("/reset_password", async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(err.statusCode || 500).json({ error: err.message });
+    console.error("ERRO AO RESETEAR PASSWORD:", err);
   }
 });
 

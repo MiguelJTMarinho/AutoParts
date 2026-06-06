@@ -451,7 +451,8 @@
       "contactUs": "Contacte-nos",
       "aboutUs": "Sobre nós",
       "faqs": "Perguntas Frequentes",
-      "features": "Funcionalidades"
+      "PrivacyPolicy": "Política de Privacidade",
+      "termsAndConditions": "Termos e Condições"
     },
     "followUs": {
       "title": "Siga-nos",
@@ -600,5 +601,217 @@
     "sku": "SKU",
     "added": "Adcionado á lista de favoritos!",
     "removed": "Removido da lista de favoritos!"
+  },
+
+    "aboutUs": {
+    "hero": {
+      "title": "Sobre nós",
+      "subtitle": "O seu parceiro de confiança para peças automóveis de qualidade desde 2014."
+    },
+    "story": {
+      "subtitle": "A nossa história",
+      "title": "Nascidos de uma paixão por automóveis",
+      "p1": "Fundada em 2014 em Lisboa, a AutoParts começou como uma pequena oficina a fornecer peças difíceis de encontrar a mecânicos locais.",
+      "p2": "Hoje enviamos para toda a Europa, oferecendo mais de 1.000 peças para todas as principais marcas de veículos, sempre a preços justos.",
+      "cta": "Ver catálogo"
+    },
+    "stats": {
+      "years": "Anos de experiência",
+      "parts": "Peças no catálogo",
+      "customers": "Clientes satisfeitos",
+      "satisfaction": "Taxa de satisfação"
+    },
+    "values": {
+      "quality": {
+        "title": "Qualidade em primeiro lugar",
+        "description": "Cada peça é cuidadosamente selecionada e verificada para cumprir os padrões OEM."
+      },
+      "trust": {
+        "title": "Baseado na confiança",
+        "description": "Relações duradouras com fornecedores e clientes através de transparência."
+      },
+      "value": {
+        "title": "Preço justo",
+        "description": "Preços competitivos sem comprometer a qualidade."
+      }
+    },
+    "whyUs": {
+      "title": "Porquê escolher a AutoParts?",
+      "subtitle": "Tudo o que precisa, sem excessos",
+      "catalogue": "Mais de 1.000 peças para todas as principais marcas",
+      "shipping": "Envio rápido em Portugal e Europa",
+      "support": "Suporte técnico especializado",
+      "returns": "Devoluções fáceis em 30 dias",
+      "payment": "Pagamentos seguros com PayPal e cartão"
+    },
+    "cta": {
+      "title": "Pronto para encontrar a sua peça?",
+      "subtitle": "Pesquise o nosso catálogo completo hoje",
+      "search": "Pesquise por marca, modelo e ano",
+      "compat": "Verifique compatibilidade antes de comprar",
+      "order": "Compre em minutos, entregue em sua casa",
+      "shop": "Comprar agora",
+      "contact": "Contactar"
+    }
+  },
+
+  "terms": {
+    "intro": {
+      "title": "Introdução",
+      "content": "Estes Termos e Condições regulam o uso deste site e a compra de produtos da AutoParts. Ao aceder ao nosso site ou ao fazer uma encomenda, concorda em ficar vinculado a estes termos."
+    },
+    "company": {
+      "title": "Informações da empresa",
+      "content": "A AutoParts é uma empresa registada com sede em Portugal. Contacto: support@autoparts.com. Estes termos estão em conformidade com a lei portuguesa e com os regulamentos de proteção do consumidor da União Europeia."
+    },
+    "orders": {
+      "title": "Encomendas e formação de contrato",
+      "content": "Quando faz uma encomenda, está a fazer uma proposta de compra. Um contrato só é formado assim que confirmarmos a encomenda e despacharmos os produtos. Reservamo-nos o direito de recusar ou cancelar qualquer encomenda devido a erros de preço, problemas de stock ou suspeita de fraude."
+    },
+    "pricing": {
+      "title": "Preços e pagamento",
+      "content": "Todos os preços são apresentados em EUR e incluem o IVA aplicável, salvo indicação em contrário. Os pagamentos são processados de forma segura através de fornecedores externos, como o PayPal ou processadores de cartões. Não guardamos dados de pagamento."
+    },
+    "shipping": {
+      "title": "Envio e entrega",
+      "content": "Fazemos entregas em todo o Portugal e em países europeus selecionados. Os prazos de entrega são estimativas e podem variar consoante a localização e a transportadora. O risco de perda passa para o cliente no momento da entrega."
+    },
+    "returns": {
+      "title": "Devoluções e direito de livre resolução",
+      "content": "Ao abrigo da legislação da UE, os consumidores têm o direito de resolução da sua compra num prazo de 14 dias sem necessidade de apresentar um motivo. Os produtos devem ser devolvidos não utilizados e na embalagem original. Os reembolsos serão processados num prazo de 14 dias após a receção dos produtos devolvidos."
+    },
+    "warranties": {
+      "title": "Garantia",
+      "content": "Todos os produtos estão cobertos pelos direitos legais de garantia aplicáveis na União Europeia. Se um produto tiver defeito ou não corresponder à descrição, tem direito à reparação, substituição ou reembolso."
+    },
+    "liability": {
+      "title": "Limitação de responsabilidade",
+      "content": "Não nos responsabilizamos por danos indiretos, perda de lucros ou atrasos causados por transportadoras externas ou eventos de força maior. A nossa responsabilidade limita-se ao valor do produto adquirido."
+    },
+    "user": {
+      "title": "Responsabilidades do utilizador",
+      "content": "Os utilizadores concordam em fornecer informações precisas ao criar uma conta ou fazer encomendas. Qualquer comportamento fraudulento ou abusivo pode resultar na suspensão ou cancelamento da conta."
+    },
+    "intellectual": {
+      "title": "Propriedade intelectual",
+      "content": "Todo o conteúdo do site, incluindo texto, imagens, logótipos e design, é propriedade da AutoParts e não pode ser copiado, reproduzido ou distribuído sem permissão."
+    },
+    "privacy": {
+      "title": "Privacidade",
+      "content": "Os seus dados pessoais são processados de acordo com a nossa Política de Privacidade, que está em conformidade com o RGPD."
+    },
+    "changes": {
+      "title": "Alterações aos termos",
+      "content": "Reservamo-nos o direito de atualizar estes Termos e Condições a qualquer momento. As alterações serão publicadas nesta página e entrarão em vigor imediatamente após a publicação."
+    },
+    "governing": {
+      "title": "Lei aplicável",
+      "content": "Estes Termos são regidos pela lei portuguesa e pelos regulamentos aplicáveis da União Europeia. Quaisquer litígios estarão sujeitos à jurisdição dos tribunais portugueses."
+    },
+    "hero": {
+      "title": "Termos e Condições",
+      "subtitle": "Regras que regem compras, entregas e a utilização do nosso site.",
+      "lastUpdated": "Última atualização"
+    },
+    "footer": {
+      "title": "Precisa de ajuda?",
+      "subtitle": "Se tiver alguma dúvida sobre os nossos termos ou políticas, não hesite em contactar-nos.",
+      "contact": "Contacte-nos"
+    }
+  },
+
+  "resetPassword": {
+    "title": "Repor a sua palavra-passe",
+    "subtitle": "Escolha uma nova palavra-passe segura para a sua conta.",
+    "error": {
+      "mismatch": "As palavras-passe não coincidem.",
+      "tooShort": "A palavra-passe deve ter pelo menos 8 caracteres.",
+      "generic": "Ocorreu um erro. O link pode ter expirado."
+    },
+    "invalidToken": {
+      "title": "Link de recuperação inválido",
+      "subtitle": "Este link de recuperação de palavra-passe é inválido ou expirou.",
+      "requestNew": "Pedir um novo link"
+    },
+    "success": {
+      "title": "Palavra-passe atualizada!",
+      "subtitle": "A sua palavra-passe foi alterada. A redirecionar para o login…",
+      "backToLogin": "Voltar ao login"
+    },
+    "form": {
+      "passwordLabel": "Nova palavra-passe",
+      "passwordPlaceholder": "Pelo menos 8 caracteres",
+      "confirmPasswordLabel": "Confirmar nova palavra-passe",
+      "confirmPasswordPlaceholder": "Repita a sua palavra-passe",
+      "saving": "A guardar…",
+      "submit": "Repor palavra-passe",
+      "rememberPassword": "Lembrou-se da sua palavra-passe?",
+      "signIn": "Iniciar sessão"
+    },
+    "info": {
+      "title": "Mantenha a sua conta segura",
+      "subtitle": "Dicas para uma palavra-passe forte",
+      "tips": {
+        "length": "Use pelo menos 8 caracteres",
+        "mix": "Misture maiúsculas, minúsculas, números e símbolos",
+        "unique": "Não reutilize palavras-passe de outros sites",
+        "share": "Nunca partilhe a sua palavra-passe com ninguém"
+      }
+    }
+  },
+
+  "privacy": {
+    "hero": {
+      "title": "Política de Privacidade",
+      "subtitle": "Esta política explica como recolhemos, utilizamos e protegemos os seus dados pessoais de acordo com o RGPD.",
+      "lastUpdated": "Última atualização"
+    },
+    "intro": "Estamos empenhados em proteger os seus dados pessoais e em respeitar os seus direitos de privacidade ao abrigo do Regulamento Geral sobre a Proteção de Dados (RGPD).",
+    "sections": {
+      "collect": {
+        "title": "Informações que recolhemos",
+        "content": "Recolhemos os dados pessoais que nos fornece diretamente quando cria uma conta, faz uma encomenda ou nos contacta. Isto inclui o nome, endereço de e-mail, morada de faturação/envio, número de telefone e informações relacionadas com o pagamento. Também recolhemos dados técnicos, como o endereço IP, tipo de navegador, informações do dispositivo e atividade de utilização para garantir a segurança e melhorar os nossos serviços."
+      },
+      "legal": {
+        "title": "Base legal para o tratamento",
+        "content": "Tratamos os seus dados pessoais sob as seguintes bases legais: (1) execução de contrato (processamento de encomendas e gestão de conta), (2) obrigação legal (requisitos fiscais e contabilísticos), (3) interesse legítimo (prevenção de fraude, melhoria de serviços, análises) e (4) consentimento (comunicações de marketing e cookies não essenciais)."
+      },
+      "use": {
+        "title": "Como utilizamos as suas informações",
+        "content": "Os seus dados são utilizados para processar encomendas, gerir a sua conta, fornecer apoio ao cliente, enviar e-mails transacionais, melhorar o nosso site, prevenir fraudes e cumprir obrigações legais. Se der o seu consentimento, também podemos enviar comunicações de marketing sobre produtos ou promoções."
+      },
+      "share": {
+        "title": "Partilha das suas informações",
+        "content": "Não vendemos os seus dados pessoais. Apenas partilhamos informações com terceiros de confiança necessários para o funcionamento do nosso negócio, incluindo processadores de pagamento, empresas de envio, fornecedores de alojamento e serviços de análise. Todos os parceiros estão contratualmente vinculados a proteger os seus dados ao abrigo do RGPD."
+      },
+      "transfer": {
+        "title": "Transferências internacionais de dados",
+        "content": "Alguns prestadores de serviços podem processar dados fora do Espaço Económico Europeu (EEE). Nesses casos, garantimos salvaguardas adequadas, como Cláusulas Contratuais Tipo (CCT) aprovadas pela Comissão Europeia, para garantir uma proteção de dados adequada."
+      },
+      "cookies": {
+        "title": "Cookies e rastreamento",
+        "content": "Utilizamos cookies essenciais para a funcionalidade do site, cookies de análise para compreender a utilização e cookies opcionais de marketing. Os cookies não essenciais só são ativados com o seu consentimento através do nosso banner de cookies. Pode retirar o consentimento ou alterar as preferências a qualquer momento."
+      },
+      "retention": {
+        "title": "Retenção de dados",
+        "content": "Conservamos os dados pessoais apenas durante o tempo necessário: dados de encomendas e faturação até 10 anos (requisitos legais e fiscais), dados da conta até ao pedido de eliminação e dados de análise normalmente até 26 meses. Após estes períodos, os dados são eliminados com segurança ou anonimizados."
+      },
+      "security": {
+        "title": "Segurança de dados",
+        "content": "Implementamos medidas técnicas e organizativas para proteger os seus dados, incluindo encriptação em trânsito (HTTPS), sistemas de autenticação seguros, controlo de acesso e monitorização. Os dados de pagamento são processados com segurança por fornecedores de pagamento certificados e nunca são armazenados nos nossos servidores."
+      },
+      "rights": {
+        "title": "Os seus direitos ao abrigo do RGPD",
+        "content": "Tem o direito de aceder, retificar, apagar, restringir ou opor-se ao tratamento dos seus dados, bem como o direito à portabilidade dos dados e a retirar o consentimento a qualquer momento. Também pode apresentar queixa à Comissão Nacional de Proteção de Dados (CNPD). Para exercer os seus direitos, contacte-nos através de support@autoparts.com."
+      },
+      "children": {
+        "title": "Privacidade das crianças",
+        "content": "Os nossos serviços não se destinam a indivíduos com menos de 16 anos. Não recolhemos intencionalmente dados pessoais de menores. Se tivermos conhecimento de que tais dados foram recolhidos, serão eliminados imediatamente."
+      },
+      "changes": {
+        "title": "Alterações a esta política",
+        "content": "Podemos atualizar esta Política de Privacidade periodicamente. Alterações significativas serão comunicadas no nosso site ou por e-mail, quando apropriado. A versão mais recente estará sempre disponível nesta página."
+      }
+    }
   }
 }

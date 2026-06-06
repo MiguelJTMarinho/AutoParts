@@ -36,6 +36,7 @@ const orderRoutes = require("./routes/orderRoutes");
 const newsletterSubscribersRoutes = require("./routes/newsletterSubscribersRoutes");
 const shippingRateRoutes = require("./routes/shippingRateRoutes");
 const productFitmentRoutes = require("./routes/productFitmentRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 const app = express();
 app.use(cookieParser());
@@ -90,6 +91,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/newsletter", newsletterSubscribersRoutes);
 app.use("/api/shipping_rates", shippingRateRoutes);
 app.use("/api/product_fitments", productFitmentRoutes);
+app.use("/api/contact", contactRoutes);
 
 Sentry.setupExpressErrorHandler(app);
 // Error fall-through

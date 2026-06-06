@@ -31,6 +31,11 @@ import OrderManagement from "../components/Admin/OrderManagement";
 import CategoriesManagement from "../components/Admin/CategoriesManagement";
 import PartBrandsManagement from "../components/Admin/PartBrandManagement";
 import ScrollToTop from "../components/Common/ScrollToTop";
+import ForgotPassword from "../Pages/ForgotPassword";
+import ResetPassword from "../Pages/ResetPassword";
+import AboutUs from "../Pages/AboutUs";
+import PrivacyPolicy from "../Pages/PrivacyPolicy";
+import TermsAndConditions from "../Pages/TermsConditions";
 
 const AppContent = () => {
   const dispatch = useDispatch();
@@ -67,6 +72,11 @@ const AppContent = () => {
           <Route path="order/:id" element={<OrderDetailsPage />} />
           <Route path="wishlist" element={<WishlistPage />} />
           <Route path="contact" element={<ContactUs />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="about-us" element={<AboutUs />} />
+          <Route path="privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="terms-and-conditions" element={<TermsAndConditions />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminHomePage />} />

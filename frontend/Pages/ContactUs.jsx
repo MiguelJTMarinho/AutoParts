@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FiPhoneCall, FiMail, FiMapPin } from "react-icons/fi";
 import { toast } from "sonner";
+import axios from "axios";
 
 const ContactUs = () => {
   const { t } = useTranslation();
@@ -18,25 +19,32 @@ const ContactUs = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/contact`, formData);
+
       toast.success(
         t(
           "contactUs.successMessage",
           "Message sent successfully! We will get back to you soon.",
         ),
       );
+
       setFormData({
         name: "",
         email: "",
         subject: "",
         message: "",
       });
-    }, 1500);
+    } catch (error) {
+      toast.error("Failed to send message");
+      //console.error("Error sending contact message:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
