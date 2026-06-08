@@ -13,7 +13,9 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { userInfo, guestId } = useSelector((state) => state.auth);
+  const { userInfo, guestId, loading, error } = useSelector(
+    (state) => state.auth,
+  );
   const { cart } = useSelector((state) => state.cart);
 
   const redirect = new URLSearchParams(location.search).get("redirect") || "/";
@@ -47,6 +49,12 @@ const Login = () => {
           </h1>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            {error && (
+              <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {t(`loginPage.errors.${error}`, error)}
+              </div>
+            )}
+
             {/* Email */}
             <div className="relative">
               <label className="block text-sm font-semibold mb-2">
@@ -93,9 +101,12 @@ const Login = () => {
 
             <button
               type="submit"
-              className="inline-block border border-main-blue text-white bg-main-blue px-8 py-3 uppercase font-bold rounded-md hover:bg-white hover:text-main-blue transition cursor-pointer"
+              disabled={loading}
+              className="inline-block border border-main-blue text-white bg-main-blue px-8 py-3 uppercase font-bold rounded-md hover:bg-white hover:text-main-blue transition cursor-pointer disabled:opacity-60"
             >
-              Sign In
+              {loading
+                ? t("loginPage.form.loadingButton")
+                : t("loginPage.form.submitButton")}
             </button>
           </form>
         </section>

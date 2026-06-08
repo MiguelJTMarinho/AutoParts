@@ -48,7 +48,13 @@
       "passwordLabel": "Contraseña",
       "passwordPlaceholder": "Introduce tu contraseña",
       "forgotPassword": "¿Has olvidado tu contraseña?",
-      "submitButton": "Entrar"
+      "submitButton": "Entrar",
+      "loadingButton": "Entrando..."
+    },
+    "errors": {
+      "Invalid credentials": "Correo o contraseña incorrectos.",
+      "User not found": "Correo o contraseña incorrectos.",
+      "Login failed": "No se pudo iniciar sesión. Inténtalo de nuevo."
     },
     "registerPromo": {
       "title": "¿No tienes una cuenta?",

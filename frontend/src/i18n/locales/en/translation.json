@@ -48,7 +48,13 @@
       "passwordLabel": "Password",
       "passwordPlaceholder": "Enter your password",
       "forgotPassword": "Forgot your password?",
-      "submitButton": "Sign In"
+      "submitButton": "Sign In",
+      "loadingButton": "Signing in..."
+    },
+    "errors": {
+      "Invalid credentials": "Incorrect email or password.",
+      "User not found": "Incorrect email or password.",
+      "Login failed": "Could not sign in. Please try again."
     },
     "registerPromo": {
       "title": "Don’t have an account?",

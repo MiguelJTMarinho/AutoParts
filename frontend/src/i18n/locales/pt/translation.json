@@ -48,7 +48,13 @@
       "passwordLabel": "Palavra-passe",
       "passwordPlaceholder": "Introduza a sua palavra-passe",
       "forgotPassword": "Esqueceu-se da palavra-passe?",
-      "submitButton": "Entrar"
+      "submitButton": "Entrar",
+      "loadingButton": "A entrar..."
+    },
+    "errors": {
+      "Invalid credentials": "Email ou palavra-passe incorretos.",
+      "User not found": "Email ou palavra-passe incorretos.",
+      "Login failed": "Não foi possível iniciar sessão. Tente novamente."
     },
     "registerPromo": {
       "title": "Ainda não tem conta?",

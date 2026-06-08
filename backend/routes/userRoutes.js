@@ -5,7 +5,7 @@ require("dotenv").config();
 const multer = require("multer");
 
 const userService = require("../service/userService");
-const { isAdmin } = require("../middleware/authMiddleware");
+const { isAdmin, optionalAuth } = require("../middleware/authMiddleware");
 const protect = require("../middleware/authMiddleware").protect;
 
 // Multer setup using memory storage
@@ -223,6 +223,13 @@ router.post("/logout", (req, res) => {
   res.json({
     message: "Logged out successfully",
   });
+});
+
+// @route GET /api/users/session
+// @desc Check current session without returning 401 for guests
+// @access Public
+router.get("/session", optionalAuth, async (req, res) => {
+  res.json({ user: req.user || null });
 });
 
 // @route GET /api/users/me

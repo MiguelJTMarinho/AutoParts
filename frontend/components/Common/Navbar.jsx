@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { HiOutlineUser, HiOutlineShoppingCart, HiOutlineHeart } from "react-icons/hi2";
+import {
+  HiOutlineUser,
+  HiOutlineShoppingCart,
+  HiOutlineHeart,
+} from "react-icons/hi2";
 import { useSelector, useDispatch } from "react-redux";
 import SearchBar from "./SearchBar";
 import CartDrawer from "../Layout/CartDrawer";
@@ -13,13 +17,13 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
   const { items: wishlistItems } = useSelector((state) => state.wishlist);
-  const { user } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (user) {
+    if (userInfo) {
       dispatch(fetchWishlist());
     }
-  }, [dispatch, user]);
+  }, [dispatch, userInfo]);
 
   const toggleCartDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -46,14 +50,16 @@ const Navbar = () => {
         </div>
 
         {/* Right - Icons */}
-        <div className="flex items-center space-x-4 ml-auto md:order-3">
-          <Link
-            to="/admin"
-            className=" block bg-black px-2 rounded text-sm text-white"
-          >
-            Admin
-          </Link>
 
+        <div className="flex items-center space-x-4 ml-auto md:order-3">
+          {userInfo && userInfo.role == "admin" && (
+            <Link
+              to="/admin"
+              className=" block bg-black px-2 rounded text-sm text-white"
+            >
+              Admin
+            </Link>
+          )}
           <LanguageSwitcher />
 
           <Link to="/wishlist" className="relative hover:text-black">

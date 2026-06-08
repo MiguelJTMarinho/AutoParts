@@ -21,6 +21,7 @@ import OrderConfirmation from "../Pages/OrderConfirmation";
 import OrderDetailsPage from "../Pages/OrderDetailsPage";
 import WishlistPage from "../Pages/WishlistPage";
 import ContactUs from "../Pages/ContactUs";
+import AdminRoute from "../components/Admin/AdminRoute";
 import AdminLayout from "../components/Admin/AdminLayout";
 import AdminHomePage from "../Pages/AdminHomePage";
 import UserManagement from "../components/Admin/UserManagement";
@@ -79,7 +80,14 @@ const AppContent = () => {
           <Route path="privacy-policy" element={<PrivacyPolicy />} />
           <Route path="terms-and-conditions" element={<TermsAndConditions />} />
         </Route>
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }
+        >
           <Route index element={<AdminHomePage />} />
           <Route path="users" element={<UserManagement />} />
           <Route path="products" element={<ProductManagement />} />

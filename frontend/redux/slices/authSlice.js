@@ -7,7 +7,7 @@ const loadUserFromStorage = () => {
   try {
     const serializedUser = localStorage.getItem("userInfo");
     return serializedUser ? JSON.parse(serializedUser) : null;
-  } catch (e) {
+  } catch {
     return null;
   }
 };
@@ -21,6 +21,7 @@ const initialState = {
   userInfo: userFromStorage,
   guestId: initialGuestId,
   loading: false,
+  authChecked: false,
   error: null,
 };
 
@@ -38,7 +39,9 @@ export const loginUser = createAsyncThunk(
 
       return response.data.user;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || { message: "Login failed" },
+      );
     }
   },
 );
@@ -68,12 +71,17 @@ export const checkAuthStatus = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/users/me`,
+        `${import.meta.env.VITE_API_URL}/users/session`,
       );
 
+      if (!response.data.user) {
+        localStorage.removeItem("userInfo");
+        return rejectWithValue({ message: "Não autenticado" });
+      }
+
       // Atualiza o localStorage com os dados frescos do backend
-      localStorage.setItem("userInfo", JSON.stringify(response.data));
-      return response.data;
+      localStorage.setItem("userInfo", JSON.stringify(response.data.user));
+      return response.data.user;
     } catch (error) {
       // Se falhar (cookie expirado ou apagado), limpamos os vestígios locais
       localStorage.removeItem("userInfo");
@@ -109,6 +117,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.userInfo = null;
       state.error = null;
+      state.authChecked = true;
       state.guestId = `guest_${uuidv4()}`;
       localStorage.removeItem("userInfo");
       localStorage.setItem("x-guest-id", state.guestId);
@@ -128,6 +137,7 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.userInfo = action.payload;
+        state.authChecked = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -141,17 +151,26 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.userInfo = action.payload;
+        state.authChecked = true;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || "Registration failed";
       })
       // --- CHECK AUTH STATUS ---
+      .addCase(checkAuthStatus.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(checkAuthStatus.fulfilled, (state, action) => {
+        state.loading = false;
         state.userInfo = action.payload;
+        state.authChecked = true;
       })
       .addCase(checkAuthStatus.rejected, (state) => {
+        state.loading = false;
         state.userInfo = null;
+        state.authChecked = true;
       });
   },
 });
