@@ -37,7 +37,9 @@ const PartBrandsManagement = () => {
     e.preventDefault();
     try {
       await dispatch(createPartBrand(formData)).unwrap();
-      toast.success(t("partBrandsManagement.toast.added", "Brand added successfully!"));
+      toast.success(
+        t("partBrandsManagement.toast.added", "Brand added successfully!"),
+      );
       setFormData({
         name: "",
       });
@@ -52,7 +54,12 @@ const PartBrandsManagement = () => {
     if (window.confirm(t("partBrandsManagement.alerts.confirmDelete"))) {
       try {
         await dispatch(deletePartBrand(id)).unwrap();
-        toast.success(t("partBrandsManagement.toast.deleted", "Brand deleted successfully!"));
+        toast.success(
+          t(
+            "partBrandsManagement.toast.deleted",
+            "Brand deleted successfully!",
+          ),
+        );
       } catch (err) {
         console.error("Failed to delete part brand:", err);
         toast.error(err?.message || "Failed to delete part brand");
@@ -61,7 +68,10 @@ const PartBrandsManagement = () => {
   };
 
   const filteredBrands = partBrands?.filter((brand) => {
-    if (searchQuery.trim() !== "" && !brand.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+    if (
+      searchQuery.trim() !== "" &&
+      !brand.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
       return false;
     }
     return true;
@@ -73,14 +83,17 @@ const PartBrandsManagement = () => {
         <h2 className="text-2xl font-bold mb-4">
           {t("partBrandsManagement.title")}
         </h2>
-        
+
         <div className="flex flex-1 justify-end items-center gap-4 mb-6 sm:mb-0">
           <input
             type="text"
-            placeholder={t("partBrandsManagement.searchPlaceholder", "Search by name...")}
+            placeholder={t(
+              "partBrandsManagement.searchPlaceholder",
+              "Search by name...",
+            )}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="border border-gray-300 rounded p-2 text-sm focus:outline-none focus:border-blue-500 bg-white min-w-[200px]"
+            className="border border-gray-300 rounded p-2 text-sm focus:outline-none focus:border-blue-500 bg-white min-w-50"
           />
           {!showAddForm && (
             <button
@@ -107,7 +120,10 @@ const PartBrandsManagement = () => {
               {t("partBrandsManagement.addTitle")}
             </h3>
             <p className="text-sm text-gray-500 mt-1">
-              {t("partBrandsManagement.addSubtitle", "Fill the form below to add a new part brand.")}
+              {t(
+                "partBrandsManagement.addSubtitle",
+                "Fill the form below to add a new part brand.",
+              )}
             </p>
           </div>
 

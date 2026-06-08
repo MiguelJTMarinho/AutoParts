@@ -7,6 +7,7 @@ import {
   FaStore,
   FaTags,
   FaUser,
+  FaTruck,
 } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -89,6 +90,17 @@ const AdminSidebar = () => {
         >
           <FaClipboardList />
           <span>{t("adminSidebar.orders")}</span>
+        </NavLink>
+        <NavLink
+          to="/admin/shipping-rates"
+          className={({ isActive }) =>
+            isActive
+              ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
+              : "text-gray-300 hover:bg-gray700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"
+          }
+        >
+          <FaTruck />
+          <span>{t("adminSidebar.shippingRates", "Shipping Rates")}</span>
         </NavLink>
         <NavLink
           to="/"

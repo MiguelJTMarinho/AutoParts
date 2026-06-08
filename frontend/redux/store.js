@@ -9,6 +9,7 @@ import adminProductSlice from "./slices/admin/adminProductSlice";
 import adminOrderSlice from "./slices/admin/adminOrderSlice";
 import adminCategorySlice from "./slices/admin/adminCategorySlice";
 import adminPartBrandSlice from "./slices/admin/adminPartBrandSlice";
+import adminShippingRateSlice from "./slices/admin/adminShippingRateSlice";
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     adminOrders: adminOrderSlice,
     adminCategories: adminCategorySlice,
     adminPartBrands: adminPartBrandSlice,
+    adminShippingRates: adminShippingRateSlice,
   },
 });
 

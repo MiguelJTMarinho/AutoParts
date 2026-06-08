@@ -811,5 +811,50 @@
         "content": "Podemos actualizar esta Política de Privacidad de vez en cuando. Los cambios significativos se comunicarán en nuestro sitio web o por correo electrónico cuando corresponda. La última versión siempre estará disponible en esta página."
       }
     }
+  },
+
+"shippingRates": {
+    "title": "Tarifas de Envío",
+    "add": "Añadir tarifa",
+    "editTitle": "Editar Tarifa de Envío",
+    "addTitle": "Añadir Tarifa de Envío",
+    "confirmDelete": "¿Está seguro de que desea eliminar esto?",
+    "toast": {
+      "created": "Tarifa de envío creada",
+      "updated": "Tarifa de envío actualizada",
+      "deleted": "Tarifa de envío eliminada"
+    },
+    "form": {
+      "min_weight": "Peso mínimo (kg)",
+      "max_weight": "Peso máximo (kg)",
+      "price": "Precio de envío (€)",
+      "actions": "Acciones"
+    }
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar"
+  },
+
+  "contactUs": {
+    "successMessage": "¡Mensaje enviado con éxito! Nos pondremos en contacto con usted pronto.",
+    "title": "Contáctenos",
+    "subtitle": "¿Tiene preguntas? Nos encantaría escucharle. Envíenos un mensaje y le responderemos lo antes posible.",
+    "phone": "Teléfono",
+    "email": "Correo electrónico",
+    "address": "Oficina",
+    "formTitle": "Enviar un Mensaje",
+    "nameLabel": "Nombre Completo",
+    "namePlaceholder": "Juan Pérez",
+    "emailLabel": "Correo Electrónico",
+    "emailPlaceholder": "juan@ejemplo.com",
+    "subjectLabel": "Asunto",
+    "subjectPlaceholder": "¿Cómo podemos ayudar?",
+    "messageLabel": "Mensaje",
+    "messagePlaceholder": "Su mensaje aquí...",
+    "sending": "Enviando...",
+    "sendButton": "Enviar Mensaje"
   }
 }

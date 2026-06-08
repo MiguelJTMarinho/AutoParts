@@ -30,6 +30,7 @@ import EditProductPage from "../components/Admin/EditProductPage";
 import OrderManagement from "../components/Admin/OrderManagement";
 import CategoriesManagement from "../components/Admin/CategoriesManagement";
 import PartBrandsManagement from "../components/Admin/PartBrandManagement";
+import ShippingRatesManagement from "../components/Admin/ShippingRatesManagement";
 import ScrollToTop from "../components/Common/ScrollToTop";
 import ForgotPassword from "../Pages/ForgotPassword";
 import ResetPassword from "../Pages/ResetPassword";
@@ -87,6 +88,7 @@ const AppContent = () => {
           <Route path="orders" element={<OrderManagement />} />
           <Route path="categories" element={<CategoriesManagement />} />
           <Route path="part-brands" element={<PartBrandsManagement />} />
+          <Route path="shipping-rates" element={<ShippingRatesManagement />} />
         </Route>
       </Routes>
     </BrowserRouter>
