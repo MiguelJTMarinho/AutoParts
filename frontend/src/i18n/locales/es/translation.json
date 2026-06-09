@@ -135,28 +135,44 @@
 
   "profilePage": {
     "buttons": {
-      "orders": "Pedidos",
+      "orders": "Mis Pedidos",
       "logOut": "Cerrar Sesión",
+      "changePhoto": "Cambiar Foto",
       "editProfile": "Editar Perfil",
-      "cancel": "Cancelar",
       "saveChanges": "Guardar Cambios",
-      "changePhoto": "Cambiar"
+      "cancel": "Cancelar"
     },
     "sections": {
       "personalInfo": "Información Personal",
-      "address": "Dirección"
+      "address": "Direcciones"
     },
     "fields": {
       "firstName": "Nombre",
       "lastName": "Apellido",
       "email": "Correo Electrónico",
       "phone": "Número de Teléfono",
-      "addressLine1": "Línea de Dirección 1",
-      "addressLine2": "Línea de Dirección 2",
+      "nif": "NIF / DNI",
+      "addressLine1": "Dirección (Línea 1)",
+      "addressLine2": "Dirección (Línea 2)",
       "city": "Ciudad",
       "postalCode": "Código Postal",
-      "country": "País",
-      "nif": "NIF"
+      "country": "País"
+    },
+    "address": {
+      "added": "Dirección añadida.",
+      "updated": "Dirección actualizada.",
+      "confirmDelete": "¿Eliminar esta dirección?",
+      "deleted": "Dirección eliminada.",
+      "add": "Añadir dirección",
+      "empty": "No hay direcciones guardadas todavía.",
+      "label": "Dirección",
+      "cityCountry": "Ciudad / País",
+      "postal": "Código postal",
+      "showing": "Mostrando",
+      "results": "direcciones",
+      "newTitle": "Nueva dirección",
+      "editTitle": "Editar dirección",
+      "title": "Etiqueta (ej. Casa, Trabajo)"
     }
   },
 

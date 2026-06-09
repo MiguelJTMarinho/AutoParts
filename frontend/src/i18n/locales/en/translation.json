@@ -136,28 +136,44 @@
 
   "profilePage": {
     "buttons": {
-      "orders": "Orders",
+      "orders": "My Orders",
       "logOut": "Log Out",
+      "changePhoto": "Change Photo",
       "editProfile": "Edit Profile",
-      "cancel": "Cancel",
       "saveChanges": "Save Changes",
-      "changePhoto": "Change"
+      "cancel": "Cancel"
     },
     "sections": {
       "personalInfo": "Personal Information",
-      "address": "Address"
+      "address": "Addresses"
     },
     "fields": {
       "firstName": "First Name",
       "lastName": "Last Name",
-      "email": "Email",
+      "email": "Email Address",
       "phone": "Phone Number",
+      "nif": "NIF / Tax ID",
       "addressLine1": "Address Line 1",
       "addressLine2": "Address Line 2",
       "city": "City",
       "postalCode": "Postal Code",
-      "country": "Country",
-      "nif": "NIF"
+      "country": "Country"
+    },
+    "address": {
+      "added": "Address added.",
+      "updated": "Address updated.",
+      "confirmDelete": "Delete this address?",
+      "deleted": "Address removed.",
+      "add": "Add address",
+      "empty": "No addresses saved yet.",
+      "label": "Address",
+      "cityCountry": "City / Country",
+      "postal": "Postal code",
+      "showing": "Showing",
+      "results": "addresses",
+      "newTitle": "New address",
+      "editTitle": "Edit address",
+      "title": "Label (e.g. Home, Work)"
     }
   },
 

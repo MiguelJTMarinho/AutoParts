@@ -27,6 +27,10 @@ const Checkout = () => {
     nif: "",
   });
 
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddressId, setSelectedAddressId] = useState("");
+  const [saveAddress, setSaveAddress] = useState(false);
+
   const cartItems = cart?.items || cart?.products || [];
   const cartTotal =
     cart?.total ||
@@ -62,7 +66,8 @@ const Checkout = () => {
             }),
           ]);
 
-          const addressData = addressRes.data;
+          const addressData = addressRes.data || [];
+          setAddresses(addressData);
           const freshUser = userRes.data;
 
           setShippingAddress((prev) => {
@@ -74,8 +79,8 @@ const Checkout = () => {
               nif: freshUser?.nif || prev.nif,
             };
 
-            if (addressData && addressData.length > 0) {
-              // Mapeia o nome do país vindo da BD para as <options> do teu select ("PT" ou "ES")
+            if (addressData.length > 0) {
+              setSelectedAddressId(addressData[0].id);
               let fetchedCountry = addressData[0].country || "";
               const lowerCountry = fetchedCountry.toLowerCase().trim();
               if (lowerCountry === "portugal" || lowerCountry === "pt")
@@ -104,6 +109,45 @@ const Checkout = () => {
     }
   }, [userInfo]);
 
+  const handleAddressSelect = (addressId) => {
+    if (!addressId) {
+      setSelectedAddressId("");
+      setShippingAddress((prev) => ({
+        ...prev,
+        address: "",
+        address2: "",
+        city: "",
+        postalCode: "",
+        country: "",
+      }));
+      return;
+    }
+
+    const address = addresses.find((a) => a.id === Number(addressId));
+
+    if (!address) return;
+
+    let country = address.country || "";
+
+    if (country.toLowerCase() === "portugal") country = "PT";
+    else if (
+      country.toLowerCase() === "espanha" ||
+      country.toLowerCase() === "spain"
+    )
+      country = "ES";
+
+    setSelectedAddressId(address.id);
+
+    setShippingAddress((prev) => ({
+      ...prev,
+      address: address.address_line_1 || "",
+      address2: address.address_line_2 || "",
+      city: address.city || "",
+      postalCode: address.postal_code || "",
+      country,
+    }));
+  };
+
   const handleCreateCheckout = (e) => {
     e.preventDefault();
     setShowPayment(true);
@@ -111,6 +155,24 @@ const Checkout = () => {
 
   const handlePaymentSuccess = async (details) => {
     setIsProcessing(true);
+    if (!selectedAddressId && saveAddress) {
+      try {
+        await axios.post(
+          `${import.meta.env.VITE_API_URL}/addresses`,
+          {
+            title: "Checkout",
+            address_line_1: shippingAddress.address,
+            address_line_2: shippingAddress.address2,
+            city: shippingAddress.city,
+            postal_code: shippingAddress.postalCode,
+            country: shippingAddress.country,
+          },
+          { withCredentials: true },
+        );
+      } catch (error) {
+        console.error("Failed to save address", error);
+      }
+    }
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/orders/checkout`,
@@ -231,6 +293,29 @@ const Checkout = () => {
               className="w-full p-2 border rounded"
             />
           </div>
+          {addresses.length > 0 && (
+            <div className="mb-6">
+              <label className="block text-gray-700 mb-2">
+                Moradas guardadas
+              </label>
+
+              <select
+                value={selectedAddressId}
+                onChange={(e) => handleAddressSelect(e.target.value)}
+                className="w-full p-2 border rounded bg-white"
+              >
+                {addresses.map((address) => (
+                  <option key={address.id} value={address.id}>
+                    {address.title
+                      ? `${address.title} - ${address.address_line_1}`
+                      : address.address_line_1}
+                  </option>
+                ))}
+
+                <option value="">Nova morada</option>
+              </select>
+            </div>
+          )}
           <div className="mb-4">
             <label className="block text-gray-700">
               {t("checkoutPage.form.address")}
@@ -238,12 +323,13 @@ const Checkout = () => {
             <input
               type="text"
               value={shippingAddress.address}
-              onChange={(e) =>
+              onChange={(e) => {
                 setShippingAddress({
                   ...shippingAddress,
                   address: e.target.value,
-                })
-              }
+                });
+                setSelectedAddressId("");
+              }}
               className="w-full p-2 border rounded"
               required
             />
@@ -255,12 +341,13 @@ const Checkout = () => {
             <input
               type="text"
               value={shippingAddress.address2}
-              onChange={(e) =>
+              onChange={(e) => {
                 setShippingAddress({
                   ...shippingAddress,
                   address2: e.target.value,
-                })
-              }
+                });
+                setSelectedAddressId("");
+              }}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -272,12 +359,13 @@ const Checkout = () => {
               <input
                 type="text"
                 value={shippingAddress.city}
-                onChange={(e) =>
+                onChange={(e) => {
                   setShippingAddress({
                     ...shippingAddress,
                     city: e.target.value,
-                  })
-                }
+                  });
+                  setSelectedAddressId("");
+                }}
                 className="w-full p-2 border rounded"
                 required
               />
@@ -289,12 +377,13 @@ const Checkout = () => {
               <input
                 type="text"
                 value={shippingAddress.postalCode}
-                onChange={(e) =>
+                onChange={(e) => {
                   setShippingAddress({
                     ...shippingAddress,
                     postalCode: e.target.value,
-                  })
-                }
+                  });
+                  setSelectedAddressId("");
+                }}
                 className="w-full p-2 border rounded"
                 required
               />
@@ -306,12 +395,13 @@ const Checkout = () => {
             </label>
             <select
               value={shippingAddress.country}
-              onChange={(e) =>
+              onChange={(e) => {
                 setShippingAddress({
                   ...shippingAddress,
                   country: e.target.value,
-                })
-              }
+                });
+                setSelectedAddressId("");
+              }}
               className="w-full p-2 border rounded bg-white"
               required
             >
@@ -339,6 +429,18 @@ const Checkout = () => {
               required
             />
           </div>
+          {!selectedAddressId && (
+            <div className="mb-4">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={saveAddress}
+                  onChange={(e) => setSaveAddress(e.target.checked)}
+                />
+                Guardar esta morada para futuras compras
+              </label>
+            </div>
+          )}
           <div className="mt-6">
             {/* Payment button*/}
             {!showPayment ? (

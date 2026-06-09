@@ -136,28 +136,44 @@
 
   "profilePage": {
     "buttons": {
-      "orders": "Encomendas",
+      "orders": "Minhas Encomendas",
       "logOut": "Terminar Sessão",
+      "changePhoto": "Alterar Foto",
       "editProfile": "Editar Perfil",
-      "cancel": "Cancelar",
       "saveChanges": "Guardar Alterações",
-      "changePhoto": "Alterar"
+      "cancel": "Cancelar"
     },
     "sections": {
       "personalInfo": "Informações Pessoais",
-      "address": "Morada"
+      "address": "Moradas"
     },
     "fields": {
-      "firstName": "Nome Próprio",
+      "firstName": "Nome",
       "lastName": "Apelido",
-      "email": "E-mail",
-      "phone": "Número de Telemóvel",
-      "addressLine1": "Linha de Morada 1",
-      "addressLine2": "Linha de Morada 2",
-      "city": "Cidade",
+      "email": "Endereço de E-mail",
+      "phone": "Número de Telefone",
+      "nif": "NIF",
+      "addressLine1": "Morada (Linha 1)",
+      "addressLine2": "Morada (Linha 2)",
+      "city": "Localidade",
       "postalCode": "Código Postal",
-      "country": "País",
-      "nif": "NIF"
+      "country": "País"
+    },
+    "address": {
+      "added": "Morada adicionada.",
+      "updated": "Morada atualizada.",
+      "confirmDelete": "Eliminar esta morada?",
+      "deleted": "Morada removida.",
+      "add": "Adicionar morada",
+      "empty": "Nenhuma morada guardada ainda.",
+      "label": "Morada",
+      "cityCountry": "Localidade / País",
+      "postal": "Código postal",
+      "showing": "A mostrar",
+      "results": "moradas",
+      "newTitle": "Nova morada",
+      "editTitle": "Editar morada",
+      "title": "Rótulo (ex. Casa, Trabalho)"
     }
   },
 
