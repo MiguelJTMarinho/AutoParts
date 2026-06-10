@@ -613,6 +613,7 @@
   },
 
   "wishlist": {
+    "login": "Log In",
     "title": "My Wishlist",
     "loginRequired": "Please login to view your wishlist.",
     "loading": "Loading wishlist...",
@@ -880,6 +881,36 @@
     "messagePlaceholder": "Your message here...",
     "sending": "Sending...",
     "sendButton": "Send Message"
+  },
+
+  "forgotPassword": {
+    "error": "Something went wrong. Please try again.",
+    "title": "Forgot your password?",
+    "subtitle": "Enter your email and we'll send you a reset link.",
+    "success": {
+      "title": "Check your inbox",
+      "subtitle": "If an account exists for",
+      "suffix": ", you'll receive a reset link shortly.",
+      "backToLogin": "Back to login"
+    },
+    "form": {
+      "emailLabel": "Email address",
+      "emailPlaceholder": "Enter your email",
+      "sending": "Sending…",
+      "submit": "Send reset link",
+      "rememberPassword": "Remembered your password?",
+      "signIn": "Sign in"
+    },
+    "info": {
+      "title": "How it works",
+      "subtitle": "Simple and secure password reset",
+      "steps": {
+        "email": "Enter the email linked to your account",
+        "link": "We'll send you a secure reset link",
+        "reset": "Click the link and choose a new password",
+        "login": "Sign in with your new credentials"
+      }
+    }
   }
   
 }

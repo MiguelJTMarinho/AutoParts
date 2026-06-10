@@ -60,7 +60,9 @@ export const registerUser = createAsyncThunk(
 
       return response.data.user; // Return the user object from the response
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || { message: "Registration failed" },
+      );
     }
   },
 );

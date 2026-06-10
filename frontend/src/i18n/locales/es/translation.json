@@ -611,6 +611,7 @@
   },
 
   "wishlist": {
+    "login": "Iniciar sesión",
     "title": "Mi Lista de Deseos",
     "loginRequired": "Por favor, inicia sesión para ver tu lista de deseos.",
     "loading": "Cargando lista de deseos...",
@@ -878,5 +879,35 @@
     "messagePlaceholder": "Su mensaje aquí...",
     "sending": "Enviando...",
     "sendButton": "Enviar Mensaje"
+  },
+
+  "forgotPassword": {
+    "error": "Algo salió mal. Por favor, inténtelo de nuevo.",
+    "title": "¿Olvidó su contraseña?",
+    "subtitle": "Ingrese su correo electrónico y le enviaremos un enlace de restablecimiento.",
+    "success": {
+      "title": "Revise su bandeja de entrada",
+      "subtitle": "Si existe una cuenta para",
+      "suffix": ", recibirá un enlace de restablecimiento en breve.",
+      "backToLogin": "Volver al inicio de sesión"
+    },
+    "form": {
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "Ingrese su correo electrónico",
+      "sending": "Enviando…",
+      "submit": "Enviar enlace de restablecimiento",
+      "rememberPassword": "¿Recordó su contraseña?",
+      "signIn": "Iniciar sesión"
+    },
+    "info": {
+      "title": "Cómo funciona",
+      "subtitle": "Restablecimiento de contraseña simple y seguro",
+      "steps": {
+        "email": "Ingrese el correo electrónico vinculado a su cuenta",
+        "link": "Le enviaremos un enlace de restablecimiento seguro",
+        "reset": "Haga clic en el enlace y elija una nueva contraseña",
+        "login": "Inicie sesión con sus nuevas credenciales"
+      }
+    }
   }
 }

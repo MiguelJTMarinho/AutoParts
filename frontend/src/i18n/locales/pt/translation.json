@@ -500,7 +500,7 @@
   },
 
   "topbar": {
-    "shippingMessage": "Enviamos para todo o país - Envio rápido e fiável!"
+    "shippingMessage": "Enviamos para toda a Península Ibérica - Envio rápido e fiável!"
   },
 
   "featuredCollection": {
@@ -613,6 +613,7 @@
   },
 
   "wishlist": {
+    "login": "Iniciar Sessão",
     "title": "Lista de Favoritos",
     "loginRequired": "Por favor, inicie sessão para ver a sua lista de favoritos.",
     "loading": "A carregar favoritos...",
@@ -880,5 +881,35 @@
     "messagePlaceholder": "A sua mensagem aqui...",
     "sending": "A enviar...",
     "sendButton": "Enviar Mensagem"
+  },
+
+  "forgotPassword": {
+    "error": "Ocorreu um erro. Por favor, tente novamente.",
+    "title": "Esqueceu-se da sua palavra-passe?",
+    "subtitle": "Insira o seu e-mail e enviar-lhe-emos um link de recuperação.",
+    "success": {
+      "title": "Verifique a sua caixa de entrada",
+      "subtitle": "Se existir uma conta para",
+      "suffix": ", receberá um link de recuperação em breve.",
+      "backToLogin": "Voltar ao login"
+    },
+    "form": {
+      "emailLabel": "Endereço de e-mail",
+      "emailPlaceholder": "Insira o seu e-mail",
+      "sending": "A enviar…",
+      "submit": "Enviar link de recuperação",
+      "rememberPassword": "Lembrou-se da sua palavra-passe?",
+      "signIn": "Iniciar sessão"
+    },
+    "info": {
+      "title": "Como funciona",
+      "subtitle": "Recuperação de palavra-passe simples e segura",
+      "steps": {
+        "email": "Insira o e-mail associado à sua conta",
+        "link": "Enviar-lhe-emos um link de recuperação seguro",
+        "reset": "Clique no link e escolha uma nova palavra-passe",
+        "login": "Inicie sessão com as suas novas credenciais"
+      }
+    }
   }
 }

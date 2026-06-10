@@ -66,7 +66,7 @@ const Login = () => {
                 name="email"
                 autoComplete="email"
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder={t("loginPage.form.emailPlaceholder")}
                 className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
@@ -83,7 +83,7 @@ const Login = () => {
                 name="password"
                 autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
+                placeholder={t("loginPage.form.passwordPlaceholder")}
                 className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />

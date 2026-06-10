@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { HiCheck } from "react-icons/hi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/slices/authSlice";
 import { useTranslation } from "react-i18next";
 
@@ -23,6 +23,7 @@ const Register = () => {
   };
 
   const dispatch = useDispatch();
+  const { error } = useSelector((state) => state.auth);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -137,6 +138,10 @@ const Register = () => {
             >
               {t("registerPage.form.submitButton")}
             </button>
+
+            {error && (
+              <p className="text-red-500 text-sm">{error}</p>
+            )}
           </form>
 
           <p className="text-sm mt-6 text-gray-500">

@@ -33,7 +33,7 @@ const WishlistPage = () => {
           to="/login"
           className="bg-main-blue text-white px-6 py-2 rounded-md hover:bg-blue-700"
         >
-          {t("auth.login")}
+          {t("wishlist.login")}
         </Link>
       </div>
     );

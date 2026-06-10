@@ -40,6 +40,14 @@ const registerUser = async ({ first_name, last_name, email, password }) => {
   const password_hash = await bcrypt.hash(password, salt);
   const username = await generateUsername(email);
 
+  const userExists = await userRepository.findUserByEmail(email);
+
+  if (userExists) {
+    throw new Error("User with that email already exists!");
+  }
+
+  
+
   const user = await userRepository.createUser({
     username,
     first_name,

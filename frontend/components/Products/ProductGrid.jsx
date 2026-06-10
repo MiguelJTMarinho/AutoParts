@@ -73,7 +73,7 @@ const ProductGrid = ({ products, loading, error }) => {
             to={`/product/${product.id}`}
             className="group block h-full"
           >
-            <div className="bg-white rounded-xl border border-gray-100 p-3 hover:border-transparent hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+            <div className="bg-white rounded-xl border border-gray-200 bg-gray-100 p-3 hover:border-transparent hover:shadow-xl transition-all duration-300 flex flex-col h-full">
               <div className="relative w-full aspect-square overflow-hidden rounded-lg bg-gray-50 mb-4">
                 <img
                   src={
