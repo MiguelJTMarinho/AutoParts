@@ -1,25 +1,21 @@
-const { Pool } = require("pg");
+const { Pool } = require("@neondatabase/serverless");
 require("dotenv").config();
 
 const pool = new Pool({
-  user: process.env.PG_USER,
-  host: process.env.PG_HOST,
-  database: process.env.PG_DATABASE,
-  password: process.env.PG_PASSWORD,
-  port: process.env.PG_PORT,
-  ssl: {
-    require: true
-  },
+  connectionString: process.env.CONNECTION_STRING,
 });
 
 pool.on("error", (err, client) => {
   console.error("Unexpected error on idle client", err);
 });
 
-// opcional: log de ligação
 pool
   .connect()
-  .then(() => console.log("PostgreSQL connected"))
+  .then(() => console.log("Neon PostgreSQL connected via WebSockets"))
   .catch((err) => console.error("Connection error", err));
+
+pool.on("error", (err) => {
+  console.error("Unexpected error on idle client", err);
+});
 
 module.exports = pool;
