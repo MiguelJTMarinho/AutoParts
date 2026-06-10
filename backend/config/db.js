@@ -15,8 +15,4 @@ pool
   .then(() => console.log("Neon PostgreSQL connected via WebSockets"))
   .catch((err) => console.error("Connection error", err));
 
-pool.on("error", (err) => {
-  console.error("Unexpected error on idle client", err);
-});
-
 module.exports = pool;
