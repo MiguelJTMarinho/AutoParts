@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { clearCart } from "../redux/slices/cartSlice";
 import { HiOutlinePencil, HiOutlineTrash, HiPlus } from "react-icons/hi2";
+import { deleteUser } from "../../redux/slices/admin/adminUsersSlice";
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -35,6 +36,12 @@ const Profile = () => {
     nif: "",
     avatar: "https://picsum.photos/500/500?1",
   });
+
+  const handleDeleteUser = (userId) => {
+    if (window.confirm(t("userManagement.alerts.confirmDelete"))) {
+      dispatch(deleteUser(userId));
+    }
+  };
 
   const config = { withCredentials: true };
 
@@ -212,6 +219,13 @@ const Profile = () => {
             className="px-6 py-2.5 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 transition"
           >
             {t("profilePage.buttons.logOut")}
+          </button>
+          <button
+            onClick={() => handleDeleteUser(userInfo.id)}
+            disabled={loading}
+            className="bg-red-500 text-white py-2 px-4 hover:bg-red-600 rounded cursor-pointer"
+          >
+            {t("userManagement.table.deleteButton")}
           </button>
         </div>
 
