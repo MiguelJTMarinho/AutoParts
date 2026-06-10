@@ -37,9 +37,20 @@ const Profile = () => {
     avatar: "https://picsum.photos/500/500?1",
   });
 
-  const handleDeleteUser = (userId) => {
+  const handleDeleteUser = async (userId) => {
     if (window.confirm(t("userManagement.alerts.confirmDelete"))) {
-      dispatch(deleteUser(userId));
+      try {
+        // Add .unwrap() to catch Redux Toolkit thunk errors properly
+        await dispatch(deleteUser(userId)).unwrap(); 
+        
+        // Clean up the frontend session
+        dispatch(logoutUser());
+        dispatch(clearCart());
+        toast.success(t("profilePage.alerts.accountDeleted", "Account deleted."));
+        navigate("/login");
+      } catch (error) {
+        toast.error(t("profilePage.alerts.deleteFailed", "Failed to delete account."));
+      }
     }
   };
 
@@ -222,7 +233,6 @@ const Profile = () => {
           </button>
           <button
             onClick={() => handleDeleteUser(userInfo.id)}
-            disabled={loading}
             className="bg-red-500 text-white py-2 px-4 hover:bg-red-600 rounded cursor-pointer"
           >
             {t("userManagement.table.deleteButton")}
