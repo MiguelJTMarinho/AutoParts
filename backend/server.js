@@ -75,6 +75,11 @@ app.get("/debug-sentry", function mainHandler(req, res) {
   throw new Error("Sentry Test Error: " + new Date().toISOString());
 });
 
+// Add this simple route to handle the root URL
+app.get("/", (req, res) => {
+  res.send("AutoParts API is running! 🚗💨");
+});
+
 app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/car_brands", carBrandsRoutes);
