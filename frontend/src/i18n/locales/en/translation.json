@@ -382,7 +382,7 @@
     },
     "buttons": {
       "edit": "Edit",
-      "markSold": "Mark as Sold",
+      "markSold": "Sold",
       "delete": "Delete",
       "disable": "Disable"
     },
@@ -444,6 +444,18 @@
       "country": "Country",
       "phone": "Phone"
     },
+    "validation": {
+      "firstName": "Invalid first name (minimum 2 letters)",
+      "lastName": "Invalid last name (minimum 2 letters)",
+      "nif": "Invalid NIF / Tax ID (9 digits)",
+      "address": "Address is required",
+      "city": "Invalid city",
+      "country": "Country is required",
+      "postalCodePT": "Invalid postal code (e.g., 1234-567)",
+      "postalCodeES": "Invalid postal code (e.g., 28001)",
+      "postalCodeDefault": "Invalid postal code",
+      "phone": "Invalid phone number"
+    },
     "buttons": {
       "continuePayment": "Continue to Payment"
     },
@@ -500,7 +512,7 @@
   },
 
   "topbar": {
-    "shippingMessage": "We ship nationwide - Fast and reliable shipping!"
+    "shippingMessage": "We ship throughout the Iberian Peninsula - Fast and reliable shipping!"
   },
 
   "featuredCollection": {

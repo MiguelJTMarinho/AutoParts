@@ -7,6 +7,14 @@ import axios from "axios";
 import { toast } from "sonner";
 import { clearCart } from "../../redux/slices/cartSlice";
 
+const validateNIF = (nif) => /^\d{9}$/.test(nif);
+const validatePhone = (phone) => /^\+?[\d\s\-]{9,15}$/.test(phone);
+const validatePostalCode = (code, country) => {
+  if (country === "PT") return /^\d{4}-\d{3}$/.test(code);
+  if (country === "ES") return /^\d{5}$/.test(code);
+  return code.length > 0;
+};
+
 const Checkout = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -15,6 +23,7 @@ const Checkout = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const [showPayment, setShowPayment] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [errors, setErrors] = useState({});
   const [shippingAddress, setShippingAddress] = useState({
     firstName: "",
     lastName: "",
@@ -45,7 +54,6 @@ const Checkout = () => {
 
   useEffect(() => {
     if (userInfo) {
-      // Preenche os dados base (Redux) de imediato para não haver delay na interface
       setShippingAddress((prev) => ({
         ...prev,
         firstName: userInfo.first_name || "",
@@ -56,7 +64,6 @@ const Checkout = () => {
 
       const fetchCheckoutData = async () => {
         try {
-          // Vai buscar a morada e os dados frescos do utilizador (para garantir que o NIF não está desatualizado no Redux)
           const [addressRes, userRes] = await Promise.all([
             axios.get(`${import.meta.env.VITE_API_URL}/addresses`, {
               withCredentials: true,
@@ -124,11 +131,9 @@ const Checkout = () => {
     }
 
     const address = addresses.find((a) => a.id === Number(addressId));
-
     if (!address) return;
 
     let country = address.country || "";
-
     if (country.toLowerCase() === "portugal") country = "PT";
     else if (
       country.toLowerCase() === "espanha" ||
@@ -137,7 +142,6 @@ const Checkout = () => {
       country = "ES";
 
     setSelectedAddressId(address.id);
-
     setShippingAddress((prev) => ({
       ...prev,
       address: address.address_line_1 || "",
@@ -148,9 +152,45 @@ const Checkout = () => {
     }));
   };
 
+const validate = () => {
+    const newErrors = {};
+
+    if (!/^[a-zA-ZÀ-ÿ\s\-']{2,}$/.test(shippingAddress.firstName))
+      newErrors.firstName = t("checkoutPage.validation.firstName", "Invalid first name (minimum 2 letters)");
+
+    if (!/^[a-zA-ZÀ-ÿ\s\-']{2,}$/.test(shippingAddress.lastName))
+      newErrors.lastName = t("checkoutPage.validation.lastName", "Invalid last name (minimum 2 letters)");
+
+    if (shippingAddress.nif && !validateNIF(shippingAddress.nif))
+      newErrors.nif = t("checkoutPage.validation.nif", "Invalid NIF (9 digits)");
+
+    if (!shippingAddress.address.trim())
+      newErrors.address = t("checkoutPage.validation.address", "Address is required");
+
+    if (!/^[a-zA-ZÀ-ÿ\s]{2,}$/.test(shippingAddress.city))
+      newErrors.city = t("checkoutPage.validation.city", "Invalid city");
+
+    if (!shippingAddress.country)
+      newErrors.country = t("checkoutPage.validation.country", "Country is required");
+
+    if (!validatePostalCode(shippingAddress.postalCode, shippingAddress.country))
+      newErrors.postalCode =
+        shippingAddress.country === "PT"
+          ? t("checkoutPage.validation.postalCodePT", "Invalid postal code (e.g., 1234-567)")
+          : shippingAddress.country === "ES"
+          ? t("checkoutPage.validation.postalCodeES", "Invalid postal code (e.g., 28001)")
+          : t("checkoutPage.validation.postalCodeDefault", "Invalid postal code");
+
+    if (!validatePhone(shippingAddress.phone))
+      newErrors.phone = t("checkoutPage.validation.phone", "Invalid phone number");
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleCreateCheckout = (e) => {
     e.preventDefault();
-    setShowPayment(true);
+    if (validate()) setShowPayment(true);
   };
 
   const handlePaymentSuccess = async (details) => {
@@ -218,6 +258,14 @@ const Checkout = () => {
     );
   }
 
+  const fieldClass = (field) =>
+    `w-full p-2 border rounded ${errors[field] ? "border-red-500" : ""}`;
+
+  const ErrorMsg = ({ field }) =>
+    errors[field] ? (
+      <p className="text-red-500 text-xs mt-1">{errors[field]}</p>
+    ) : null;
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter">
       {/* Left Section */}
@@ -249,15 +297,14 @@ const Checkout = () => {
               <input
                 type="text"
                 value={shippingAddress.firstName}
-                onChange={(e) =>
-                  setShippingAddress({
-                    ...shippingAddress,
-                    firstName: e.target.value,
-                  })
-                }
-                className="w-full p-2 border rounded"
+                onChange={(e) => {
+                  const val = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s\-']/g, "");
+                  setShippingAddress({ ...shippingAddress, firstName: val });
+                }}
+                className={fieldClass("firstName")}
                 required
               />
+              <ErrorMsg field="firstName" />
             </div>
             <div>
               <label className="block text-gray-700">
@@ -266,15 +313,14 @@ const Checkout = () => {
               <input
                 type="text"
                 value={shippingAddress.lastName}
-                onChange={(e) =>
-                  setShippingAddress({
-                    ...shippingAddress,
-                    lastName: e.target.value,
-                  })
-                }
-                className="w-full p-2 border rounded"
+                onChange={(e) => {
+                  const val = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s\-']/g, "");
+                  setShippingAddress({ ...shippingAddress, lastName: val });
+                }}
+                className={fieldClass("lastName")}
                 required
               />
+              <ErrorMsg field="lastName" />
             </div>
           </div>
           <div className="mb-4">
@@ -284,21 +330,20 @@ const Checkout = () => {
             <input
               type="text"
               value={shippingAddress.nif}
-              onChange={(e) =>
-                setShippingAddress({
-                  ...shippingAddress,
-                  nif: e.target.value,
-                })
-              }
-              className="w-full p-2 border rounded"
+              onChange={(e) => {
+                const val = e.target.value.replace(/\D/g, "").slice(0, 9);
+                setShippingAddress({ ...shippingAddress, nif: val });
+              }}
+              className={fieldClass("nif")}
+              maxLength={9}
             />
+            <ErrorMsg field="nif" />
           </div>
           {addresses.length > 0 && (
             <div className="mb-6">
               <label className="block text-gray-700 mb-2">
                 Moradas guardadas
               </label>
-
               <select
                 value={selectedAddressId}
                 onChange={(e) => handleAddressSelect(e.target.value)}
@@ -311,7 +356,6 @@ const Checkout = () => {
                       : address.address_line_1}
                   </option>
                 ))}
-
                 <option value="">Nova morada</option>
               </select>
             </div>
@@ -324,15 +368,13 @@ const Checkout = () => {
               type="text"
               value={shippingAddress.address}
               onChange={(e) => {
-                setShippingAddress({
-                  ...shippingAddress,
-                  address: e.target.value,
-                });
+                setShippingAddress({ ...shippingAddress, address: e.target.value });
                 setSelectedAddressId("");
               }}
-              className="w-full p-2 border rounded"
+              className={fieldClass("address")}
               required
             />
+            <ErrorMsg field="address" />
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">
@@ -342,10 +384,7 @@ const Checkout = () => {
               type="text"
               value={shippingAddress.address2}
               onChange={(e) => {
-                setShippingAddress({
-                  ...shippingAddress,
-                  address2: e.target.value,
-                });
+                setShippingAddress({ ...shippingAddress, address2: e.target.value });
                 setSelectedAddressId("");
               }}
               className="w-full p-2 border rounded"
@@ -360,15 +399,14 @@ const Checkout = () => {
                 type="text"
                 value={shippingAddress.city}
                 onChange={(e) => {
-                  setShippingAddress({
-                    ...shippingAddress,
-                    city: e.target.value,
-                  });
+                  const val = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+                  setShippingAddress({ ...shippingAddress, city: val });
                   setSelectedAddressId("");
                 }}
-                className="w-full p-2 border rounded"
+                className={fieldClass("city")}
                 required
               />
+              <ErrorMsg field="city" />
             </div>
             <div>
               <label className="block text-gray-700">
@@ -378,15 +416,13 @@ const Checkout = () => {
                 type="text"
                 value={shippingAddress.postalCode}
                 onChange={(e) => {
-                  setShippingAddress({
-                    ...shippingAddress,
-                    postalCode: e.target.value,
-                  });
+                  setShippingAddress({ ...shippingAddress, postalCode: e.target.value });
                   setSelectedAddressId("");
                 }}
-                className="w-full p-2 border rounded"
+                className={fieldClass("postalCode")}
                 required
               />
+              <ErrorMsg field="postalCode" />
             </div>
           </div>
           <div className="mb-4">
@@ -396,13 +432,10 @@ const Checkout = () => {
             <select
               value={shippingAddress.country}
               onChange={(e) => {
-                setShippingAddress({
-                  ...shippingAddress,
-                  country: e.target.value,
-                });
+                setShippingAddress({ ...shippingAddress, country: e.target.value });
                 setSelectedAddressId("");
               }}
-              className="w-full p-2 border rounded bg-white"
+              className={`w-full p-2 border rounded bg-white ${errors.country ? "border-red-500" : ""}`}
               required
             >
               <option value="">
@@ -411,6 +444,7 @@ const Checkout = () => {
               <option value="PT">Portugal</option>
               <option value="ES">Espanha</option>
             </select>
+            <ErrorMsg field="country" />
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">
@@ -419,15 +453,14 @@ const Checkout = () => {
             <input
               type="tel"
               value={shippingAddress.phone}
-              onChange={(e) =>
-                setShippingAddress({
-                  ...shippingAddress,
-                  phone: e.target.value,
-                })
-              }
-              className="w-full p-2 border rounded"
+              onChange={(e) => {
+                const val = e.target.value.replace(/[^\d\s\+\-]/g, "");
+                setShippingAddress({ ...shippingAddress, phone: val });
+              }}
+              className={fieldClass("phone")}
               required
             />
+            <ErrorMsg field="phone" />
           </div>
           {!selectedAddressId && (
             <div className="mb-4">
@@ -442,7 +475,6 @@ const Checkout = () => {
             </div>
           )}
           <div className="mt-6">
-            {/* Payment button*/}
             {!showPayment ? (
               <button
                 type="submit"
@@ -458,10 +490,7 @@ const Checkout = () => {
                 </h3>
                 {isProcessing ? (
                   <div className="text-center py-4 font-medium text-gray-600">
-                    {t(
-                      "checkoutPage.payment.processing",
-                      "A processar pagamento...",
-                    )}
+                    {t("checkoutPage.payment.processing", "A processar pagamento...")}
                   </div>
                 ) : (
                   <PaypalButton

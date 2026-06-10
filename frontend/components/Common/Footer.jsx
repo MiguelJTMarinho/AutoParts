@@ -108,15 +108,23 @@ const Footer = () => {
           </h3>
 
           <div className="flex items-center space-x-4 mb-6">
-            <TbBrandFacebook className="h-5 w-5" />
-            <IoLogoInstagram className="h-5 w-5" />
-            <RiTwitterXLine className="h-4 w-4" />
+            <a href="facebook.com" className="hover:text-gray-300">
+              <TbBrandFacebook className="h-5 w-5" />
+            </a>
+            <a href="instagram.com" className="hover:text-gray-300">
+              <IoLogoInstagram className="h-5 w-5" />
+            </a>
+            <a href="x.com" className="hover:text-gray-300">
+              <RiTwitterXLine className="h-4 w-4" />
+            </a>
           </div>
 
           <p className="text-gray-500">{t("footer.followUs.callUs")}</p>
           <p className="flex items-center mt-2">
             <FiPhoneCall className="mr-2" />
-            912 123 123
+              <a href="tel:+1234567890" className="hover:text-gray-300">
+                +351 999 999 999
+              </a>
           </p>
         </div>
       </div>

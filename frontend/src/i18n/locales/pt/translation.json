@@ -382,7 +382,7 @@
     },
     "buttons": {
       "edit": "Editar",
-      "markSold": "Marcar como Vendido",
+      "markSold": "Vendido",
       "delete": "Eliminar",
       "disable": "Desativar"
     },
@@ -443,6 +443,18 @@
       "postalCode": "Código Postal",
       "country": "País",
       "phone": "Telemóvel"
+    },
+    "validation": {
+      "firstName": "Nome inválido (mínimo 2 letras)",
+      "lastName": "Apelido inválido (mínimo 2 letras)",
+      "nif": "NIF inválido (9 dígitos)",
+      "address": "Morada obrigatória",
+      "city": "Cidade inválida",
+      "country": "País obrigatório",
+      "postalCodePT": "Código postal inválido (ex: 1234-567)",
+      "postalCodeES": "Código postal inválido (ex: 28001)",
+      "postalCodeDefault": "Código postal inválido",
+      "phone": "Telefone inválido"
     },
     "buttons": {
       "continuePayment": "Continuar para Pagamento"
