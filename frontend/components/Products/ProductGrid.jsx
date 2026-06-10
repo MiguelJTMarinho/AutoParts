@@ -4,6 +4,22 @@ import { useTranslation } from "react-i18next";
 
 const ITEMS_PER_PAGE = 20;
 
+const getPageRange = (current, total) => {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+
+  const pages = new Set([1, total, current]);
+  if (current > 1) pages.add(current - 1);
+  if (current < total) pages.add(current + 1);
+
+  const sorted = Array.from(pages).sort((a, b) => a - b);
+  const result = [];
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) result.push("...");
+    result.push(sorted[i]);
+  }
+  return result;
+};
+
 const ProductGrid = ({ products, loading, error }) => {
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,6 +62,7 @@ const ProductGrid = ({ products, loading, error }) => {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE,
   );
+  const pageRange = getPageRange(currentPage, totalPages);
 
   return (
     <div>
@@ -94,7 +111,7 @@ const ProductGrid = ({ products, loading, error }) => {
       </div>
 
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-8">
+        <div className="flex justify-center items-center gap-1 mt-8 flex-wrap">
           <button
             onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
             disabled={currentPage === 1}
@@ -103,19 +120,28 @@ const ProductGrid = ({ products, loading, error }) => {
             &lsaquo;
           </button>
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`px-3 py-1 rounded border text-sm ${
-                page === currentPage
-                  ? "bg-gray-900 text-white border-gray-900"
-                  : "border-gray-300 text-gray-600 hover:bg-gray-100"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
+          {pageRange.map((page, i) =>
+            page === "..." ? (
+              <span
+                key={`ellipsis-${i}`}
+                className="px-2 py-1 text-sm text-gray-400"
+              >
+                &hellip;
+              </span>
+            ) : (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-3 py-1 rounded border text-sm ${
+                  page === currentPage
+                    ? "bg-gray-900 text-white border-gray-900"
+                    : "border-gray-300 text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                {page}
+              </button>
+            ),
+          )}
 
           <button
             onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
