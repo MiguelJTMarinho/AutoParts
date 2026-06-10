@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { clearCart } from "../redux/slices/cartSlice";
 import { HiOutlinePencil, HiOutlineTrash, HiPlus } from "react-icons/hi2";
-import { deleteUser } from "../../redux/slices/admin/adminUsersSlice";
+import { deleteUser } from "../redux/slices/admin/adminUsersSlice";
 
 const Profile = () => {
   const { t } = useTranslation();
