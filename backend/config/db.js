@@ -1,6 +1,7 @@
 const { Pool } = require("@neondatabase/serverless");
 require("dotenv").config();
 
+// Create a connection pool to the Neon PostgreSQL database
 const pool = new Pool({
   connectionString: process.env.CONNECTION_STRING,
 });
