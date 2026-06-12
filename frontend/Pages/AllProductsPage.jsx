@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaFilter } from "react-icons/fa";
+import { HiXMark } from "react-icons/hi2";
 import FilterSidebar from "../components/Products/FilterSidebar";
 import SortOptions from "../components/Products/SortOptions";
 import ProductGrid from "../components/Products/ProductGrid";
@@ -27,7 +28,7 @@ const AllProductsPage = () => {
   };
 
   const handleClickOutside = (e) => {
-    //Close sidebar if clicked outside
+    // Fecha a sidebar se clicar fora dela (útil para prevenir bugs no desktop)
     if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
       setIsSidebarOpen(false);
     }
@@ -35,43 +36,71 @@ const AllProductsPage = () => {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   return (
-    <div className="flex flex-col lg:flex-row">
+    <div className="flex flex-col lg:flex-row relative">
       {/* Mobile Filter button */}
-      <button
-        onClick={toggleSidebar}
-        className="lg:hidden border p-2 flex justify-center items-center"
-      >
-        <FaFilter className="mr-2" /> {t("allProductsPage.filters")}
-      </button>
+      <div className="p-4 lg:hidden">
+        <button
+          onClick={toggleSidebar}
+          className="w-full border p-3 flex justify-center items-center bg-white rounded-lg shadow-sm hover:bg-gray-50 transition"
+        >
+          <FaFilter className="mr-2 text-main-blue" />{" "}
+          {t("allProductsPage.filters", "Filters")}
+        </button>
+      </div>
+
+      {/* Mobile Overlay Backdrop */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
 
       {/* Filter bar */}
       <div
         ref={sidebarRef}
         className={`
-    fixed inset-y-0 left-0 w-64 bg-white overflow-y-auto z-30
-    transition-transform duration-300 shrink-0
-    ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
-    lg:static lg:translate-x-0 lg:block
-  `}
+          fixed inset-y-0 left-0 w-72 bg-white overflow-y-auto z-50 shadow-2xl
+          transition-transform duration-300 shrink-0
+          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:static lg:translate-x-0 lg:block lg:w-64 lg:shadow-none lg:z-auto
+        `}
       >
+        {/* Mobile Sidebar Header & Close Button */}
+        <div className="flex justify-between items-center p-4 border-b border-gray-100 lg:hidden">
+          <span className="font-bold text-lg text-gray-800">
+            {t("allProductsPage.filters", "Filters")}
+          </span>
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <HiXMark className="w-6 h-6 text-gray-600" />
+          </button>
+        </div>
+
         <FilterSidebar />
       </div>
-      <div className="grow p-4">
-        <h2 className="text-2xl uppercase mb-4">
-          {t("allProductsPage.title")}
+
+      {/* Main Content */}
+      <div className="grow p-4 lg:p-6">
+        <h2 className="text-2xl md:text-3xl font-bold uppercase mb-6 text-gray-800">
+          {t("allProductsPage.title", "All Products")}
         </h2>
+
         {/* Sort */}
         <SortOptions />
 
         {/* Product Grid */}
-        <ProductGrid products={products} loading={loading} error={error} />
+        <div className="mt-6">
+          <ProductGrid products={products} loading={loading} error={error} />
+        </div>
       </div>
     </div>
   );

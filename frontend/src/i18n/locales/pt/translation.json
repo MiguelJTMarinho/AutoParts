@@ -923,5 +923,11 @@
         "login": "Inicie sessão com as suas novas credenciais"
       }
     }
+  },
+
+  "categoryMenu": {
+    "buttonLabel": "Categorias",
+    "viewAll": "Ver tudo",
+    "hoverPrompt": "Passe o rato sobre uma categoria para ver as suas subcategorias"
   }
 }

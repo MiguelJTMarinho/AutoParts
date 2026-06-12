@@ -923,6 +923,12 @@
         "login": "Sign in with your new credentials"
       }
     }
+  },
+
+  "categoryMenu": {
+    "buttonLabel": "Categories",
+    "viewAll": "View all",
+    "hoverPrompt": "Hover over a category to see its subcategories"
   }
   
 }
