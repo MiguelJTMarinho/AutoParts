@@ -111,6 +111,25 @@ export const logoutUser = createAsyncThunk(
   },
 );
 
+// Delete User Account
+export const deleteUserAccount = createAsyncThunk(
+  "auth/deleteUserAccount",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/users/hard-delete`,
+        { withCredentials: true },
+      );
+      dispatch(logout());
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: "Failed to delete account" },
+      );
+    }
+  },
+);
+
 // Slice
 const authSlice = createSlice({
   name: "auth",

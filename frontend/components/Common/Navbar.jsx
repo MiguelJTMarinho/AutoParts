@@ -41,63 +41,57 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="container mx-auto flex flex-wrap items-center justify-between py-4 px-4 sm:px-6">
+      <nav className="container mx-auto flex flex-wrap items-center justify-between py-4 px-6">
         {/* Left - Logo */}
-        <div className="order-1 shrink-0">
-          <Link to="/" className="block">
-            <img
-              src={logo}
-              alt="AutoParts Logo"
-              className="h-8 md:h-10 w-auto"
-            />
+
+        <div>
+          <Link to="/" className="text-3xl font-medium">
+            <img src={logo} alt="AutoParts Logo" className="h-10 w-auto" />
           </Link>
         </div>
 
-        {/* Right - Icons (Fica ao lado do Logo no Mobile) */}
-        <div className="order-2 md:order-3 flex items-center space-x-3 md:space-x-4 ml-auto">
-          {userInfo && userInfo.role === "admin" && (
+        {/* Right - Icons */}
+
+        <div className="flex items-center space-x-4 ml-auto md:order-3">
+          {userInfo && userInfo.role == "admin" && (
             <Link
               to="/admin"
-              className="hidden sm:block bg-black px-2 py-1 rounded text-xs text-white"
+              className=" block bg-black px-2 rounded text-sm text-white"
             >
               Admin
             </Link>
           )}
-
           <LanguageSwitcher />
 
-          <Link to="/wishlist" className="relative hover:text-black transition">
+          <Link to="/wishlist" className="relative hover:text-black">
             <HiOutlineHeart className="h-6 w-6 text-gray-700" />
             {wishlistItemCount > 0 && (
-              <span className="absolute -top-1.5 -right-2 bg-main-blue text-white text-[10px] font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
+              <span className="absolute -top-1 -right-2 bg-main-blue text-white text-xs rounded-full px-2 py-0.5">
                 {wishlistItemCount}
               </span>
             )}
           </Link>
 
-          <Link to="/profile" className="hover:text-black transition">
+          <Link to="/profile" className="hover:text-black">
             <HiOutlineUser className="h-6 w-6 text-gray-700" />
           </Link>
-
           <button
             onClick={toggleCartDrawer}
-            className="relative hover:text-black cursor-pointer transition"
+            className="relative hover:text-black cursor-pointer"
           >
             <HiOutlineShoppingCart className="h-6 w-6 text-gray-700" />
             {cartItemCount > 0 && (
-              <span className="absolute -top-1.5 -right-2 bg-main-blue text-white text-[10px] font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
+              <span className="absolute -top-1 -right-2 bg-main-blue text-white text-xs rounded-full px-2 py-0.5">
                 {cartItemCount}
               </span>
             )}
           </button>
         </div>
 
-        {/* Center - Searchbar & Category Menu (Desce para a 2ª linha no Mobile) */}
-        <div className="order-3 md:order-2 w-full md:w-auto md:flex-1 flex items-center gap-2 mt-4 md:mt-0 md:px-8">
-          <div className="shrink-0">
+        {/* Center - Searchbar */}
+        <div className="w-full md:flex md:justify-center md:flex-1 mt-4 md:mt-0 md:mx-8">
+          <div className="flex items-center gap-2 w-full max-w-2xl">
             <CategoryMenu />
-          </div>
-          <div className="flex-1 w-full">
             <SearchBar />
           </div>
         </div>

@@ -201,6 +201,44 @@ router.put("/:id", protect, isAdmin, async (req, res) => {
   }
 });
 
+// @route DELETE /api/users/profile
+// @desc Delete logged-in user profile
+// @access Private
+router.delete("/profile", protect, async (req, res) => {
+  try {
+    await userService.deleteUser(req.user.id);
+
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    res.json({ message: "Account deleted successfully" });
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
+// @route DELETE /api/users/hard-delete
+// @desc Hard delete logged-in user profile
+// @access Private
+router.delete("/hard-delete", protect, async (req, res) => {
+  try {
+    await userService.hardDeleteUser(req.user.id);
+
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    res.json({ message: "Account deleted successfully" });
+  } catch (err) {
+    res.status(err.statusCode || 500).json({ error: err.message });
+  }
+});
+
 // @route DELETE /api/users/:id
 // @desc Soft Delete user (Admin only)
 // @access Private/Admin

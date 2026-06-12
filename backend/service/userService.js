@@ -46,8 +46,6 @@ const registerUser = async ({ first_name, last_name, email, password }) => {
     throw new Error("User with that email already exists!");
   }
 
-  
-
   const user = await userRepository.createUser({
     username,
     first_name,
@@ -317,6 +315,11 @@ const deleteUser = async (id) => {
   return deletedUser;
 };
 
+const hardDeleteUser = async (id) => {
+  const deletedUser = await userRepository.hardDeleteUser(id);
+  return deletedUser;
+};
+
 module.exports = {
   registerUser,
   createUserByAdmin,
@@ -329,4 +332,5 @@ module.exports = {
   changePassword,
   getAllUsers,
   deleteUser,
+  hardDeleteUser,
 };

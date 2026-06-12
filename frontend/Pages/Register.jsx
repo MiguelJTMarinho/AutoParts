@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiCheck } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/slices/authSlice";
@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 const Register = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -25,20 +26,25 @@ const Register = () => {
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.auth);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert(t("registerPage.alerts.passwordMismatch"));
       return;
     }
-    dispatch(
-      registerUser({
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        email: formData.email,
-        password: formData.password,
-      }),
-    );
+    try {
+      await dispatch(
+        registerUser({
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+        }),
+      ).unwrap();
+      navigate("/");
+    } catch (err) {
+      console.error("Registration failed:", err);
+    }
   };
 
   return (
@@ -139,9 +145,7 @@ const Register = () => {
               {t("registerPage.form.submitButton")}
             </button>
 
-            {error && (
-              <p className="text-red-500 text-sm">{error}</p>
-            )}
+            {error && <p className="text-red-500 text-sm">{error}</p>}
           </form>
 
           <p className="text-sm mt-6 text-gray-500">

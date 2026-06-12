@@ -163,6 +163,16 @@ const deleteUser = async (id) => {
   return result.rows[0];
 };
 
+const hardDeleteUser = async (id) => {
+  const result = await pool.query(
+    `DELETE FROM users
+     WHERE id = $1`,
+    [id],
+  );
+
+  return result.rows[0];
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
@@ -176,4 +186,5 @@ module.exports = {
   getAllUsers,
   updateUser,
   deleteUser,
+  hardDeleteUser,
 };

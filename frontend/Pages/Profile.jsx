@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "../redux/slices/authSlice";
+import { logoutUser, deleteUserAccount } from "../redux/slices/authSlice";
 import axios from "axios";
 import { toast } from "sonner";
 import { clearCart } from "../redux/slices/cartSlice";
 import { HiOutlinePencil, HiOutlineTrash, HiPlus } from "react-icons/hi2";
-import { deleteUser } from "../redux/slices/admin/adminUsersSlice";
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -37,14 +36,11 @@ const Profile = () => {
     avatar: "https://picsum.photos/500/500?1",
   });
 
-  const handleDeleteUser = async (userId) => {
+  const handleDeleteUser = async () => {
     if (window.confirm(t("userManagement.alerts.confirmDelete"))) {
       try {
-        // Add .unwrap() to catch Redux Toolkit thunk errors properly
-        await dispatch(deleteUser(userId)).unwrap(); 
+        await dispatch(deleteUserAccount()).unwrap(); 
         
-        // Clean up the frontend session
-        dispatch(logoutUser());
         dispatch(clearCart());
         toast.success(t("profilePage.alerts.accountDeleted", "Account deleted."));
         navigate("/login");
@@ -232,7 +228,7 @@ const Profile = () => {
             {t("profilePage.buttons.logOut")}
           </button>
           <button
-            onClick={() => handleDeleteUser(userInfo.id)}
+            onClick={handleDeleteUser}
             className="bg-red-500 text-white py-2 px-4 hover:bg-red-600 rounded cursor-pointer"
           >
             {t("userManagement.table.deleteButton")}
