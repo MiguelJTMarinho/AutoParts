@@ -174,37 +174,47 @@
       "newTitle": "Nova morada",
       "editTitle": "Editar morada",
       "title": "Rótulo (ex. Casa, Trabalho)"
+    },
+    "deleteAccount": {
+      "dangerZone": "Zona de Perigo",
+      "title": "Eliminar Conta",
+      "description": "Esta ação é irreversível. Ao eliminar a sua conta, todos os seus dados, encomendas e informações pessoais serão permanentemente removidos do nosso sistema.",
+      "confirmDelete": "Tem a certeza que deseja eliminar a sua conta? Esta ação não pode ser desfeita.",
+      "deleteAccount": "Eliminar Conta",
+      "deleted": "A sua conta foi eliminada com sucesso.",
+      "deleteFailed": "Não foi possível eliminar a sua conta. Tente novamente mais tarde."
     }
   },
 
   "registerPage": {
-    "title": "Crie a sua conta",
+    "title": "Criar Conta",
     "form": {
-      "firstNameLabel": "Nome Próprio *",
-      "firstNamePlaceholder": "João",
-      "lastNameLabel": "Apelido *",
-      "lastNamePlaceholder": "Silva",
-      "emailLabel": "E-mail *",
-      "emailPlaceholder": "Introduza o seu email",
-      "passwordLabel": "Palavra-passe *",
-      "passwordPlaceholder": "Crie uma palavra-passe",
-      "confirmPasswordLabel": "Confirmar Palavra-passe *",
-      "confirmPasswordPlaceholder": "Repita a palavra-passe",
-      "submitButton": "Criar Conta",
+      "firstNameLabel": "Nome",
+      "lastNameLabel": "Apelido",
+      "emailLabel": "Endereço de E-mail",
+      "passwordLabel": "Palavra-passe",
+      "confirmPasswordLabel": "Confirmar Palavra-passe",
+      "submitButton": "Registar",
       "alreadyHaveAccount": "Já tem uma conta?",
       "signInHere": "Inicie sessão aqui"
     },
+    "validation": {
+      "minLength": "Mínimo 8 caracteres",
+      "uppercase": "Uma letra maiúscula",
+      "number": "Um número",
+      "special": "Um caractere especial (@$!%*?&)"
+    },
     "alerts": {
-      "passwordMismatch": "As palavras-passe não coincidem"
+      "passwordMismatch": "As palavras-passe não coincidem."
     },
     "promo": {
-      "title": "Porquê criar uma conta?",
-      "subtitle": "Rápido. Seguro. Prático.",
+      "title": "Porquê juntar-se a nós?",
+      "subtitle": "Aproveite as vantagens de ter uma conta",
       "benefits": {
-        "trackOrders": "Acompanhe as suas encomendas em tempo real",
-        "saveInfo": "Guarde informações de envio e faturação",
-        "offers": "Aceda a ofertas e promoções exclusivas",
-        "fastCheckout": "Finalização de compra mais rápida"
+        "trackOrders": "Acompanhe as suas encomendas facilmente",
+        "saveInfo": "Guarde as suas informações de envio",
+        "offers": "Receba ofertas e descontos exclusivos",
+        "fastCheckout": "Processo de pagamento mais rápido"
       }
     }
   },

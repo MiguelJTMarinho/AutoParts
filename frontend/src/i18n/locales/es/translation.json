@@ -173,37 +173,47 @@
       "newTitle": "Nueva dirección",
       "editTitle": "Editar dirección",
       "title": "Etiqueta (ej. Casa, Trabajo)"
+    },
+    "deleteAccount": {
+      "dangerZone": "Zona de Peligro",
+      "title": "Eliminar Cuenta",
+      "description": "Esta acción es irreversible. Al eliminar tu cuenta, todos tus datos, pedidos e información personal serán eliminados permanentemente de nuestro sistema.",
+      "confirmDelete": "¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.",
+      "deleteAccount": "Eliminar Cuenta",
+      "deleted": "Tu cuenta ha sido eliminada con éxito.",
+      "deleteFailed": "No se pudo eliminar tu cuenta. Por favor, inténtalo de nuevo más tarde."
     }
   },
 
-  "registerPage": {
-    "title": "Crea tu cuenta",
+"registerPage": {
+    "title": "Crear una Cuenta",
     "form": {
-      "firstNameLabel": "Nombre *",
-      "firstNamePlaceholder": "Juan",
-      "lastNameLabel": "Apellido *",
-      "lastNamePlaceholder": "Pérez",
-      "emailLabel": "Correo Electrónico *",
-      "emailPlaceholder": "Introduce tu correo",
-      "passwordLabel": "Contraseña *",
-      "passwordPlaceholder": "Crea una contraseña",
-      "confirmPasswordLabel": "Confirmar Contraseña *",
-      "confirmPasswordPlaceholder": "Repite tu contraseña",
-      "submitButton": "Crear Cuenta",
+      "firstNameLabel": "Nombre",
+      "lastNameLabel": "Apellido",
+      "emailLabel": "Correo Electrónico",
+      "passwordLabel": "Contraseña",
+      "confirmPasswordLabel": "Confirmar Contraseña",
+      "submitButton": "Registrarse",
       "alreadyHaveAccount": "¿Ya tienes una cuenta?",
       "signInHere": "Inicia sesión aquí"
     },
+    "validation": {
+      "minLength": "Mínimo 8 caracteres",
+      "uppercase": "Una letra mayúscula",
+      "number": "Un número",
+      "special": "Un carácter especial (@$!%*?&)"
+    },
     "alerts": {
-      "passwordMismatch": "Las contraseñas no coinciden"
+      "passwordMismatch": "Las contraseñas no coinciden."
     },
     "promo": {
-      "title": "¿Por qué crear una cuenta?",
-      "subtitle": "Rápido. Seguro. Práctico.",
+      "title": "¿Por qué unirse a nosotros?",
+      "subtitle": "Disfruta de los beneficios de tener una cuenta",
       "benefits": {
-        "trackOrders": "Rastrea tus pedidos en tiempo real",
-        "saveInfo": "Guarda información de envío y facturación",
-        "offers": "Accede a ofertas y promociones exclusivas",
-        "fastCheckout": "Proceso de compra más rápido"
+        "trackOrders": "Rastrea tus pedidos fácilmente",
+        "saveInfo": "Guarda tu información de envío",
+        "offers": "Recibe ofertas y descuentos exclusivos",
+        "fastCheckout": "Proceso de pago más rápido"
       }
     }
   },

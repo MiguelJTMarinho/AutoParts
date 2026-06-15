@@ -37,15 +37,22 @@ const Profile = () => {
   });
 
   const handleDeleteUser = async () => {
-    if (window.confirm(t("userManagement.alerts.confirmDelete"))) {
+    if (window.confirm(t("profilePage.deleteAccount.confirmDelete"))) {
       try {
-        await dispatch(deleteUserAccount()).unwrap(); 
-        
+        await dispatch(deleteUserAccount()).unwrap();
+
         dispatch(clearCart());
-        toast.success(t("profilePage.alerts.accountDeleted", "Account deleted."));
+        toast.success(
+          t("profilePage.deleteAccount.deleted", "Account deleted."),
+        );
         navigate("/login");
       } catch (error) {
-        toast.error(t("profilePage.alerts.deleteFailed", "Failed to delete account."));
+        toast.error(
+          t(
+            "profilePage.deleteAccount.deleteFailed",
+            "Failed to delete account.",
+          ),
+        );
       }
     }
   };
@@ -223,15 +230,9 @@ const Profile = () => {
           </Link>
           <button
             onClick={handleLogout}
-            className="px-6 py-2.5 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 transition"
+            className="px-6 py-2.5 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 transition cursor-pointer"
           >
             {t("profilePage.buttons.logOut")}
-          </button>
-          <button
-            onClick={handleDeleteUser}
-            className="bg-red-500 text-white py-2 px-4 hover:bg-red-600 rounded cursor-pointer"
-          >
-            {t("userManagement.table.deleteButton")}
           </button>
         </div>
 
@@ -276,7 +277,7 @@ const Profile = () => {
           {!isEditing && (
             <button
               onClick={() => setIsEditing(true)}
-              className="px-6 py-2.5 rounded-lg bg-main-blue text-white font-semibold shadow hover:shadow-lg hover:scale-[1.02] transition"
+              className="px-6 py-2.5 rounded-lg bg-main-blue text-white font-semibold shadow hover:shadow-lg hover:scale-[1.02] transition cursor-pointer"
             >
               {t("profilePage.buttons.editProfile")}
             </button>
@@ -383,7 +384,7 @@ const Profile = () => {
             </h2>
             <button
               onClick={openNewAddress}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-main-blue text-white text-sm font-semibold hover:opacity-90 transition"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-main-blue text-white text-sm font-semibold hover:opacity-90 transition cursor-pointer"
             >
               <HiPlus className="text-base" />
               {t("profilePage.address.add", "Add address")}
@@ -465,6 +466,31 @@ const Profile = () => {
               </div>
             </div>
           )}
+        </div>
+        {/* Danger Zone */}
+        <div className="bg-white rounded-2xl shadow-sm p-8">
+          <h2 className="text-lg font-semibold text-red-600 border-b border-red-100 pb-3 mb-6">
+            {t("profilePage.deleteAccount.dangerZone", "Danger Zone")}
+          </h2>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium text-gray-800">
+                {t("profilePage.deleteAccount.title", "Delete account")}
+              </p>
+              <p className="text-sm text-gray-400 mt-0.5">
+                {t(
+                  "profilePage.deleteAccount.description",
+                  "This action is permanent and cannot be undone.",
+                )}
+              </p>
+            </div>
+            <button
+              onClick={handleDeleteUser}
+              className="px-5 py-2.5 rounded-lg border border-red-500 text-red-500 text-sm font-semibold hover:bg-red-500 hover:text-white transition cursor-pointer"
+            >
+              {t("profilePage.deleteAccount.deleteAccount")}
+            </button>
+          </div>
         </div>
       </div>
 

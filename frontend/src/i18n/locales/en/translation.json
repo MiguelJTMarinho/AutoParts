@@ -174,40 +174,51 @@
       "newTitle": "New address",
       "editTitle": "Edit address",
       "title": "Label (e.g. Home, Work)"
+    },
+    "deleteAccount": {
+      "dangerZone": "Danger Zone",
+      "title": "Delete Account",
+      "description": "This action is irreversible. Deleting your account will permanently remove all your data, orders, and personal information from our system.",
+      "confirmDelete": "Are you sure you want to delete your account? This action cannot be undone.",
+      "deleteAccount": "Delete Account",
+      "deleted": "Your account has been successfully deleted.",
+      "deleteFailed": "Failed to delete your account. Please try again later."
     }
   },
 
-  "registerPage": {
-    "title": "Create your account",
+"registerPage": {
+    "title": "Create an Account",
     "form": {
-      "firstNameLabel": "First Name *",
-      "firstNamePlaceholder": "John",
-      "lastNameLabel": "Last Name *",
-      "lastNamePlaceholder": "Doe",
-      "emailLabel": "Email *",
-      "emailPlaceholder": "Enter your email",
-      "passwordLabel": "Password *",
-      "passwordPlaceholder": "Create a password",
-      "confirmPasswordLabel": "Confirm Password *",
-      "confirmPasswordPlaceholder": "Repeat your password",
-      "submitButton": "Create Account",
+      "firstNameLabel": "First Name",
+      "lastNameLabel": "Last Name",
+      "emailLabel": "Email Address",
+      "passwordLabel": "Password",
+      "confirmPasswordLabel": "Confirm Password",
+      "submitButton": "Register",
       "alreadyHaveAccount": "Already have an account?",
       "signInHere": "Sign in here"
     },
+    "validation": {
+      "minLength": "Minimum 8 characters",
+      "uppercase": "One uppercase letter",
+      "number": "One number",
+      "special": "One special character (@$!%*?&)"
+    },
     "alerts": {
-      "passwordMismatch": "Passwords do not match"
+      "passwordMismatch": "Passwords do not match."
     },
     "promo": {
-      "title": "Why create an account?",
-      "subtitle": "Fast. Secure. Convenient.",
+      "title": "Why join us?",
+      "subtitle": "Enjoy the benefits of having an account",
       "benefits": {
-        "trackOrders": "Track your orders in real time",
-        "saveInfo": "Save shipping and billing information",
-        "offers": "Access exclusive offers and promotions",
-        "fastCheckout": "Faster checkout experience"
+        "trackOrders": "Track your orders easily",
+        "saveInfo": "Save your shipping information",
+        "offers": "Receive exclusive offers and discounts",
+        "fastCheckout": "Faster checkout process"
       }
     }
   },
+
 
   "adminLayout": {
     "title": "Admin Dashboard"

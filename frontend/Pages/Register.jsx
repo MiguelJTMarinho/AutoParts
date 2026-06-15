@@ -15,6 +15,16 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+  const [passwordErrors, setPasswordErrors] = useState([]);
+
+  const validatePassword = (password) => {
+    const errors = [];
+    if (password.length < 8) errors.push("min");
+    if (!/[A-Z]/.test(password)) errors.push("upper");
+    if (!/[0-9]/.test(password)) errors.push("number");
+    if (!/[@$!%*?&]/.test(password)) errors.push("special");
+    return errors;
+  };
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -28,10 +38,12 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert(t("registerPage.alerts.passwordMismatch"));
+    const errors = validatePassword(formData.password);
+    if (errors.length > 0) {
+      setPasswordErrors(errors);
       return;
     }
+    if (formData.password !== formData.confirmPassword) return;
     try {
       await dispatch(
         registerUser({
@@ -115,11 +127,62 @@ const Register = () => {
                 type="password"
                 name="password"
                 value={formData.password}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setPasswordErrors(validatePassword(e.target.value));
+                }}
                 placeholder="Create a password"
-                className="w-full border rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-main-blue"
+                className={`w-full border rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-main-blue ${
+                  passwordErrors.length > 0
+                    ? "border-red-400"
+                    : formData.password
+                      ? "border-green-400"
+                      : ""
+                }`}
                 required
               />
+              {formData.password && (
+                <ul className="mt-2 space-y-1">
+                  {[
+                    {
+                      key: "min",
+                      label: t(
+                        "registerPage.validation.minLength",
+                        "Mínimo 8 caracteres",
+                      ),
+                      test: formData.password.length >= 8,
+                    },
+                    {
+                      key: "upper",
+                      label: t(
+                        "registerPage.validation.uppercase",
+                        "Uma letra maiúscula",
+                      ),
+                      test: /[A-Z]/.test(formData.password),
+                    },
+                    {
+                      key: "number",
+                      label: t("registerPage.validation.number", "Um número"),
+                      test: /[0-9]/.test(formData.password),
+                    },
+                    {
+                      key: "special",
+                      label: t(
+                        "registerPage.validation.special",
+                        "Um caractere especial (@$!%*?&)",
+                      ),
+                      test: /[@$!%*?&]/.test(formData.password),
+                    },
+                  ].map(({ key, label, test }) => (
+                    <li
+                      key={key}
+                      className={`text-xs flex items-center gap-1.5 ${test ? "text-green-500" : "text-gray-400"}`}
+                    >
+                      <span>{test ? "✓" : "○"}</span> {label}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             {/* Confirm Password */}
@@ -133,19 +196,39 @@ const Register = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Repeat your password"
-                className="w-full border rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-main-blue"
+                className={`w-full border rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-main-blue ${
+                  formData.confirmPassword
+                    ? formData.password === formData.confirmPassword
+                      ? "border-green-400"
+                      : "border-red-400"
+                    : ""
+                }`}
                 required
               />
+              {formData.confirmPassword &&
+                formData.password !== formData.confirmPassword && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {t("registerPage.alerts.passwordMismatch")}
+                  </p>
+                )}
             </div>
 
             <button
               type="submit"
-              className="inline-block border border-main-blue text-white bg-main-blue px-8 py-3 uppercase font-bold rounded-md hover:bg-white hover:text-main-blue transition cursor-pointer"
+              disabled={
+                passwordErrors.length > 0 ||
+                formData.password !== formData.confirmPassword
+              }
+              className="inline-block border border-main-blue text-white bg-main-blue px-8 py-3 uppercase font-bold rounded-md hover:bg-white hover:text-main-blue transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t("registerPage.form.submitButton")}
             </button>
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && (
+              <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-md">
+                <span>⚠</span> {error}
+              </div>
+            )}
           </form>
 
           <p className="text-sm mt-6 text-gray-500">
@@ -171,17 +254,14 @@ const Register = () => {
               <HiCheck className="text-main-blue" />
               <span>{t("registerPage.promo.benefits.trackOrders")}</span>
             </li>
-
             <li className="flex items-center gap-3">
               <HiCheck className="text-main-blue" />
               <span>{t("registerPage.promo.benefits.saveInfo")}</span>
             </li>
-
             <li className="flex items-center gap-3">
               <HiCheck className="text-main-blue" />
               <span>{t("registerPage.promo.benefits.offers")}</span>
             </li>
-
             <li className="flex items-center gap-3">
               <HiCheck className="text-main-blue" />
               <span>{t("registerPage.promo.benefits.fastCheckout")}</span>

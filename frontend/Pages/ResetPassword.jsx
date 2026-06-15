@@ -14,9 +14,19 @@ const ResetPassword = () => {
     password: "",
     confirmPassword: "",
   });
+  const [passwordErrors, setPasswordErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(null);
+
+  const validatePassword = (password) => {
+    const errors = [];
+    if (password.length < 8) errors.push("min");
+    if (!/[A-Z]/.test(password)) errors.push("upper");
+    if (!/[0-9]/.test(password)) errors.push("number");
+    if (!/[@$!%*?&]/.test(password)) errors.push("special");
+    return errors;
+  };
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -31,13 +41,9 @@ const ResetPassword = () => {
       return;
     }
 
-    if (formData.password.length < 8) {
-      setError(
-        t(
-          "resetPassword.error.tooShort",
-          "Password must be at least 8 characters.",
-        ),
-      );
+    const errors = validatePassword(formData.password);
+    if (errors.length > 0) {
+      setPasswordErrors(errors);
       return;
     }
 
@@ -126,6 +132,7 @@ const ResetPassword = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              {/* Password */}
               <div>
                 <label className="block text-sm font-semibold mb-2">
                   {t("resetPassword.form.passwordLabel", "New password")}
@@ -134,17 +141,69 @@ const ResetPassword = () => {
                   type="password"
                   name="password"
                   value={formData.password}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setPasswordErrors(validatePassword(e.target.value));
+                  }}
                   placeholder={t(
                     "resetPassword.form.passwordPlaceholder",
                     "At least 8 characters",
                   )}
-                  className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full border rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-main-blue ${
+                    passwordErrors.length > 0
+                      ? "border-red-400"
+                      : formData.password
+                        ? "border-green-400"
+                        : ""
+                  }`}
                   required
                   autoComplete="new-password"
                 />
+                {formData.password && (
+                  <ul className="mt-2 space-y-1">
+                    {[
+                      {
+                        key: "min",
+                        label: t(
+                          "registerPage.validation.minLength",
+                          "Mínimo 8 caracteres",
+                        ),
+                        test: formData.password.length >= 8,
+                      },
+                      {
+                        key: "upper",
+                        label: t(
+                          "registerPage.validation.uppercase",
+                          "Uma letra maiúscula",
+                        ),
+                        test: /[A-Z]/.test(formData.password),
+                      },
+                      {
+                        key: "number",
+                        label: t("registerPage.validation.number", "Um número"),
+                        test: /[0-9]/.test(formData.password),
+                      },
+                      {
+                        key: "special",
+                        label: t(
+                          "registerPage.validation.special",
+                          "Um caractere especial (@$!%*?&)",
+                        ),
+                        test: /[@$!%*?&]/.test(formData.password),
+                      },
+                    ].map(({ key, label, test }) => (
+                      <li
+                        key={key}
+                        className={`text-xs flex items-center gap-1.5 ${test ? "text-green-500" : "text-gray-400"}`}
+                      >
+                        <span>{test ? "✓" : "○"}</span> {label}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
+              {/* Confirm Password */}
               <div>
                 <label className="block text-sm font-semibold mb-2">
                   {t(
@@ -161,18 +220,41 @@ const ResetPassword = () => {
                     "resetPassword.form.confirmPasswordPlaceholder",
                     "Repeat your password",
                   )}
-                  className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full border rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-main-blue ${
+                    formData.confirmPassword
+                      ? formData.password === formData.confirmPassword
+                        ? "border-green-400"
+                        : "border-red-400"
+                      : ""
+                  }`}
                   required
                   autoComplete="new-password"
                 />
+                {formData.confirmPassword &&
+                  formData.password !== formData.confirmPassword && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {t(
+                        "resetPassword.error.mismatch",
+                        "Passwords do not match.",
+                      )}
+                    </p>
+                  )}
               </div>
 
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {error && (
+                <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-md">
+                  <span>⚠</span> {error}
+                </div>
+              )}
 
               <button
                 type="submit"
-                disabled={loading}
-                className="inline-block border border-main-blue text-white bg-main-blue px-8 py-3 uppercase font-bold rounded-md hover:bg-white hover:text-main-blue transition cursor-pointer disabled:opacity-60"
+                disabled={
+                  loading ||
+                  passwordErrors.length > 0 ||
+                  formData.password !== formData.confirmPassword
+                }
+                className="inline-block border border-main-blue text-white bg-main-blue px-8 py-3 uppercase font-bold rounded-md hover:bg-white hover:text-main-blue transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading
                   ? t("resetPassword.form.saving", "Saving…")
@@ -197,11 +279,9 @@ const ResetPassword = () => {
           <h2 className="text-2xl md:text-3xl font-black mb-4">
             {t("resetPassword.info.title", "Keep your account safe")}
           </h2>
-
           <h3 className="text-main-blue font-bold text-lg mb-8">
             {t("resetPassword.info.subtitle", "Tips for a strong password")}
           </h3>
-
           <ul className="space-y-4">
             <li className="flex items-center gap-3">
               <HiCheck className="text-main-blue shrink-0" />
