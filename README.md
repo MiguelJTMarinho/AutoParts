@@ -31,3 +31,5 @@ Tailwindcss
 Nodejs
 Redux Toolkit
 Sentry
+
+Update
