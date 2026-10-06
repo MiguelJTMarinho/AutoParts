@@ -16,23 +16,27 @@ const Login = () => {
   const { userInfo, guestId, loading, error } = useSelector(
     (state) => state.auth,
   );
-  const { cart } = useSelector((state) => state.cart);
 
   const redirect = new URLSearchParams(location.search).get("redirect") || "/";
   const isCheckoutRedirect = redirect.includes("/checkout");
 
   useEffect(() => {
-    if (userInfo) {
-      const cartItems = cart?.items || cart?.products || [];
-      if (cartItems.length > 0 && guestId) {
-        dispatch(mergeCart({ guestId })).then(() => {
-          navigate(isCheckoutRedirect ? "/checkout" : "/");
-        });
-      } else {
+    if (!userInfo) return;
+
+    const finalizeLogin = async () => {
+      try {
+        if (guestId) {
+          await dispatch(mergeCart({ guestId })).unwrap();
+        }
+      } catch (error) {
+        console.error("Failed to merge guest cart after login:", error);
+      } finally {
         navigate(isCheckoutRedirect ? "/checkout" : "/");
       }
-    }
-  }, [userInfo, guestId, cart, navigate, isCheckoutRedirect, dispatch]);
+    };
+
+    finalizeLogin();
+  }, [userInfo, guestId, navigate, isCheckoutRedirect, dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
